@@ -1,0 +1,39 @@
+name: CI & Event Data Validation
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  validate-events:
+    name: Validate Event Schemas & JSON
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate JSON syntax
+        run: |
+          python -c "
+          import json, glob, sys
+          files = glob.glob('data/**/*.json', recursive=True)
+          errors = 0
+          for f in files:
+              try:
+                  with open(f, 'r', encoding='utf-8') as fp:
+                      json.load(fp)
+                  print(f'✅ Valid JSON: {f}')
+              except Exception as e:
+                  print(f'❌ JSON Error in {f}: {e}', file=sys.stderr)
+                  errors += 1
+          if errors > 0:
+              sys.exit(1)
+          "

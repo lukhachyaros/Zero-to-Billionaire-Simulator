@@ -1,0 +1,180 @@
+[
+  {
+    "eventId": "evt_birth_001",
+    "category": "childhood",
+    "title": "Chào đời tại Bệnh viện Phụ sản",
+    "minAge": 0,
+    "maxAge": 0,
+    "priority": 100,
+    "description": "Bạn vừa cất tiếng khóc chào đời tại một bệnh viện phụ sản ở Việt Nam. Bố mẹ nhìn bạn với ánh mắt đầy hy vọng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_cry_loud",
+        "label": "Khóc to hết cỡ để thu hút sự chú ý",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Các y bác sĩ khen bạn có lá phổi rất khỏe!",
+            "statModifiers": {
+              "health": 5,
+              "happiness": 2
+            }
+          }
+        ]
+      },
+      {
+        "id": "opt_sleep_peacefully",
+        "label": "Ngoan ngoãn ngủ say trong vòng tay mẹ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mẹ bạn cảm thấy nhẹ nhõm vì bạn là một đứa trẻ dễ nuôi.",
+            "statModifiers": {
+              "happiness": 5,
+              "parentRelationship": 10
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_tet_li_xi_005",
+    "category": "family_culture",
+    "title": "Mùng 1 Tết Nguyên Đán",
+    "minAge": 5,
+    "maxAge": 12,
+    "priority": 70,
+    "description": "Hôm nay là mùng 1 Tết. Bố mẹ dắt bạn đi chúc Tết họ hàng. Chú Bác mừng tuổi bạn một phong bao lì xì đỏ chót.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_give_to_mom",
+        "label": "Đưa hết cho mẹ giữ hộ (với lời hứa sau này trả lại)",
+        "outcomes": [
+          {
+            "probability": 0.9,
+            "message": "Mẹ khen bạn ngoan ngoãn. (Tuy nhiên xác suất bạn đòi lại được số tiền này là rất thấp!)",
+            "statModifiers": {
+              "parentRelationship": 15,
+              "discipline": 5
+            }
+          }
+        ]
+      },
+      {
+        "id": "opt_hide_in_piggy_bank",
+        "label": "Lén nhét vào lợn đất tiết kiệm riêng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn đã có khoản quỹ đen đầu tiên trong đời!",
+            "statModifiers": {
+              "cash": 500000,
+              "financialLiteracy": 5
+            }
+          }
+        ]
+      },
+      {
+        "id": "opt_buy_toys",
+        "label": "Rủ đám bạn cùng xóm đi mua đồ chơi và bánh kẹo",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "message": "Bạn có một ngày vui vẻ bên bạn bè, tiền tiêu vèo hết sạch.",
+            "statModifiers": {
+              "happiness": 15,
+              "health": -3
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_highschool_exam_018",
+    "category": "education",
+    "title": "Kỳ thi Tuyển sinh Đại học",
+    "minAge": 18,
+    "maxAge": 18,
+    "priority": 95,
+    "description": "Thời khắc quyết định 12 năm đèn sách đã tới. Nguyện vọng 1 của bạn là trường Đại học Bách Khoa / Ngoại Thương danh tiếng.",
+    "conditions": [
+      {
+        "field": "age",
+        "operator": "==",
+        "value": 18
+      }
+    ],
+    "options": [
+      {
+        "id": "opt_study_hard_exam",
+        "label": "Tập trung cao độ, giải đề thi thử suốt đêm",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "condition": "intelligence >= 60",
+            "message": "Chúc mừng! Bạn đạt điểm số ấn tượng và chính thức trở thành Thủ khoa / Sinh viên Top đầu!",
+            "statModifiers": {
+              "intelligence": 10,
+              "stress": 20,
+              "socialStatus": 20
+            },
+            "unlockedFlags": ["education_university_tier1"]
+          },
+          {
+            "probability": 0.25,
+            "message": "Áp lực quá lớn khiến bạn bị đau bụng khi vào phòng thi. Điểm số chỉ vừa đủ vào trường tư thục.",
+            "statModifiers": {
+              "happiness": -15,
+              "stress": 30
+            },
+            "unlockedFlags": ["education_university_tier2"]
+          }
+        ]
+      },
+      {
+        "id": "opt_vocational_school",
+        "label": "Chọn học nghề lập trình / thiết kế thực chiến",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn bỏ qua con đường lý thuyết đại học, tập trung học kỹ năng nghề để đi làm sớm.",
+            "statModifiers": {
+              "practicalSkills": 20,
+              "stress": -10
+            },
+            "unlockedFlags": ["education_vocational"]
+          }
+        ]
+      },
+      {
+        "id": "opt_early_startup",
+        "label": "Từ chối học tiếp, bắt đầu khởi nghiệp kinh doanh buôn bán",
+        "outcomes": [
+          {
+            "probability": 0.5,
+            "condition": "charisma >= 50",
+            "message": "Bạn mở một tiệm trà sữa hoặc bán hàng online đắt khách bất ngờ!",
+            "statModifiers": {
+              "cash": 20000000,
+              "businessAcuity": 15
+            },
+            "unlockedFlags": ["career_entrepreneur_early"]
+          },
+          {
+            "probability": 0.5,
+            "message": "Thiếu kinh nghiệm quản lý vốn khiến bạn lỗ mất khoản tiền tiết kiệm ban đầu.",
+            "statModifiers": {
+              "cash": -5000000,
+              "stress": 20
+            },
+            "unlockedFlags": ["career_freelancer"]
+          }
+        ]
+      }
+    ]
+  }
+]
