@@ -1,0 +1,350 @@
+[
+  {
+    "eventId": "evt_00_birth",
+    "category": "childhood",
+    "title": "Cất tiếng khóc chào đời",
+    "minAge": 0,
+    "maxAge": 0,
+    "priority": 100,
+    "description": "Bạn vừa sinh ra tại một bệnh viện ở Việt Nam. Bố mẹ rạng rỡ chào đón đứa con đầu lòng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_cry_heroic",
+        "label": "Khóc thật to vang dội khắp khoa sản",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bác sĩ khen bạn có lá phổi phi thường!",
+            "statModifiers": { "health": 10, "happiness": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_smile_angel",
+        "label": "Mỉm cười thiên thần trong vòng tay mẹ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bố mẹ xúc động rơi nước mắt vì đứa con ngoan.",
+            "statModifiers": { "parentRelationship": 15, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_03_kindergarten",
+    "category": "childhood",
+    "title": "Ngày đầu tiên đến trường mầm non",
+    "minAge": 3,
+    "maxAge": 3,
+    "priority": 90,
+    "description": "Mẹ đưa bạn đến trường mẫu giáo. Rất nhiều đứa trẻ xung quanh đang ôm chặt chân phụ huynh khóc lóc.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_cry_along",
+        "label": "Khóc gào theo các bạn, đòi mẹ bế về",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cô giáo phải dỗ bạn bằng một gói kẹo mềm.",
+            "statModifiers": { "discipline": -5, "happiness": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_play_blocks",
+        "label": "Chạy ngay lại góc đồ chơi xếp hình lâu đài",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn nhanh chóng kết thân với bạn bè và tỏ ra rất thông minh.",
+            "statModifiers": { "intelligence": 5, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_06_grade1",
+    "category": "education",
+    "title": "Bước vào Lớp 1 Tiểu học",
+    "minAge": 6,
+    "maxAge": 6,
+    "priority": 95,
+    "description": "Bạn đeo chiếc cặp sách mới tinh, mặc đồng phục trắng bước vào cổng trường tiểu học.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_front_seat",
+        "label": "Xung phong ngồi bàn đầu để nghe cô giảng bài",
+        "outcomes": [
+          {
+            "probability": 0.9,
+            "message": "Bạn được bầu làm Lớp phó học tập!",
+            "statModifiers": { "intelligence": 8, "discipline": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_back_seat",
+        "label": "Ngồi bàn cuối cùng đám bạn quậy phá",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Những giờ ra chơi bắn bi, nhảy dây tràn ngập tiếng cười.",
+            "statModifiers": { "happiness": 15, "discipline": -5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_10_math_contest",
+    "category": "education",
+    "title": "Thi Học sinh Giỏi cấp Quận",
+    "minAge": 10,
+    "maxAge": 10,
+    "priority": 85,
+    "description": "Cô giáo chủ nhiệm chọn bạn vào đội tuyển thi Olympic Toán cấp Quận.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_cram_math",
+        "label": "Ôn luyện ngày đêm các dạng toán nâng cao",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "message": "Bạn đạt Giải Nhì cấp Quận! Bố mẹ thưởng cho một chuyến đi chơi thảo cầm viên.",
+            "statModifiers": { "intelligence": 12, "parentRelationship": 10, "stress": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_skip_contest",
+        "label": "Xin rút khỏi đội tuyển để đi đá bóng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thể lực và sự dẻo dai của bạn tăng vọt.",
+            "statModifiers": { "health": 12, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_15_highschool_exam",
+    "category": "education",
+    "title": "Kỳ thi Tuyển sinh vào Lớp 10 THPT",
+    "minAge": 15,
+    "maxAge": 15,
+    "priority": 95,
+    "description": "Cuộc chiến khốc liệt giành suất vào trường THPT Chuyên / Công lập điểm.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_exam_specialized",
+        "label": "Thi vào trường Chuyên cấp Tỉnh/Thành phố",
+        "outcomes": [
+          {
+            "probability": 0.65,
+            "message": "Bạn đỗ Chuyên với số điểm rực rỡ! Cả họ nội ngoại đều tự hào.",
+            "statModifiers": { "intelligence": 15, "socialStatus": 15 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Thiếu 0.5 điểm, bạn chuyển sang học trường công lập gần nhà.",
+            "statModifiers": { "happiness": -10, "stress": 15 }
+          }
+        ]
+      },
+      {
+        "id": "opt_exam_standard",
+        "label": "Đăng ký trường vừa sức để giữ tâm lý thoải mái",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn đỗ nhẹ nhàng và tận hưởng mùa hè trọn vẹn.",
+            "statModifiers": { "happiness": 10, "stress": -10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_18_national_exam",
+    "category": "education",
+    "title": "Ngã rẽ cuộc đời: Tốt nghiệp THPT & Đại học",
+    "minAge": 18,
+    "maxAge": 18,
+    "priority": 100,
+    "description": "12 năm đèn sách kết thúc bằng kỳ thi quyết định hướng đi tương lai.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_university_top",
+        "label": "Nộp đơn vào Đại học Bách Khoa / Kinh tế Quốc dân",
+        "outcomes": [
+          {
+            "probability": 0.7,
+            "message": "Trúng tuyển trường Top! Bạn bước chân vào giảng đường với bao hoài bão lớn.",
+            "statModifiers": { "intelligence": 15, "stress": 20 }
+          }
+        ]
+      },
+      {
+        "id": "opt_vocational_tech",
+        "label": "Học Cao đẳng Nghề Công nghệ cao để đi làm sớm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn thành thạo kỹ năng thực chiến và được doanh nghiệp săn đón ngay từ năm 2.",
+            "statModifiers": { "discipline": 15, "happiness": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_military_service",
+        "label": "Tình nguyện lên đường nhập ngũ thực hiện Nghĩa vụ Quân sự",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "2 năm quân ngũ rèn giũa bạn thành người có kỷ luật sắt và thể lực thép.",
+            "statModifiers": { "health": 25, "discipline": 30, "socialStatus": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_startup_now",
+        "label": "Vay vốn 20 triệu mở sạp bán trà sữa / bán hàng online",
+        "outcomes": [
+          {
+            "probability": 0.5,
+            "message": "Khách đông nườm nượp! Bạn bắt đầu kiếm được những triệu đồng đầu tiên.",
+            "statModifiers": { "cash": 30000000, "happiness": 20 }
+          },
+          {
+            "probability": 0.5,
+            "message": "Mặt bằng ế ẩm, bạn mất trắng vốn khởi nghiệp và nếm mùi thất bại đầu đời.",
+            "statModifiers": { "cash": -15000000, "stress": 25 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_22_first_job",
+    "category": "career",
+    "title": "Phỏng vấn việc làm đầu tiên sau khi tốt nghiệp",
+    "minAge": 22,
+    "maxAge": 23,
+    "priority": 90,
+    "description": "Bạn mặc bộ âu phục chỉnh tề đi phỏng vấn tại một tập đoàn công nghệ lớn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_negotiate_hard",
+        "label": "Tự tin đàm phán mức lương 15 triệu/tháng",
+        "outcomes": [
+          {
+            "probability": 0.6,
+            "message": "Nhà tuyển dụng ấn tượng với khí chất của bạn và đồng ý mức lương đề xuất!",
+            "statModifiers": { "cash": 15000000, "happiness": 20, "socialStatus": 10 }
+          },
+          {
+            "probability": 0.4,
+            "message": "Họ từ chối vì cho rằng bạn quá ngạo mạn. Bạn chấp nhận làm thực tập sinh lương hỗ trợ 5 triệu.",
+            "statModifiers": { "cash": 5000000, "stress": 15 }
+          }
+        ]
+      },
+      {
+        "id": "opt_humble_accept",
+        "label": "Khiêm tốn học hỏi với mức lương khởi điểm 10 triệu/tháng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn chính thức trở thành nhân viên văn phòng, bắt đầu tích lũy kinh nghiệm.",
+            "statModifiers": { "cash": 10000000, "discipline": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_26_invest_opportunity",
+    "category": "finance",
+    "title": "Cơ hội Đầu tư: Sóng Chứng khoán & Đất nền",
+    "minAge": 26,
+    "maxAge": 30,
+    "priority": 85,
+    "description": "Một người bạn thân rủ bạn cùng góp 100 triệu để mua chung một lô đất vùng ven đang có tin quy hoạch.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_all_in_land",
+        "label": "Tất tay 100 triệu đồng đón sóng quy hoạch",
+        "outcomes": [
+          {
+            "probability": 0.6,
+            "message": "Quy hoạch đường vành đai đi qua! Lô đất tăng giá gấp 3 lần sau 1 năm!",
+            "statModifiers": { "cash": 300000000, "happiness": 30, "socialStatus": 20 }
+          },
+          {
+            "probability": 0.4,
+            "message": "Dự án dính quy hoạch treo, vốn bị chôn chặt không thanh khoản được.",
+            "statModifiers": { "cash": -100000000, "stress": 30 }
+          }
+        ]
+      },
+      {
+        "id": "opt_safe_saving",
+        "label": "Gửi tiết kiệm ngân hàng lấy lãi an toàn 7%/năm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Tiền đẻ ra tiền đều đặn, tối ngủ ngon giấc không lo toan.",
+            "statModifiers": { "cash": 7000000, "happiness": 5, "stress": -10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "evt_30_marriage",
+    "category": "relationship",
+    "title": "Hôn nhân & Lập gia đình",
+    "minAge": 28,
+    "maxAge": 32,
+    "priority": 90,
+    "description": "Người yêu giục bạn tính chuyện cưới xin. Bố mẹ hai bên mong ngóng có cháu bế.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_big_wedding",
+        "label": "Tổ chức đám cưới hoành tráng 50 bàn tiệc tại trung tâm tiệc cưới",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hôn lễ lộng lẫy trong tiếng vỗ tay chúc phúc của bạn bè và họ hàng!",
+            "statModifiers": { "cash": -120000000, "happiness": 25, "socialStatus": 15 }
+          }
+        ]
+      },
+      {
+        "id": "opt_cozy_wedding",
+        "label": "Tổ chức tiệc ấm cúng, dành tiền lo đặt cọc căn hộ chung cư",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hai vợ chồng đồng lòng vun vén tổ ấm nhỏ vững chãi.",
+            "statModifiers": { "cash": -30000000, "happiness": 20, "discipline": 15 }
+          }
+        ]
+      }
+    ]
+  }
+]
