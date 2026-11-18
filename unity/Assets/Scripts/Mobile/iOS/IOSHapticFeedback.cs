@@ -7,25 +7,39 @@ using System.Runtime.InteropServices;
 namespace ZeroToBillionaire.Mobile.iOS
 {
     /// <summary>
-    /// Wrapper for iOS Taptic Engine / Core Haptics.
-    /// Provides tactile feedback for user choices, successes, and life events.
+    /// Wrapper cho Apple Taptic Engine / UIFeedbackGenerator (iOS) và rung cơ bản trên Android.
+    /// Tích hợp giới hạn tần suất (debounce) tránh tốn pin và cho phép người chơi bật/tắt trong Cài đặt.
     /// </summary>
     public static class IOSHapticFeedback
     {
+        private const string HAPTIC_PREF_KEY = "ZTB_Haptics_Enabled";
+        private const float MIN_HAPTIC_INTERVAL = 0.04f;
+        private static float lastHapticTime = -1f;
+
+        public static bool IsEnabled
+        {
+            get => PlayerPrefs.GetInt(HAPTIC_PREF_KEY, 1) == 1;
+            set
+            {
+                PlayerPrefs.SetInt(HAPTIC_PREF_KEY, value ? 1 : 0);
+                PlayerPrefs.Save();
+            }
+        }
+
         public enum HapticImpactType
         {
-            Light,
-            Medium,
-            Heavy,
-            Rigid,
-            Soft
+            Light = 0,
+            Medium = 1,
+            Heavy = 2,
+            Rigid = 3,
+            Soft = 4
         }
 
         public enum HapticNotificationType
         {
-            Success,
-            Warning,
-            Error
+            Success = 0,
+            Warning = 1,
+            Error = 2
         }
 
 #if UNITY_IOS && !UNITY_EDITOR
@@ -39,8 +53,18 @@ namespace ZeroToBillionaire.Mobile.iOS
         private static extern void _triggerSelectionHaptic();
 #endif
 
+        private static bool CanTrigger()
+        {
+            if (!IsEnabled) return false;
+            if (Time.unscaledTime - lastHapticTime < MIN_HAPTIC_INTERVAL) return false;
+            lastHapticTime = Time.unscaledTime;
+            return true;
+        }
+
         public static void TriggerImpact(HapticImpactType type)
         {
+            if (!CanTrigger()) return;
+
 #if UNITY_IOS && !UNITY_EDITOR
             try
             {
@@ -50,13 +74,18 @@ namespace ZeroToBillionaire.Mobile.iOS
             {
                 Debug.LogWarning($"[IOSHapticFeedback] Impact haptic failed: {ex.Message}");
             }
-#elif UNITY_EDITOR
-            Debug.Log($"[Haptic Preview] Impact: {type}");
+#elif UNITY_ANDROID && !UNITY_EDITOR
+            if (type == HapticImpactType.Heavy)
+            {
+                Handheld.Vibrate();
+            }
 #endif
         }
 
         public static void TriggerNotification(HapticNotificationType type)
         {
+            if (!CanTrigger()) return;
+
 #if UNITY_IOS && !UNITY_EDITOR
             try
             {
@@ -66,13 +95,18 @@ namespace ZeroToBillionaire.Mobile.iOS
             {
                 Debug.LogWarning($"[IOSHapticFeedback] Notification haptic failed: {ex.Message}");
             }
-#elif UNITY_EDITOR
-            Debug.Log($"[Haptic Preview] Notification: {type}");
+#elif UNITY_ANDROID && !UNITY_EDITOR
+            if (type == HapticNotificationType.Error || type == HapticNotificationType.Warning)
+            {
+                Handheld.Vibrate();
+            }
 #endif
         }
 
         public static void TriggerSelection()
         {
+            if (!CanTrigger()) return;
+
 #if UNITY_IOS && !UNITY_EDITOR
             try
             {
@@ -82,8 +116,6 @@ namespace ZeroToBillionaire.Mobile.iOS
             {
                 Debug.LogWarning($"[IOSHapticFeedback] Selection haptic failed: {ex.Message}");
             }
-#elif UNITY_EDITOR
-            Debug.Log("[Haptic Preview] Selection tap");
 #endif
         }
     }

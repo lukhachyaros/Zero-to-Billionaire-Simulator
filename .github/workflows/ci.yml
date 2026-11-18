@@ -1,4 +1,4 @@
-name: CI & Event Data Validation
+name: CI & Game Data Validation
 
 on:
   push:
@@ -7,8 +7,8 @@ on:
     branches: [ "main", "develop" ]
 
 jobs:
-  validate-events:
-    name: Validate Event Schemas & JSON
+  validate-project:
+    name: Validate Schemas, Simulation, C# & Web Client
     runs-on: ubuntu-latest
 
     steps:
@@ -20,20 +20,13 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Validate JSON syntax
+      - name: Validate Game Data, Simulation, C# Braces & Web DOM
+        run: python tools/validate_game_data.py --check
+
+      - name: Verify Vendored Three.js & Check Web JavaScript Syntax
         run: |
-          python -c "
-          import json, glob, sys
-          files = glob.glob('data/**/*.json', recursive=True)
-          errors = 0
-          for f in files:
-              try:
-                  with open(f, 'r', encoding='utf-8') as fp:
-                      json.load(fp)
-                  print(f'✅ Valid JSON: {f}')
-              except Exception as e:
-                  print(f'❌ JSON Error in {f}: {e}', file=sys.stderr)
-                  errors += 1
-          if errors > 0:
-              sys.exit(1)
-          "
+          test -s web/vendor/three.min.js
+          node --check web/audio.js
+          node --check web/diorama3d.js
+          node --check web/game.js
+          node --check web/game_data.js

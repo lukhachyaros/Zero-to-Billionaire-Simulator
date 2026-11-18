@@ -13,7 +13,7 @@ namespace ZeroToBillionaire.Events
         public string description;
         public int minAge;
         public int maxAge;
-        public int priority;
+        public int priority = 50;
         public bool isOneTime = true;
         public List<EventCondition> conditions = new List<EventCondition>();
         public List<EventOption> options = new List<EventOption>();
@@ -36,13 +36,16 @@ namespace ZeroToBillionaire.Events
         public string message;
         public StatModifiers statModifiers = new StatModifiers();
         public List<string> unlockedFlags = new List<string>();
-        public string nextEventId; // Event chaining
+        public string nextEventId;       // Chuỗi sự kiện nối tiếp
+        public string educationSet;      // Cập nhật cấp học nếu có
+        public string maritalStatusSet;  // Cập nhật tình trạng hôn nhân nếu có
+        public int childrenDelta = 0;    // Số con tăng thêm nếu có
     }
 
     [System.Serializable]
     public class EventCondition
     {
-        public string field; // "age", "cash", "intelligence", "gender", "hasFlag"
+        public string field;        // "age", "cash", "netWorth", "intelligence", "gender", "hasFlag", "notHasFlag", "childrenCount"
         public string operatorType; // "==", ">=", "<=", ">", "<", "!="
         public string stringValue;
         public long numberValue;
