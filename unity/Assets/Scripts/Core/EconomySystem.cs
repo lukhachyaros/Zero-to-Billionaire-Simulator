@@ -386,8 +386,10 @@ namespace ZeroToBillionaire.Core
             long grossMonthlyInflow = stats.monthlyIncome + posPassiveMonthly;
             if (stats.age >= 18 && grossMonthlyInflow > 0)
             {
-                long rawLiving = (long)(stats.monthlyIncome * 0.28f + posPassiveMonthly * 0.12f) + stats.childrenCount * 1_500_000L;
-                long maxLiving = (long)(grossMonthlyInflow * 0.65f);
+                bool ownsHome = GetHighestRealEstateTier() >= 1;
+                float baseRate = (ownsHome ? 0.34f : 0.42f) + (currentCycle == MacroEconomicCycle.Inflation ? 0.06f : 0f);
+                long rawLiving = (long)(stats.monthlyIncome * baseRate + posPassiveMonthly * 0.18f) + stats.childrenCount * 2_500_000L;
+                long maxLiving = (long)(grossMonthlyInflow * 0.78f);
                 stats.monthlyExpense = Math.Min(rawLiving, maxLiving);
             }
             else
@@ -413,7 +415,23 @@ namespace ZeroToBillionaire.Core
             {
                 long annualLiving = stats.monthlyExpense * 12L;
                 stats.cash -= annualLiving;
-                RecordCashflow(stats.age, -annualLiving, "living", "Chi phí sinh hoạt cả năm", stats.cash);
+                RecordCashflow(stats.age, -annualLiving, "living", "Thuê nhà & Sinh hoạt phí cả năm", stats.cash);
+            }
+
+            // Thuế TNCN & Bảo hiểm bắt buộc lũy tiến khi thu nhập năm > 180 Triệu đ
+            long annualGross = grossMonthlyInflow * 12L;
+            if (stats.age >= 18 && annualGross > 180_000_000L)
+            {
+                float baseTaxRate = 0.10f;
+                if (annualGross > 2_400_000_000L) baseTaxRate = 0.25f;
+                else if (annualGross > 600_000_000L) baseTaxRate = 0.18f;
+                float effRate = Math.Max(0.06f, baseTaxRate - stats.financialLiteracy * 0.0008f);
+                long annualTax = (long)((annualGross - 150_000_000L) * effRate);
+                if (annualTax > 0)
+                {
+                    stats.cash -= annualTax;
+                    RecordCashflow(stats.age, -annualTax, "tax", "Thuế TNCN & Bảo hiểm bắt buộc", stats.cash);
+                }
             }
 
             if (negUpkeepMonthly > 0)
@@ -421,6 +439,17 @@ namespace ZeroToBillionaire.Core
                 long annualUpkeep = negUpkeepMonthly * 12L;
                 stats.cash -= annualUpkeep;
                 RecordCashflow(stats.age, -annualUpkeep, "upkeep", "Bảo dưỡng Xe & Du thuyền", stats.cash);
+            }
+
+            long curPortVal = GetTotalPortfolioValue();
+            if (stats.age >= 22 && CalculateNetWorth(stats) >= 2_000_000_000L && stats.cash >= 30_000_000L && curPortVal > 0)
+            {
+                long assetFee = Math.Min((long)(stats.cash * 0.18f), (long)(curPortVal * 0.009f));
+                if (assetFee >= 1_000_000L)
+                {
+                    stats.cash -= assetFee;
+                    RecordCashflow(stats.age, -assetFee, "upkeep", "Thuế & phí bảo trì cơ ngơi", stats.cash);
+                }
             }
 
             // Biến động giá trị danh mục tài sản

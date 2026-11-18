@@ -147,12 +147,13 @@ flowchart TD
 ```
 
 * **Chỉ số cá nhân:** Sức khỏe, Trí tuệ, Ngoại hình, Hạnh phúc, Kỷ luật, Áp lực (Stress), Giao tiếp (Charisma), Hiểu biết Tài chính, Kỹ năng Thực chiến, Nhạy bén Kinh doanh, May mắn, Địa vị Xã hội, Phúc đức (Karma), Quan hệ gia đình.
-* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế** khi trưởng thành. Chi phí sinh hoạt tự động tính theo tỉ lệ khi có thu nhập dương (không trừ tiền vô lý khi đang học/thất nghiệp) kèm **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, vay ngân hàng (8.5%/năm), 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản.
-* **Bảng Xếp hạng Phú hào & Điện Danh vọng (`LeaderboardSystem.cs`):** Tranh tài với 20 Đại gia & Tỷ phú thế giới có tài sản biến động theo kinh tế vĩ mô, theo dõi khoảng cách vượt hạng trực tiếp và lưu giữ Top 10 đời kỷ lục vào **Điện Danh Vọng**.
-* **Sự nghiệp & Học vấn:** 4 Hoàn cảnh xuất thân (Mái ấm Tình thương, Bình dân, Công chức Trí thức, Trâm anh Thế phiệt) và 22 Ngành nghề có lộ trình thăng chức, tăng lương, nghỉ hưu.
-* **Cỗ Máy Thời Gian & Lưu an toàn:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), hỗ trợ quay ngược tối đa 5 năm trước để sửa quyết định sai lầm.
-* **Hệ thống sự kiện Data-driven:** **142 kịch bản** rẽ nhánh & lặp lại (0–96 tuổi) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
-* **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** đổ bóng mềm với 5 cấp độ phòng siêu chi tiết, 6 tab tính năng di động, nhân vật Chibi cử động có phụ kiện theo tuổi, chế độ Ngày/Đêm, âm thanh Web Audio & tự động lưu LocalStorage.
+* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế**. Chi phí thuê nhà/sinh hoạt chỉ tính tỉ lệ khi có thu nhập dương (không trừ tiền vô lý khi đang học/thất nghiệp), áp dụng thuế TNCN lũy tiến & phí quản lý cơ ngơi thực tế kèm **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, vay ngân hàng (8.5%/năm), 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản.
+* **Đua Top Người Chơi Thực (Live) & Tỷ Phú AI (`live_leaderboard.js`, `LeaderboardSystem.cs`):** Tự đặt/đổi tên nhân vật, đồng bộ tài sản ròng & trạng thái online theo thời gian thực với cộng đồng người chơi, cạnh tranh 20 Tỷ phú AI và lưu kỷ lục vào **Điện Danh Vọng**.
+* **Cơ chế Chơi Lại & Gói Hỗ Trợ (`MonetizationSystem.cs`):** Lượt đời đầu miễn phí; từ đời thứ 2 có thể xem quảng cáo ngắn 5s nhận vé + buff may mắn hoặc mở Gói Khởi Đầu / VIP Vĩnh Viễn (chơi lại vô hạn + huy hiệu VIP).
+* **Sự nghiệp & Học vấn:** 4 Hoàn cảnh xuất thân (Mái ấm Tình thương, Bình dân, Công chức Trí thức, Trâm anh Thế phiệt) và 22 Ngành nghề có bộ lọc trực quan theo điều kiện hiện tại.
+* **Cỗ Máy Thời Gian & Lưu Sao Lưu Đa Thiết Bị:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), mã sao lưu `ZTB2:` & file tải về để khôi phục tiến trình, hỗ trợ quay ngược 5–8 năm trước để sửa quyết định sai lầm.
+* **Hệ thống sự kiện Data-driven:** **170 kịch bản** rẽ nhánh & lặp lại (0–96 tuổi, gồm 28 biến cố chi tiêu & thử thách thực tế) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
+* **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** nâng cấp sàn gỗ/cẩm thạch, cao ốc sáng đèn, thú cưng Corgi, mô hình siêu xe, 5 tab điều hướng gọn nhẹ dễ tiếp cận & âm thanh Web Audio.
 
 ---
 
@@ -181,25 +182,27 @@ Zero-to-Billionaire-Simulator/
 │   ├── backgrounds/               # 4 Hoàn cảnh xuất thân (starting_backgrounds.json)
 │   ├── careers/                   # 22 Ngành nghề & lộ trình thăng chức (careers.json)
 │   ├── economy/                   # 18 Tài sản (assets.json) & 20 Tỷ phú đối thủ (billionaire_leaderboard.json)
-│   └── events/                    # 142 kịch bản sự kiện JSON (0 - 96 tuổi)
+│   └── events/                    # 170 kịch bản sự kiện JSON (0 - 96 tuổi)
 │       ├── life_events_full.json  # Sự kiện cột mốc cuộc đời
 │       ├── random_yearly_events.json # Sự kiện ngẫu nhiên hàng năm
 │       ├── pack_youth_school.json # 26 kịch bản Tuổi thơ & Học đường
 │       ├── pack_career_workplace.json # 26 kịch bản Công sở & Khởi nghiệp
 │       ├── pack_wealth_investments.json # 26 kịch bản Tài chính & Đầu tư
 │       ├── pack_family_society_elder.json # 26 kịch bản Gia đình, Xã hội & Tuổi già
+│       ├── pack_life_expenses_hardcore.json # 28 kịch bản Áp lực Chi tiêu, Thuế & Biến cố
 │       └── sample_events.json     # File sự kiện mẫu minh họa cho cộng đồng
 ├── docs/                          # Tài liệu GDD, iOS Plan & 3D Art Pipeline
 │   └── screenshots/               # Ảnh chụp demo gameplay hiển thị trong README
 ├── tools/
 │   └── validate_game_data.py      # Kiểm tra schema, mô phỏng 0-90 tuổi, DOM & đồng bộ dữ liệu
 ├── web/                           # Phiên bản 3D Three.js chơi trực tiếp (Deploy GitHub Pages)
-│   ├── index.html                 # Giao diện Mobile-First Portrait chuẩn iPhone
+│   ├── index.html                 # Giao diện Mobile-First Portrait 5 tab tối ưu dễ tiếp cận
 │   ├── styles.css                 # Hệ thống Dark-Glassmorphic UI & Safe Area
 │   ├── vendor/three.min.js        # Thư viện Three.js WebGL đóng gói cục bộ (offline-ready)
-│   ├── diorama3d.js               # Engine 3D WebGL PBR (5 cấp phòng, Chibi, Ngày/Đêm, đổ bóng)
+│   ├── live_leaderboard.js        # Đồng bộ BXH Người Chơi Thực theo thời gian thực (MQTT WSS)
+│   ├── diorama3d.js               # Engine 3D WebGL PBR nâng cấp (sàn gỗ/marble, thú cưng, siêu xe)
 │   ├── audio.js                   # Âm thanh tổng hợp Web Audio & rung Haptic
-│   ├── game.js                    # Vòng lặp mô phỏng đầy đủ + Lưu LocalStorage
+│   ├── game.js                    # Vòng lặp mô phỏng, cân bằng chi tiêu, quảng cáo/VIP & mã sao lưu
 │   └── game_data.js               # Bundle dữ liệu tự đồng bộ từ data/
 ├── index.html                     # Bản Web 3D đồng bộ tại thư mục gốc (deploy trực tiếp từ nhánh main)
 ├── .nojekyll                      # Tắt Jekyll processing trên GitHub Pages

@@ -14,14 +14,15 @@
     <aside class="desktop-side-info">
       <h1>💎 Zero to Billionaire</h1>
       <p>
-        Bản mô phỏng tương tác trực tiếp trên trình duyệt kết hợp <strong>Event Engine</strong> phân nhánh kiểu BitLife,
-        không gian <strong>Three.js WebGL 3D Isometric</strong> đổ bóng PBR nâng cấp theo tài sản và bối cảnh đời sống Việt Nam.
+        Bản mô phỏng cuộc đời <strong>3D Isometric PBR</strong> tối ưu thao tác một tay:
+        tự đặt tên nhân vật, đua top tài sản <strong>trực tiếp giữa người chơi thực</strong> và chinh phục cột mốc 1 Tỷ USD.
       </p>
       <ul class="desktop-feature-list">
-        <li>🏠 <strong>5 Cấp độ Phòng 3D</strong>: Phòng tuổi thơ ➔ Phòng trọ 12m² ➔ Chung cư ➔ Biệt thự ➔ Penthouse Hồ bơi vô cực.</li>
-        <li>🎭 <strong>140+ Kịch bản Sự kiện</strong>: Từ tuổi thơ Việt Nam, công sở, đầu tư đến đại thọ 90+.</li>
-        <li>📒 <strong>Sổ Lịch sử Dòng tiền Ra/Vào</strong>: Minh bạch mọi khoản thu chi; thất nghiệp/đi học không bị trừ tiền vô lý.</li>
-        <li>👑 <strong>Bảng Xếp hạng Phú hào (Top 21)</strong> &amp; <strong>Điện Danh vọng</strong> ghi nhận kỷ lục các đời.</li>
+        <li>✍️ <strong>Tự Đặt Tên &amp; Đổi Tên Tự Do</strong>: Đặt tên nhân vật, con cháu và lưu bảng vàng trực tuyến.</li>
+        <li>🌐 <strong>Bảng Xếp Hạng Người Chơi Thực (Live)</strong>: Đồng bộ thời gian thực cùng cộng đồng &amp; 20 Tỷ phú AI.</li>
+        <li>🏡 <strong>Đồ Họa 3D WebGL Nâng Cấp</strong>: Sàn gỗ/cẩm thạch, cao ốc sáng đèn, thú cưng Corgi, siêu xe &amp; kính tri thức.</li>
+        <li>🎭 <strong>170 Kịch Bản Thực Tế</strong>: Bổ sung các biến cố chi tiêu, thuế, y tế, kinh doanh cân bằng thử thách.</li>
+        <li>💾 <strong>Lưu Tiến Trình &amp; Mã Sao Lưu</strong>: Tự động lưu an toàn + xuất/nhập mã khôi phục đa thiết bị.</li>
       </ul>
       <p><em>Mẹo: Kéo ngang trên phòng 3D để xoay góc nhìn và cuộn chuột để phóng to/thu nhỏ!</em></p>
     </aside>
@@ -36,7 +37,7 @@
         <div class="diorama-top-bar">
           <div class="diorama-badges">
             <div class="pill-badge" id="room-tier-badge">🏠 Phòng Tuổi Thơ Ấm Áp</div>
-            <div class="pill-badge gold" id="generation-badge">👑 Đời thứ 1 • Bình dân</div>
+            <div class="pill-badge gold" id="generation-badge">👑 Đời 1 • Bình dân</div>
           </div>
 
           <div class="diorama-controls">
@@ -45,27 +46,34 @@
             <button class="icon-btn" id="btn-time-machine" title="Cỗ Máy Thời Gian (Quay lại 1 năm)" disabled>
               ⏪<span class="mini-counter" id="time-machine-count">0</span>
             </button>
-            <button class="icon-btn" id="btn-new-life-top" title="Tạo Cuộc Đời Mới">✨</button>
+            <button class="icon-btn" id="btn-open-save-modal" title="Lưu &amp; Sao Lưu Tiến Trình">💾</button>
+            <button class="icon-btn gold-btn" id="btn-open-shop-modal" title="Gói Hỗ Trợ &amp; VIP">🎁</button>
+            <button class="icon-btn" id="btn-new-life-top" title="Chơi Lại Cuộc Đời Khác">🔄</button>
           </div>
         </div>
 
-        <div class="diorama-hint">👆 Vuốt xoay phòng 3D • Cuộn phóng to/nhỏ • 5 cấp tài sản</div>
+        <div class="diorama-hint">👆 Vuốt xoay phòng 3D • Cuộn phóng to/nhỏ</div>
         <div id="toast-notification"></div>
       </section>
 
-      <!-- Bảng chỉ số gọn nhẹ -->
+      <!-- Bảng chỉ số gọn nhẹ, dễ tiếp cận -->
       <section id="hud-strip">
         <div class="hud-row-top">
           <div class="hud-identity">
-            <div id="hud-name">Nguyễn Gia Huy</div>
+            <div class="hud-name-line">
+              <div id="hud-name">Nguyễn Gia Huy</div>
+              <button type="button" class="inline-edit-btn" id="btn-rename-char" title="Đặt lại tên nhân vật">✏️</button>
+              <span class="vip-tag hidden" id="hud-vip-badge">👑 VIP</span>
+            </div>
             <div class="hud-sub">
               <span id="hud-job">Trẻ nhỏ</span>
               <span>•</span>
               <span id="hud-macro">🌤️ Tăng trưởng</span>
+              <span class="autosave-pill" id="autosave-indicator">✓ Đã lưu</span>
             </div>
           </div>
           <div class="hud-right-pills">
-            <button type="button" class="hud-rank-pill" id="hud-rank" title="Xem Bảng Xếp Hạng Phú Hào">🏆 #21</button>
+            <button type="button" class="hud-rank-pill" id="hud-rank" title="Xem Bảng Xếp Hạng Người Chơi">🌐 #1</button>
             <div class="hud-age-box">
               <div id="hud-age">0 Tuổi</div>
             </div>
@@ -73,7 +81,7 @@
         </div>
 
         <div class="hud-money-row">
-          <div class="money-chip clickable" id="money-chip-cash" title="Bấm để xem Lịch sử dòng tiền">
+          <div class="money-chip clickable" id="money-chip-cash" title="Bấm để xem Sổ Dòng Tiền">
             <span>Tiền mặt 📒</span>
             <strong id="hud-cash">0 đ</strong>
           </div>
@@ -83,22 +91,24 @@
           </div>
         </div>
 
-        <div class="hud-bars-grid">
-          <div class="stat-mini">
-            <div class="stat-mini-label"><span>❤️ Khỏe</span><strong id="val-health">90</strong></div>
-            <div class="progress-track"><div class="progress-fill fill-health" id="bar-health" style="width:90%"></div></div>
-          </div>
-          <div class="stat-mini">
-            <div class="stat-mini-label"><span>😄 Vui</span><strong id="val-happiness">80</strong></div>
-            <div class="progress-track"><div class="progress-fill fill-happy" id="bar-happiness" style="width:80%"></div></div>
-          </div>
-          <div class="stat-mini">
-            <div class="stat-mini-label"><span>🧠 Trí</span><strong id="val-intelligence">55</strong></div>
-            <div class="progress-track"><div class="progress-fill fill-intel" id="bar-intelligence" style="width:55%"></div></div>
-          </div>
-          <div class="stat-mini">
-            <div class="stat-mini-label"><span>⚡ Lo âu</span><strong id="val-stress">10</strong></div>
-            <div class="progress-track"><div class="progress-fill fill-stress" id="bar-stress" style="width:10%"></div></div>
+        <div class="hud-bars-clickable" id="hud-bars-clickable" title="Bấm để xem toàn bộ 14 chỉ số &amp; thành tựu">
+          <div class="hud-bars-grid">
+            <div class="stat-mini">
+              <div class="stat-mini-label"><span>❤️ Khỏe</span><strong id="val-health">90</strong></div>
+              <div class="progress-track"><div class="progress-fill fill-health" id="bar-health" style="width:90%"></div></div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-label"><span>😄 Vui</span><strong id="val-happiness">80</strong></div>
+              <div class="progress-track"><div class="progress-fill fill-happy" id="bar-happiness" style="width:80%"></div></div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-label"><span>🧠 Trí</span><strong id="val-intelligence">55</strong></div>
+              <div class="progress-track"><div class="progress-fill fill-intel" id="bar-intelligence" style="width:55%"></div></div>
+            </div>
+            <div class="stat-mini">
+              <div class="stat-mini-label"><span>⚡ Lo âu</span><strong id="val-stress">10</strong></div>
+              <div class="progress-track"><div class="progress-fill fill-stress" id="bar-stress" style="width:10%"></div></div>
+            </div>
           </div>
         </div>
       </section>
@@ -107,9 +117,11 @@
       <section id="tab-content-area">
         <!-- TAB 1: CUỘC ĐỜI -->
         <div class="tab-panel active" id="tab-life">
+          <div class="smart-guide-card" id="smart-guide-banner"></div>
+
           <div class="section-card">
             <div class="section-title">
-              <span>⚡ Hoạt động trong năm</span>
+              <span>⚡ Hoạt động nhanh trong năm</span>
               <span id="activities-remaining">Còn 2/2 lượt</span>
             </div>
             <div id="activities-grid"></div>
@@ -117,7 +129,7 @@
 
           <div class="section-card">
             <div class="section-title">
-              <span>📜 Dòng Thời Gian Cuộc Đời</span>
+              <span>📜 Nhật Ký Cuộc Đời</span>
             </div>
             <div id="life-timeline-list"></div>
           </div>
@@ -127,14 +139,19 @@
         <div class="tab-panel" id="tab-career">
           <div class="section-card" id="current-career-card"></div>
 
-          <div class="section-card">
-            <div class="section-title"><span>🎓 Học vấn &amp; Chứng chỉ Nâng cấp</span></div>
-            <div class="list-stack" id="courses-list"></div>
+          <div class="subnav-pills" id="career-subnav"></div>
+
+          <div class="section-card" id="career-jobs-pane">
+            <div class="section-title">
+              <span>💼 Thị trường Việc làm</span>
+              <button type="button" class="filter-pill" id="btn-filter-eligible-jobs">Chỉ hiện đủ điều kiện</button>
+            </div>
+            <div class="list-stack" id="careers-list"></div>
           </div>
 
-          <div class="section-card">
-            <div class="section-title"><span>💼 Thị trường Việc làm (22 Ngành nghề)</span></div>
-            <div class="list-stack" id="careers-list"></div>
+          <div class="section-card hidden" id="career-courses-pane">
+            <div class="section-title"><span>🎓 Học vấn &amp; Chứng chỉ Nâng cấp</span></div>
+            <div class="list-stack" id="courses-list"></div>
           </div>
         </div>
 
@@ -142,38 +159,31 @@
         <div class="tab-panel" id="tab-assets">
           <div class="section-card" id="finance-summary-card"></div>
 
-          <div class="section-card" id="cashflow-ledger-card"></div>
+          <div class="subnav-pills" id="assets-subnav"></div>
 
-          <div class="section-card" id="bank-desk-card"></div>
+          <div id="assets-market-pane" class="subpane-stack">
+            <div class="section-card">
+              <div class="section-title"><span>📦 Danh mục Đang sở hữu</span></div>
+              <div class="list-stack" id="portfolio-list"></div>
+            </div>
 
-          <div class="section-card">
-            <div class="section-title"><span>📦 Danh mục Đang sở hữu</span></div>
-            <div class="list-stack" id="portfolio-list"></div>
+            <div class="section-card">
+              <div class="section-title"><span>🏛️ Sàn Giao dịch Tài sản</span></div>
+              <div class="filter-pills" id="asset-filter-bar"></div>
+              <div class="list-stack" id="asset-catalog-list"></div>
+            </div>
           </div>
 
-          <div class="section-card">
-            <div class="section-title"><span>🏛️ Sàn Giao dịch Tài sản &amp; Doanh nghiệp</span></div>
-            <div class="filter-pills" id="asset-filter-bar"></div>
-            <div class="list-stack" id="asset-catalog-list"></div>
-          </div>
-        </div>
-
-        <!-- TAB 4: BẢNG XẾP HẠNG PHÚ HÀO -->
-        <div class="tab-panel" id="tab-leaderboard">
-          <div class="section-card" id="leaderboard-hero-card"></div>
-
-          <div class="section-card">
-            <div class="section-title"><span>👑 Bảng Xếp Hạng Người Giàu (Top 21)</span></div>
-            <div class="list-stack" id="leaderboard-list"></div>
+          <div id="assets-ledger-pane" class="subpane-stack hidden">
+            <div class="section-card" id="cashflow-ledger-card"></div>
           </div>
 
-          <div class="section-card">
-            <div class="section-title"><span>🏛️ Điện Danh Vọng Cá Nhân (Kỷ lục các Đời)</span></div>
-            <div class="list-stack" id="hall-of-fame-list"></div>
+          <div id="assets-bank-pane" class="subpane-stack hidden">
+            <div class="section-card" id="bank-desk-card"></div>
           </div>
         </div>
 
-        <!-- TAB 5: QUAN HỆ & GIA TỘC -->
+        <!-- TAB 4: GIA ĐÌNH & QUAN HỆ -->
         <div class="tab-panel" id="tab-social">
           <div class="section-card" id="dynasty-banner"></div>
           <div class="section-card" id="social-actions-bar"></div>
@@ -183,11 +193,42 @@
           </div>
         </div>
 
-        <!-- TAB 5: HỒ SƠ & THÀNH TỰU -->
+        <!-- TAB 5: BẢNG XẾP HẠNG THỰC & PHÚ HÀO -->
+        <div class="tab-panel" id="tab-leaderboard">
+          <div class="subnav-pills" id="leaderboard-subnav"></div>
+
+          <div class="section-card" id="live-board-status-card">
+            <div class="live-status-row">
+              <span id="live-board-status">🟡 Đang kết nối máy chủ Live...</span>
+              <button type="button" class="btn-sm btn-ghost" id="btn-sync-leaderboard">↻ Đồng bộ</button>
+            </div>
+          </div>
+
+          <div class="section-card" id="leaderboard-hero-card"></div>
+
+          <div class="section-card" id="leaderboard-main-card">
+            <div class="section-title"><span id="leaderboard-list-title">🌐 Bảng Xếp Hạng Người Chơi Thực</span></div>
+            <div class="list-stack" id="leaderboard-list"></div>
+          </div>
+
+          <div class="section-card hidden" id="hall-of-fame-card">
+            <div class="section-title"><span>🏛️ Điện Danh Vọng Cá Nhân (Kỷ lục các Đời)</span></div>
+            <div class="list-stack" id="hall-of-fame-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB PHỤ: HỒ SƠ CHI TIẾT (Mở qua thanh chỉ số hoặc nút Lưu) -->
         <div class="tab-panel" id="tab-profile">
+          <div class="section-card">
+            <div class="section-title">
+              <span>📊 Hồ Sơ Nhân Vật Chi Tiết</span>
+              <button type="button" class="btn-sm btn-ghost" id="btn-back-from-profile">← Quay lại</button>
+            </div>
+          </div>
+
           <div class="section-card" id="wealth-rank-card">
             <div class="section-title">
-              <span>💎 Hành trình Chạm Mốc 1 Tỷ USD (25.000 Tỷ VNĐ)</span>
+              <span>💎 Mốc 1 Tỷ USD (25.000 Tỷ VNĐ)</span>
               <span id="billion-progress-text">0%</span>
             </div>
             <div id="wealth-rank-label" style="font-size:12px; color:#fde68a; font-weight:700; margin-bottom:6px;">🌱 Tay Trắng Khởi Nghiệp</div>
@@ -197,22 +238,13 @@
           </div>
 
           <div class="section-card">
-            <div class="section-title"><span>📊 Toàn bộ Chỉ số Nhân vật</span></div>
+            <div class="section-title"><span>📊 Toàn bộ 14 Chỉ số Nhân vật</span></div>
             <div class="stats-grid" id="all-stats-grid"></div>
           </div>
 
           <div class="section-card">
             <div class="section-title"><span>🏆 Thành tựu &amp; Huy hiệu</span></div>
             <div class="list-stack" id="achievements-list"></div>
-          </div>
-
-          <div class="section-card">
-            <div class="section-title"><span>💾 Quản lý Dữ liệu Lưu</span></div>
-            <div style="display:flex; gap:8px; flex-wrap:wrap;">
-              <button class="btn-sm btn-primary" id="btn-manual-save">Lưu ngay</button>
-              <button class="btn-sm btn-gold" id="btn-new-life-profile">Cuộc đời mới</button>
-              <button class="btn-sm btn-danger" id="btn-wipe-save">Xóa Save</button>
-            </div>
           </div>
         </div>
       </section>
@@ -222,14 +254,13 @@
         <button id="btn-age-up">+1 TUỔI NÀO! 🎂</button>
       </div>
 
-      <!-- Thanh Tab Bar dưới -->
+      <!-- Thanh Tab Bar 5 nút thoáng gọn -->
       <nav id="bottom-tabs">
         <button class="tab-btn active" data-tab="life"><span class="tab-ico">🌱</span>Cuộc Đời</button>
-        <button class="tab-btn" data-tab="career"><span class="tab-ico">💼</span>Nghề</button>
+        <button class="tab-btn" data-tab="career"><span class="tab-ico">💼</span>Sự Nghiệp</button>
         <button class="tab-btn" data-tab="assets"><span class="tab-ico">🏦</span>Tài Sản</button>
-        <button class="tab-btn" data-tab="leaderboard"><span class="tab-ico">👑</span>Phú Hào</button>
-        <button class="tab-btn" data-tab="social"><span class="tab-ico">❤️</span>Gia Tộc</button>
-        <button class="tab-btn" data-tab="profile"><span class="tab-ico">🏆</span>Hồ Sơ</button>
+        <button class="tab-btn" data-tab="social"><span class="tab-ico">❤️</span>Gia Đình</button>
+        <button class="tab-btn" data-tab="leaderboard"><span class="tab-ico">👑</span>Đua Top</button>
       </nav>
 
       <div class="home-indicator"></div>
@@ -244,24 +275,140 @@
         </div>
       </div>
 
-      <!-- Modal Khởi tạo Cuộc đời mới -->
+      <!-- Modal Khởi tạo Cuộc đời mới (Tự đặt tên nhân vật) -->
       <div class="sheet-backdrop modal-center" id="new-life-modal">
         <div class="modal-card">
-          <h2 style="margin:0 0 10px; font-size:17px;">✨ Khởi Đầu Cuộc Đời Mới</h2>
+          <h2 style="margin:0 0 8px; font-size:17px;">✨ Khởi Đầu Cuộc Đời Mới</h2>
+          <div class="booster-banner hidden" id="new-life-booster-banner"></div>
+          <label class="input-label" for="input-char-name">✍️ Tự đặt tên nhân vật của bạn:</label>
           <div class="form-row">
-            <input type="text" class="input-field" id="input-char-name" placeholder="Nhập họ tên nhân vật..." />
-            <button class="btn-sm btn-ghost" id="btn-random-name" title="Tên ngẫu nhiên">🎲</button>
+            <input type="text" class="input-field" id="input-char-name" maxlength="30" placeholder="Nhập họ tên bạn muốn (VD: Minh Anh)..." />
+            <button type="button" class="btn-sm btn-ghost" id="btn-random-name" title="Gợi ý tên ngẫu nhiên">🎲</button>
           </div>
           <div class="form-row">
-            <button class="gender-btn active" id="btn-gender-male">👨 Nam</button>
-            <button class="gender-btn" id="btn-gender-female">👩 Nữ</button>
+            <button type="button" class="gender-btn active" id="btn-gender-male">👨 Nam</button>
+            <button type="button" class="gender-btn" id="btn-gender-female">👩 Nữ</button>
           </div>
           <div class="section-title" style="margin-top:6px;"><span>Chọn Hoàn cảnh Xuất thân</span></div>
           <div id="backgrounds-list"></div>
           <div style="display:flex; gap:8px; margin-top:10px;">
-            <button class="btn-sm btn-green" style="flex:1; padding:10px; font-size:13px;" id="btn-start-new-life">🚀 Bắt đầu Cuộc đời</button>
-            <button class="btn-sm btn-ghost" id="btn-close-new-life">Đóng</button>
+            <button type="button" class="btn-sm btn-green" style="flex:1; padding:10px; font-size:13px;" id="btn-start-new-life">🚀 Bắt đầu Cuộc đời</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-close-new-life">Đóng</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Modal Đổi tên Nhân vật / Đặt tên Con -->
+      <div class="sheet-backdrop modal-center" id="rename-modal">
+        <div class="modal-card">
+          <h2 style="margin:0 0 8px; font-size:16px;" id="rename-modal-title">✏️ Đổi Tên Nhân Vật</h2>
+          <div class="form-row">
+            <input type="text" class="input-field" id="input-rename-char" maxlength="30" placeholder="Nhập tên mới..." />
+            <button type="button" class="btn-sm btn-ghost" id="btn-random-rename" title="Tên ngẫu nhiên">🎲</button>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button type="button" class="btn-sm btn-green" style="flex:1; padding:9px;" id="btn-confirm-rename">✅ Xác nhận tên</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-cancel-rename">Hủy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Cổng Chơi Lại (Xem Quảng Cáo hoặc Mua Gói Hỗ Trợ) -->
+      <div class="sheet-backdrop modal-center" id="replay-gate-modal">
+        <div class="modal-card">
+          <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:6px;">
+            <h2 style="margin:0; font-size:16.5px;">🔄 Chơi Lại Cuộc Đời Khác</h2>
+            <span class="pill-badge gold" id="replay-ticket-badge">🎫 0 Vé</span>
+          </div>
+          <p class="modal-sub">
+            Lượt đời đầu tiên hoàn toàn miễn phí! Để bắt đầu cuộc đời mới, hãy <strong>xem một quảng cáo ngắn</strong> hoặc chọn <strong>gói hỗ trợ nhỏ</strong> nhận thêm chỉ số &amp; vốn khởi nghiệp.
+          </p>
+
+          <div class="pack-stack">
+            <div class="pack-card ad">
+              <div class="pack-head">
+                <strong>🎬 Xem Quảng Cáo Tài Trợ (5 giây)</strong>
+                <span class="pack-price free">MIỄN PHÍ</span>
+              </div>
+              <div class="pack-perks">+1 Lượt chơi lại ngay • Tặng +5 May mắn &amp; +3 Triệu đ Quỹ Tuổi 18</div>
+              <button type="button" class="btn-sm btn-primary" style="width:100%; margin-top:7px;" id="btn-watch-ad-replay">▶️ Xem Quảng Cáo Để Chơi Lại</button>
+            </div>
+
+            <div class="pack-card starter">
+              <div class="pack-head">
+                <strong>🎁 Gói Khởi Đầu Thuận Lợi</strong>
+                <span class="pack-price">19.000đ</span>
+              </div>
+              <div class="pack-perks">3 Vé Chơi Lại không quảng cáo • Hỗ trợ 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ 18t &amp; +2 Cỗ Máy Thời Gian</div>
+              <button type="button" class="btn-sm btn-gold" style="width:100%; margin-top:7px;" id="btn-buy-starter-pack">💳 Mở Gói Khởi Đầu (19.000đ)</button>
+            </div>
+
+            <div class="pack-card vip">
+              <div class="pack-head">
+                <strong>👑 Gói Tỷ Phú VIP Vĩnh Viễn</strong>
+                <span class="pack-price">49.000đ</span>
+              </div>
+              <div class="pack-perks">Chơi lại VÔ HẠN không quảng cáo • Huy hiệu 👑 VIP trên BXH Thực • +15 Trí tuệ &amp; May mắn, +50 Triệu đ Quỹ 18t, tối đa 8 Cỗ Máy Thời Gian</div>
+              <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:7px;" id="btn-buy-vip-pack">👑 Nâng Cấp VIP Vĩnh Viễn (49.000đ)</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:10px; padding:8px;" id="btn-close-replay-gate">Để sau</button>
+        </div>
+      </div>
+
+      <!-- Modal Trình Chiếu Quảng Cáo Thưởng 5s -->
+      <div class="sheet-backdrop modal-center" id="rewarded-ad-modal">
+        <div class="modal-card">
+          <div class="event-badge">QUẢNG CÁO TÀI TRỢ</div>
+          <h2 style="margin:0 0 6px; font-size:16px;" id="ad-sponsor-title">☕ Cà Phê Tỉnh Táo Startup 24/7</h2>
+          <p class="modal-sub" id="ad-sponsor-body">Đang tải nội dung nhà tài trợ... Hãy chờ đếm ngược kết thúc để nhận vé chơi lại &amp; quà hỗ trợ!</p>
+          <div class="ad-stage-box">
+            <div class="ad-countdown" id="ad-countdown-label">⏳ Còn 5 giây...</div>
+            <div class="progress-track" style="height:8px; margin-top:8px;">
+              <div class="progress-fill fill-intel" id="ad-progress-fill" style="width:0%"></div>
+            </div>
+          </div>
+          <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:12px; padding:10px;" id="btn-claim-ad-reward" disabled>Đang xem quảng cáo...</button>
+        </div>
+      </div>
+
+      <!-- Modal Thanh Toán Gói Hỗ Trợ -->
+      <div class="sheet-backdrop modal-center" id="payment-sheet-modal">
+        <div class="modal-card">
+          <div class="event-badge">CỔNG THANH TOÁN ĐỐI TÁC (DEMO)</div>
+          <h2 style="margin:0 0 4px; font-size:16.5px;" id="pay-pack-title">Gói Khởi Đầu Thuận Lợi</h2>
+          <div class="pay-price-tag" id="pay-pack-price">19.000đ</div>
+          <div class="modal-sub" id="pay-pack-perks">Chi tiết quyền lợi...</div>
+          <div class="pay-method-box">
+            <span>Phương thức mô phỏng: <strong>Ví MoMo / Apple Pay / VietQR</strong></span>
+          </div>
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button type="button" class="btn-sm btn-green" style="flex:1; padding:10px;" id="btn-confirm-payment">✅ Xác Nhận Thanh Toán</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-cancel-payment">Hủy</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Quản lý Lưu & Sao Lưu Tiến Trình -->
+      <div class="sheet-backdrop modal-center" id="save-manage-modal">
+        <div class="modal-card">
+          <h2 style="margin:0 0 6px; font-size:16.5px;">💾 Lưu &amp; Sao Lưu Tiến Trình</h2>
+          <div class="modal-sub" id="save-status-detail">Tiến trình được tự động lưu trên trình duyệt của bạn.</div>
+          <div class="save-actions-grid">
+            <button type="button" class="btn-sm btn-primary" id="btn-manual-save">💾 Lưu Ngay</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-open-profile-stats">📊 Xem 14 Chỉ Số</button>
+            <button type="button" class="btn-sm btn-gold" id="btn-copy-save-code">📋 Chép Mã Sao Lưu</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-download-save-file">⬇️ Tải File .json</button>
+          </div>
+          <label class="input-label" style="margin-top:10px;" for="input-save-code">📥 Khôi phục tiến trình bằng Mã Sao Lưu (ZTB2:...):</label>
+          <textarea class="input-field save-code-box" id="input-save-code" rows="2" placeholder="Dán mã sao lưu ZTB2:... vào đây để khôi phục..."></textarea>
+          <div style="display:flex; gap:8px; margin-top:8px;">
+            <button type="button" class="btn-sm btn-green" style="flex:1;" id="btn-import-save-code">📥 Khôi Phục Mã</button>
+            <button type="button" class="btn-sm btn-gold" id="btn-new-life-profile">🔄 Đời Mới</button>
+            <button type="button" class="btn-sm btn-danger" id="btn-wipe-save">🗑️ Xóa Save</button>
+          </div>
+          <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:10px; padding:8px;" id="btn-close-save-modal">Đóng</button>
         </div>
       </div>
 
@@ -272,13 +419,14 @@
           <div id="gameover-summary" style="font-size:12.5px; line-height:1.5; color:#cbd5e1; margin-bottom:12px;"></div>
           <div class="section-title"><span>👑 Thừa kế Gia tộc (Chơi tiếp đời con)</span></div>
           <div class="list-stack" id="heir-selection-list" style="margin-bottom:12px;"></div>
-          <button class="btn-sm btn-primary" style="width:100%; padding:10px; font-size:13px;" id="btn-gameover-new-life">✨ Bắt đầu Gia tộc Hoàn toàn Mới</button>
+          <button type="button" class="btn-sm btn-primary" style="width:100%; padding:10px; font-size:13px;" id="btn-gameover-new-life">✨ Chơi Lại Gia Tộc Mới</button>
         </div>
       </div>
     </main>
   </div>
 
   <script src="web/game_data.js"></script>
+  <script src="web/live_leaderboard.js"></script>
   <script src="web/audio.js"></script>
   <script src="web/vendor/three.min.js"></script>
   <script src="web/diorama3d.js"></script>
