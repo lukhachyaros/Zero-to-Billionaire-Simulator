@@ -32,21 +32,34 @@
   display: none !important;
 }
 
-html,
+html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #090e1c;
+  overscroll-behavior: none;
+}
+
 body {
   margin: 0;
   padding: 0;
-  height: 100%;
-  background: var(--bg-outer);
+  width: 100%;
+  min-height: 100%;
+  min-height: 100dvh;
+  background-color: #090e1c;
+  background-image: var(--bg-outer);
   color: var(--text-main);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   overflow: hidden;
+  overscroll-behavior: none;
   user-select: none;
+  -webkit-text-size-adjust: 100%;
 }
 
 .app-stage {
   height: 100dvh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,21 +155,53 @@ body {
 }
 
 @media (max-width: 519px) {
+  html,
+  body {
+    background: #090e1c;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
   .app-stage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
     padding: 0;
+    gap: 0;
+    align-items: stretch;
+    justify-content: stretch;
+    background-color: #090e1c;
   }
   .phone-shell {
-    width: 100vw;
-    height: 100dvh;
+    width: 100%;
+    height: 100%;
+    max-height: none;
     border-radius: 0;
     border: none;
     box-shadow: none;
+    padding-top: env(safe-area-inset-top, 0px);
+    background-color: #090e1c;
   }
-  .dynamic-island {
+  .dynamic-island,
+  .home-indicator {
     display: none;
   }
-  .home-indicator {
-    padding-bottom: env(safe-area-inset-bottom);
+  #diorama-section {
+    height: 26.5%;
+    min-height: 175px;
+    max-height: 236px;
+  }
+  #bottom-tabs {
+    padding: 6px 6px calc(8px + env(safe-area-inset-bottom, 0px));
+    background-color: #090e1c;
+  }
+  .sheet-backdrop {
+    padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(14px + env(safe-area-inset-bottom, 0px));
   }
 }
 
@@ -185,7 +230,7 @@ body {
 
 .diorama-top-bar {
   position: absolute;
-  top: calc(10px + env(safe-area-inset-top));
+  top: 10px;
   left: 10px;
   right: 10px;
   display: flex;
@@ -287,6 +332,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mini-counter.paid {
+  background: linear-gradient(135deg, #f59e0b, #dc2626);
+  color: #fff;
 }
 
 .diorama-hint {
@@ -402,6 +452,25 @@ body {
   align-items: center;
   gap: 5px;
   flex-shrink: 0;
+}
+
+.hud-online-pill {
+  background: rgba(16, 185, 129, 0.16);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #6ee7b7;
+  border-radius: 10px;
+  padding: 4px 7px;
+  font-size: 10.5px;
+  font-weight: 800;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.hud-online-pill.offline {
+  background: rgba(245, 158, 11, 0.16);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fde68a;
 }
 
 .hud-rank-pill {
@@ -525,7 +594,10 @@ body {
 /* Scrollable Tab Content Area */
 #tab-content-area {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
   padding: 9px 12px 14px;
   scrollbar-width: thin;
   scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
@@ -788,6 +860,47 @@ body {
   gap: 8px;
   font-size: 11.5px;
   color: #cbd5e1;
+}
+
+.live-status-left {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.live-online-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: #a7f3d0;
+}
+
+.live-online-counter strong {
+  color: #34d399;
+  font-weight: 800;
+}
+
+.pulse-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  animation: livePulse 1.8s infinite;
+  flex-shrink: 0;
+}
+
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+  70% { box-shadow: 0 0 0 7px rgba(16, 185, 129, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+.live-sub-status {
+  font-size: 10.5px;
+  color: var(--text-muted);
 }
 
 .ledger-scroll {

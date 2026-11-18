@@ -8,7 +8,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using TMPro;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     public enum ButtonStyle { Primary, Secondary, Danger, Ghost }
 

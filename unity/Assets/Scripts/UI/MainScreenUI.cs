@@ -43,7 +43,7 @@ using ZeroToBillionaire.Core;
 using ZeroToBillionaire.Events;
 using ZeroToBillionaire.Mobile.iOS;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     public class MainScreenUI : MonoBehaviour
     {

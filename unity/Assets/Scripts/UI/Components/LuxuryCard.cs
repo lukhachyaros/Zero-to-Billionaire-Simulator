@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     [RequireComponent(typeof(Image))]
     public class LuxuryCard : MonoBehaviour,

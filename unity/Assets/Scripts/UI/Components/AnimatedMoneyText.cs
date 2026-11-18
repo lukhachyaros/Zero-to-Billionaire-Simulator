@@ -7,7 +7,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     [RequireComponent(typeof(TextMeshProUGUI))]
     public class AnimatedMoneyText : MonoBehaviour

@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     public class CharacterAvatarUI : MonoBehaviour
     {

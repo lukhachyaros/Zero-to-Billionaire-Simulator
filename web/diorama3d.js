@@ -138,7 +138,7 @@
 
       this.scene = new THREE.Scene();
 
-      const frustum = 5.3;
+      const frustum = 6.05;
       const aspect = this.width / this.height;
       this.camera = new THREE.OrthographicCamera(
         (-frustum * aspect) / 2,
@@ -149,7 +149,7 @@
         50
       );
       this.camera.position.set(8.6, 7.2, 8.6);
-      this.camera.lookAt(0, 0.85, 0);
+      this.camera.lookAt(0, 1.16, 0);
 
       // Ánh sáng 3 điểm PBR Cozy
       this.hemiLight = new THREE.HemisphereLight(0xe0f2fe, 0x334155, 0.82);
@@ -371,7 +371,7 @@
 
     updateCameraFrustum() {
       if (!this.camera) return;
-      const frustum = 5.3 / this.zoomFactor;
+      const frustum = 6.05 / this.zoomFactor;
       const aspect = this.width / this.height;
       this.camera.left = (-frustum * aspect) / 2;
       this.camera.right = (frustum * aspect) / 2;

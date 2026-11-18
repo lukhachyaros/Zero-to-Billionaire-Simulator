@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     public class CoinParticleSpawner : MonoBehaviour
     {
