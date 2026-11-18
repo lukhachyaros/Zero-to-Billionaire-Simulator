@@ -1,0 +1,844 @@
+[
+  {
+    "eventId": "exp_01_wedding_season",
+    "title": "💌 Bão Thiệp Hồng Cuối Năm",
+    "category": "relationship",
+    "minAge": 21,
+    "maxAge": 55,
+    "priority": 78,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 12000000 }
+    ],
+    "description": "Một tháng nhận liền 6 chiếc thiệp mời đám cưới từ bạn đại học cũ đến đồng nghiệp phòng bên cạnh.",
+    "options": [
+      {
+        "id": "opt_exp01_go_all",
+        "label": "Đi đủ cả 6 đám, mừng hậu hĩnh cho tròn nghĩa tình (-6 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.7, "message": "Bạn bè rất quý tấm lòng hào phóng của bạn (+8 Giao tiếp, +5 Địa vị).", "statModifiers": { "money": -6000000, "charisma": 8, "socialStatus": 5, "happiness": 4 } },
+          { "probability": 0.3, "message": "Ăn cưới liên miên cuối tháng nhìn ví tiền xót ruột, hơi mệt dạ dày (-3 Khỏe).", "statModifiers": { "money": -6000000, "charisma": 5, "health": -3, "stress": 5 } }
+        ]
+      },
+      {
+        "id": "opt_exp01_selective",
+        "label": "Chỉ đi người thân thiết, gửi phong bì vừa phải (-3 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Cân bằng được ví tiền mà vẫn giữ lễ nghĩa cơ bản.", "statModifiers": { "money": -3000000, "financialLiteracy": 3 } }
+        ]
+      },
+      {
+        "id": "opt_exp01_skip",
+        "label": "Báo bận công tác từ chối hết để tiết kiệm tiền",
+        "outcomes": [
+          { "probability": 1.0, "message": "Giữ được tiền nhưng hội bạn bàn tán sau lưng (-8 Giao tiếp, -6 Địa vị).", "statModifiers": { "charisma": -8, "socialStatus": -6, "happiness": -5 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_02_rent_hike",
+    "title": "🏠 Chủ Trọ Thông Báo Tăng Giá Phòng",
+    "category": "finance",
+    "minAge": 19,
+    "maxAge": 36,
+    "priority": 77,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "netWorth", "operatorType": "<", "numberValue": 1200000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 10000000 }
+    ],
+    "description": "Giá điện nước sinh hoạt leo thang, chủ nhà thông báo tăng tiền phòng và phí dịch vụ thêm một khoản đáng kể.",
+    "options": [
+      {
+        "id": "opt_exp02_accept",
+        "label": "Đóng thêm chênh lệch để ổn định chỗ ở làm việc (-8 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bạn tốn thêm chi phí cố định trong năm nhưng đỡ mất công chuyển đồ.", "statModifiers": { "money": -8000000, "stress": 6, "happiness": -4 } }
+        ]
+      },
+      {
+        "id": "opt_exp02_move",
+        "label": "Tự tìm phòng trọ xa trung tâm hơn, tốn phí chuyển nhà (-4 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.65, "message": "Phòng mới yên tĩnh và rẻ hơn, đi làm hơi xa một chút (+4 Kỷ luật).", "statModifiers": { "money": -4000000, "discipline": 4, "stress": 4 } },
+          { "probability": 0.35, "message": "Chuyển nhà gặp đúng trời mưa, đồ đạc hỏng hóc thêm bực mình (-5 Vui).", "statModifiers": { "money": -5500000, "happiness": -5, "stress": 8 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_03_flooded_bike",
+    "title": "🌧️ Xe Ngập Nước Chết Máy Giữa Mưa Bão",
+    "category": "finance",
+    "minAge": 18,
+    "maxAge": 55,
+    "priority": 76,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 9000000 }
+    ],
+    "description": "Cơn mưa lớn làm con đường về nhà ngập sâu nửa bánh xe. Xe của bạn chết máy giữa dòng nước, bugi và bộ nồi hỏng nặng.",
+    "options": [
+      {
+        "id": "opt_exp03_repair_full",
+        "label": "Sửa triệt để tại hãng chính quy (-7 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Xe chạy êm ru trở lại, an tâm đi làm mưa nắng.", "statModifiers": { "money": -7000000, "stress": -2, "practicalSkills": 2 } }
+        ]
+      },
+      {
+        "id": "opt_exp03_cheap_fix",
+        "label": "Dắt bộ dưới mưa rồi vá víu tạm ở tiệm vỉa hè (-2.5 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.45, "message": "Cũng đi tạm được qua tháng nhưng hay cà giật giữa đường.", "statModifiers": { "money": -2500000, "stress": 8, "health": -3 } },
+          { "probability": 0.55, "message": "Ngấm nước mưa cảm sốt 3 ngày liền và xe hỏng lại phải làm máy (-9 Triệu đ).", "statModifiers": { "money": -9000000, "health": -8, "happiness": -8 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_04_emergency_dental",
+    "title": "🏥 Đau Nhức Răng Khôn & Viêm Cấp Tính",
+    "category": "culture",
+    "minAge": 19,
+    "maxAge": 45,
+    "priority": 79,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 16000000 }
+    ],
+    "description": "Răng khôn mọc lệch đâm thẳng vào răng số 7 gây sưng má, sốt cao không thể ăn ngủ hay tập trung làm việc.",
+    "options": [
+      {
+        "id": "opt_exp04_clinic",
+        "label": "Vào bệnh viện chuyên khoa tiểu phẫu công nghệ cao (-15 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tiểu phẫu nhẹ nhàng không biến chứng, sức khỏe hồi phục nhanh chóng (+6 Khỏe).", "statModifiers": { "money": -15000000, "health": 6, "stress": -6 } }
+        ]
+      },
+      {
+        "id": "opt_exp04_delay",
+        "label": "Mua thuốc giảm đau cầm cự chờ qua đợt (-1.5 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Nhiễm trùng nặng hơn ảnh hưởng thể chất nghiêm trọng (-16 Sức khỏe, +14 Lo âu).", "statModifiers": { "money": -1500000, "health": -16, "happiness": -10, "stress": 14 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_05_broken_laptop",
+    "title": "💻 Máy Tính Chết Main Trước Ngày Chốt Deadline",
+    "category": "career",
+    "minAge": 19,
+    "maxAge": 50,
+    "priority": 80,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 24000000 }
+    ],
+    "description": "Laptop phục vụ kiếm tiền bất ngờ bốc khói bo mạch chủ đúng tuần cao điểm cần giao hồ sơ cho khách hàng lớn.",
+    "options": [
+      {
+        "id": "opt_exp05_buy_new",
+        "label": "Đầu tư máy cấu hình mạnh mới hoàn toàn (-22 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Hoàn thành deadline ngoạn mục nhờ máy chạy mượt (+6 Kỹ năng nghề, +5 Kỷ luật).", "statModifiers": { "money": -22000000, "practicalSkills": 6, "discipline": 5, "stress": -4 } }
+        ]
+      },
+      {
+        "id": "opt_exp05_repair_old",
+        "label": "Sửa main cũ và mượn máy bạn làm tạm (-6 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.4, "message": "Cứu được dữ liệu kịp giờ chót dù máy chạy hơi chậm.", "statModifiers": { "money": -6000000, "stress": 10 } },
+          { "probability": 0.6, "message": "Mất file quan trọng, trễ tiến độ bị phạt hợp đồng (-12 Triệu đ, -8 Kỹ năng).", "statModifiers": { "money": -12000000, "practicalSkills": -8, "stress": 16, "happiness": -8 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_06_parents_hospital",
+    "title": "🚑 Bố Mẹ Ở Quê Cần Phẫu Thuật Chuyên Sâu",
+    "category": "family_culture",
+    "minAge": 24,
+    "maxAge": 65,
+    "priority": 84,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "bg_orphan" },
+      { "field": "cash", "operatorType": ">=", "numberValue": 35000000 }
+    ],
+    "description": "Cuộc gọi khẩn từ quê: một bên phụ huynh cần mổ nội soi gấp tại tuyến trên để tránh biến chứng lâu dài.",
+    "options": [
+      {
+        "id": "opt_exp06_cover_all",
+        "label": "Lo trọn viện phí, thuốc tốt nhất và túc trực chăm sóc (-45 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Ca mổ thành công tốt đẹp! Bố mẹ bình an và cảm động khôn xiết (+15 Hiếu thảo, +12 Phúc đức).", "statModifiers": { "money": -45000000, "parentRelationship": 15, "karma": 12, "happiness": 8 } }
+        ]
+      },
+      {
+        "id": "opt_exp06_split",
+        "label": "Vay mượn thêm hoặc chia sẻ bớt gánh nặng với họ hàng (-25 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Mọi việc qua khỏi nhưng bản thân thêm trăn trở và áp lực tài chính.", "statModifiers": { "money": -25000000, "parentRelationship": 4, "stress": 12 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_07_tet_expenses",
+    "title": "🧧 Tết Nguyên Đán & Phong Bao Lì Xì Hai Bên",
+    "category": "family_culture",
+    "minAge": 22,
+    "maxAge": 75,
+    "priority": 76,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
+    ],
+    "description": "Cuối năm đi làm ăn xa trở về: quà biếu nội ngoại, giỏ quà sếp/đối tác và hàng chục phong bao lì xì đỏ chót xếp hàng chờ.",
+    "options": [
+      {
+        "id": "opt_exp07_grand_tet",
+        "label": "Sắm Tết tươm tất, lì xì rủng rỉnh giữ thể diện (-18 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Không khí Tết sum vầy ấm cúng, họ hàng nể trọng (+8 Địa vị, +10 Hiếu thảo).", "statModifiers": { "money": -18000000, "socialStatus": 8, "parentRelationship": 10, "happiness": 8 } }
+        ]
+      },
+      {
+        "id": "opt_exp07_frugal_tet",
+        "label": "Thắt chặt chi tiêu, gói gọn trong mức cơ bản (-7 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bảo toàn được phần lớn tiền tiết kiệm đầu năm mới.", "statModifiers": { "money": -7000000, "financialLiteracy": 3, "happiness": -3 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_08_child_tuition_surge",
+    "title": "🎒 Mùa Tựu Trường & Lớp Học Năng Khiếu Cho Con",
+    "category": "family_culture",
+    "minAge": 25,
+    "maxAge": 62,
+    "priority": 82,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 25000000 }
+    ],
+    "description": "Bước vào năm học mới với hàng loạt khoản thu: đồng phục, bán trú, ngoại ngữ và năng khiếu cho con trẻ.",
+    "options": [
+      {
+        "id": "opt_exp08_best_school",
+        "label": "Đầu tư môi trường song ngữ & ngoại khóa bài bản (-28 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Con học tập tiến bộ rõ rệt, gia đình tự hào (+10 Hạnh phúc, +6 Địa vị).", "statModifiers": { "money": -28000000, "happiness": 10, "socialStatus": 6 } }
+        ]
+      },
+      {
+        "id": "opt_exp08_public_school",
+        "label": "Học trường công lập tiêu chuẩn, cắt bớt lớp thêm (-10 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Chi phí nhẹ nhàng hơn, bạn tự dành thời gian kèm con học buổi tối.", "statModifiers": { "money": -10000000, "discipline": 3, "stress": 4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_09_tax_audit_fine",
+    "title": "🧾 Cơ Quan Thuế Rà Soát Thu Nhập Nhiều Nguồn",
+    "category": "finance",
+    "minAge": 23,
+    "maxAge": 70,
+    "priority": 83,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 100000000 }
+    ],
+    "description": "Cơ quan thuế đối chiếu dữ liệu thu nhập vãng lai, đầu tư và kinh doanh nhiều năm trước, phát hiện thiếu sót kê khai.",
+    "options": [
+      {
+        "id": "opt_exp09_settle_clean",
+        "label": "Thuê kế toán rà soát và nộp truy thu đầy đủ (-35 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Hồ sơ pháp lý sạch sẽ, không vướng rắc rối về sau (+6 Hiểu biết Tài chính).", "statModifiers": { "money": -35000000, "financialLiteracy": 6, "stress": -2 } }
+        ]
+      },
+      {
+        "id": "opt_exp09_stall",
+        "label": "Chậm trễ giải trình để kéo dài thời gian",
+        "outcomes": [
+          { "probability": 0.75, "conditionFormula": "financialLiteracy >= 75", "message": "Bạn tự chứng minh được chứng từ hợp lệ, chỉ chịu phạt hành chính nhẹ (-12 Triệu đ).", "statModifiers": { "money": -12000000, "stress": 8 } },
+          { "probability": 0.25, "message": "Bị tính phạt chậm nộp lũy kế nặng gấp rưỡi (-52 Triệu đ, +16 Lo âu).", "statModifiers": { "money": -52000000, "stress": 16, "socialStatus": -8 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_10_house_leak_storm",
+    "title": "🌪️ Bão Lớn Làm Thấm Dột Trần Nhà & Hỏng Nội Thất",
+    "category": "finance",
+    "minAge": 24,
+    "maxAge": 80,
+    "priority": 79,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1150000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 65000000 }
+    ],
+    "description": "Mùa mưa bão giật mạnh làm tốc mái hiên, thấm dột tường phòng khách và chập hệ thống điện âm tường căn nhà của bạn.",
+    "options": [
+      {
+        "id": "opt_exp10_renovate",
+        "label": "Chống thấm tổng thể & thay mới sàn gỗ bị phồng (-60 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Ngôi nhà bền chắc và sang trọng lại như mới.", "statModifiers": { "money": -60000000, "happiness": 3, "stress": -4 } }
+        ]
+      },
+      {
+        "id": "opt_exp10_patch",
+        "label": "Xử lý chắp vá tạm thời qua mùa mưa (-20 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tiết kiệm trước mắt nhưng ẩm mốc khiến sinh hoạt khó chịu (-8 Vui, -4 Khỏe).", "statModifiers": { "money": -20000000, "happiness": -8, "health": -4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_11_bad_tenant_damage",
+    "title": "🔑 Khách Thuê Trả Mặt Bằng Bỏ Trốn, Để Lại Đống Đổ Nát",
+    "category": "finance",
+    "minAge": 24,
+    "maxAge": 80,
+    "priority": 78,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1800000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 50000000 }
+    ],
+    "description": "Khách thuê bùng 2 tháng tiền nhà và tháo dỡ hư hỏng toàn bộ thiết bị điện nước khi rời đi.",
+    "options": [
+      {
+        "id": "opt_exp11_rebuild",
+        "label": "Cải tạo lại bài bản để sớm đón khách mới (-45 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bài học đắt giá về thẩm định hợp đồng thuê (+6 Kinh doanh).", "statModifiers": { "money": -45000000, "businessAcuity": 6, "stress": 8 } }
+        ]
+      },
+      {
+        "id": "opt_exp11_lawsuit",
+        "label": "Thuê luật sư truy đòi thiệt hại và sơn sửa tối thiểu (-25 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.35, "message": "Thu hồi được phần lớn tiền cọc & bồi thường qua tòa án (-5 Triệu đ chi phí).", "statModifiers": { "money": -5000000, "socialStatus": 4 } },
+          { "probability": 0.65, "message": "Thủ tục kéo dài, mất thêm án phí lẫn tiền sửa nhà (-38 Triệu đ).", "statModifiers": { "money": -38000000, "stress": 14, "happiness": -10 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_12_summer_ac_bill",
+    "title": "☀️ Đợt Nắng Nóng 41 Độ: Cháy Lốc Điều Hòa & Hóa Đơn Điện",
+    "category": "culture",
+    "minAge": 20,
+    "maxAge": 75,
+    "priority": 74,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 14000000 }
+    ],
+    "description": "Nắng nóng kỷ lục kéo dài cả tháng khiến máy lạnh quá tải hỏng nặng và tiền điện tăng vọt gấp 3 lần.",
+    "options": [
+      {
+        "id": "opt_exp12_inverter",
+        "label": "Thay máy Inverter tiết kiệm điện mới & thanh toán đủ (-11 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Không gian mát mẻ dễ chịu giúp bảo vệ giấc ngủ và năng suất làm việc.", "statModifiers": { "money": -11000000, "health": 3, "happiness": 2 } }
+        ]
+      },
+      {
+        "id": "opt_exp12_fan",
+        "label": "Tắt điều hòa dùng quạt hơi nước chống nóng (-3 Triệu đ tiền điện)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Nóng bức mất ngủ triền miên khiến tinh thần uể oải (-6 Sức khỏe, +10 Lo âu).", "statModifiers": { "money": -3000000, "health": -6, "stress": 10, "happiness": -6 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_13_traffic_fines",
+    "title": "🚦 Phạt Nguội Camera Giao Thông & Bảo Dưỡng Định Kỳ",
+    "category": "finance",
+    "minAge": 21,
+    "maxAge": 75,
+    "priority": 75,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
+    ],
+    "description": "Đi đăng kiểm bất ngờ phát hiện 2 lỗi phạt nguội từ những chuyến công tác cùng bộ lốp đã đến hạn thay.",
+    "options": [
+      {
+        "id": "opt_exp13_pay_all",
+        "label": "Nộp phạt đầy đủ và thay lốp mới đảm bảo an toàn (-12 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "An toàn là trên hết, tuân thủ luật lệ nghiêm túc hơn (+4 Kỷ luật).", "statModifiers": { "money": -12000000, "discipline": 4, "health": 2 } }
+        ]
+      },
+      {
+        "id": "opt_exp13_skip_tire",
+        "label": "Chỉ đóng phạt để qua đăng kiểm, giữ nguyên lốp cũ (-6 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.7, "message": "Tiết kiệm được một khoản trước mắt nhưng lái xe khá run tay.", "statModifiers": { "money": -6000000, "stress": 6 } },
+          { "probability": 0.3, "message": "Nổ lốp giữa cao tốc, tốn tiền cứu hộ và sửa thân vỏ gấp đôi (-18 Triệu đ).", "statModifiers": { "money": -18000000, "stress": 15, "health": -5 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_14_deepfake_scam_call",
+    "title": "📱 Cuộc Gọi Giả Danh Ngân Hàng & Video Deepfake Người Thân",
+    "category": "finance",
+    "minAge": 20,
+    "maxAge": 85,
+    "priority": 81,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
+    ],
+    "description": "Kẻ gian dùng AI giả giọng và gương mặt giống hệt người quen gọi điện hối chuyển tiền xử lý sự cố khẩn cấp trong 5 phút.",
+    "options": [
+      {
+        "id": "opt_exp14_verify",
+        "label": "Bình tĩnh cúp máy, gọi số trực tiếp xác minh kỹ",
+        "outcomes": [
+          { "probability": 0.75, "conditionFormula": "financialLiteracy >= 55", "message": "Bạn lật tẩy cú lừa Deepfake ngoạn mục và cảnh báo cho cả gia đình (+8 Tài chính, +5 Trí tuệ)!", "statModifiers": { "financialLiteracy": 8, "intelligence": 5, "karma": 4 } },
+          { "probability": 0.25, "message": "Lúc hoang mang suýt bấm link lạ khiến mất một phần tiền phí khóa thẻ (-5 Triệu đ).", "statModifiers": { "money": -5000000, "stress": 8, "financialLiteracy": 4 } }
+        ]
+      },
+      {
+        "id": "opt_exp14_panic_send",
+        "label": "Hoảng loạn tin ngay và chuyển khoản vội vã",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tiền vừa chuyển xong thì thuê bao khóa máy — mất trắng một khoản lớn (-28 Triệu đ, +20 Lo âu).", "statModifiers": { "money": -28000000, "stress": 20, "happiness": -15, "financialLiteracy": 5 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_15_ancestral_hall",
+    "title": "🏮 Họ Hàng Kêu Gọi Công Đức Xây Nhà Thờ Tổ",
+    "category": "family_culture",
+    "minAge": 28,
+    "maxAge": 85,
+    "priority": 75,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 50000000 }
+    ],
+    "description": "Trưởng tộc họp mặt các chi nhánh, kỳ vọng những người thành đạt trên thành phố đóng góp xây dựng lại nhà thờ tổ khang trang.",
+    "options": [
+      {
+        "id": "opt_exp15_lead_donor",
+        "label": "Đóng góp mức vàng khắc tên lên bảng công đức (-35 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Cả dòng họ tự hào nhắc tên bạn trong ngày khánh thành (+15 Địa vị, +12 Phúc đức).", "statModifiers": { "money": -35000000, "socialStatus": 15, "karma": 12, "parentRelationship": 10 } }
+        ]
+      },
+      {
+        "id": "opt_exp15_modest",
+        "label": "Góp tấm lòng vừa sức (-8 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Trọn vẹn tình cảm với cội nguồn mà không ảnh hưởng dòng tiền đầu tư.", "statModifiers": { "money": -8000000, "karma": 4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_16_midlife_health_check",
+    "title": "🩺 Khám Tầm Soát Tổng Quát & Chăm Sóc Sức Khỏe Tuổi 40",
+    "category": "culture",
+    "minAge": 38,
+    "maxAge": 65,
+    "priority": 82,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
+    ],
+    "description": "Áp lực công việc kéo dài nhiều năm khiến các chỉ số mỡ máu, gan và cột sống bắt đầu lên tiếng cảnh báo.",
+    "options": [
+      {
+        "id": "opt_exp16_vip_checkup",
+        "label": "Làm gói tầm soát chuyên sâu & phác đồ phục hồi toàn diện (-28 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Phát hiện sớm các nguy cơ và điều chỉnh lối sống kịp thời (+16 Sức khỏe, -12 Lo âu).", "statModifiers": { "money": -28000000, "health": 16, "stress": -12, "happiness": 6 } }
+        ]
+      },
+      {
+        "id": "opt_exp16_ignore",
+        "label": "Chủ quan nghĩ mình còn khỏe, tiết kiệm tiền làm ăn",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bệnh nền âm ỉ phát tác khiến thể lực suy giảm đáng kể (-14 Sức khỏe, +10 Lo âu).", "statModifiers": { "health": -14, "stress": 10, "happiness": -8 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_17_child_overseas_study",
+    "title": "✈️ Con Xin Vốn Học Đại Học Quốc Tế / Du Học",
+    "category": "family_culture",
+    "minAge": 40,
+    "maxAge": 68,
+    "priority": 86,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 200000000 }
+    ],
+    "description": "Con bạn xuất sắc nhận thư mời nhập học từ trường danh tiếng nhưng học phí và sinh hoạt phí năm đầu là một khoản chi lớn.",
+    "options": [
+      {
+        "id": "opt_exp17_fund_full",
+        "label": "Dốc vốn đầu tư tương lai rực rỡ cho con (-180 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Con bước ra thế giới tự tin trưởng thành, gia đình rạng danh (+18 Hạnh phúc, +14 Địa vị).", "statModifiers": { "money": -180000000, "happiness": 18, "socialStatus": 14, "karma": 8 } }
+        ]
+      },
+      {
+        "id": "opt_exp17_half_scholarship",
+        "label": "Hỗ trợ một nửa, khuyến khích con săn học bổng & tự lập (-75 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Con học được cách tự lập tài chính giống bạn ngày xưa (+10 Hạnh phúc, +5 Kỷ luật).", "statModifiers": { "money": -75000000, "happiness": 10, "discipline": 5 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_18_business_litigation",
+    "title": "⚖️ Tranh Chấp Bản Quyền & Hợp Đồng Thương Mại",
+    "category": "career",
+    "minAge": 28,
+    "maxAge": 75,
+    "priority": 85,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 5000000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 400000000 }
+    ],
+    "description": "Đối thủ cạnh tranh đâm đơn khiếu nại thương hiệu và hợp đồng phân phối đúng lúc dự án của bạn đang mở rộng quy mô.",
+    "options": [
+      {
+        "id": "opt_exp18_top_lawyers",
+        "label": "Thuê hãng luật hàng đầu bảo vệ quyền lợi đến cùng (-350 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.72, "conditionFormula": "businessAcuity >= 65", "message": "Thắng kiện vang dội, khẳng định uy tín thương hiệu trên thị trường (+14 Kinh doanh, +12 Địa vị)!", "statModifiers": { "money": -350000000, "businessAcuity": 14, "socialStatus": 12, "stress": 8 } },
+          { "probability": 0.28, "message": "Hòa giải được nhưng vẫn phải bồi thường điều khoản phụ (-550 Triệu đ).", "statModifiers": { "money": -550000000, "stress": 16 } }
+        ]
+      },
+      {
+        "id": "opt_exp18_settle_fast",
+        "label": "Nhanh chóng chi tiền hòa giải ngoài tòa cho êm chuyện (-450 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Khép lại vụ việc nhanh gọn để tập trung vận hành dòng tiền.", "statModifiers": { "money": -450000000, "stress": 6, "businessAcuity": 4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_19_luxury_property_tax",
+    "title": "🏙️ Phí Quản Lý & Tu Sửa Danh Mục Bất Động Sản Cao Cấp",
+    "category": "finance",
+    "minAge": 26,
+    "maxAge": 85,
+    "priority": 80,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 6000000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 180000000 }
+    ],
+    "description": "Ban quản lý khu đô thị cao cấp thu phí bảo trì mặt ngoài, cảnh quan và nghĩa vụ tài chính cho khối tài sản lớn bạn nắm giữ.",
+    "options": [
+      {
+        "id": "opt_exp19_pay_upkeep",
+        "label": "Thanh toán đầy đủ phí vận hành & bảo trì chuẩn 5 sao (-160 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bất động sản luôn giữ giá trị cao và thu hút khách thuê VIP (+5 Địa vị).", "statModifiers": { "money": -160000000, "socialStatus": 5 } }
+        ]
+      },
+      {
+        "id": "opt_exp19_cut_service",
+        "label": "Cắt giảm bảo dưỡng, chỉ đóng phí tối thiểu bắt buộc (-80 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tiết kiệm tiền mặt nhưng tài sản xuống cấp khiến khách thuê than phiền (-6 Địa vị, -4 Hạnh phúc).", "statModifiers": { "money": -80000000, "socialStatus": -6, "happiness": -4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_20_senior_medical_care",
+    "title": "💊 Chi Phí Thuốc Men & Vật Lý Trị Liệu Tuổi Xế Chiều",
+    "category": "culture",
+    "minAge": 62,
+    "maxAge": 95,
+    "priority": 83,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 35000000 }
+    ],
+    "description": "Thời tiết giao mùa khiến khớp gối và tim mạch tuổi xế chiều cần chế độ thuốc bổ, vật lý trị liệu định kỳ.",
+    "options": [
+      {
+        "id": "opt_exp20_care_plan",
+        "label": "Theo liệu trình bác sĩ riêng & dinh dưỡng cao cấp (-30 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Gân cốt dẻo dai, tinh thần sảng khoái tận hưởng tuổi già (+14 Sức khỏe, +8 Hạnh phúc).", "statModifiers": { "money": -30000000, "health": 14, "happiness": 8, "stress": -6 } }
+        ]
+      },
+      {
+        "id": "opt_exp20_basic_meds",
+        "label": "Chỉ uống thuốc phổ thông tiết kiệm để dành cho con cháu (-8 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Cơn đau nhức dai dẳng khiến sinh hoạt tuổi già vất vả (-10 Sức khỏe).", "statModifiers": { "money": -8000000, "health": -10, "happiness": -6 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_21_lifestyle_inflation",
+    "title": "🥂 Cám Dỗ Nâng Cấp Phong Cách Sống Giới Thượng Lưu",
+    "category": "culture",
+    "minAge": 25,
+    "maxAge": 60,
+    "priority": 76,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 120000000 }
+    ],
+    "description": "Thu nhập tăng lên kéo theo hội bạn mới rủ rê mua đồng hồ hiệu, thẻ hội viên golf và tiệc tùng cuối tuần sang chảnh.",
+    "options": [
+      {
+        "id": "opt_exp21_join_club",
+        "label": "Chi tiền trải nghiệm đẳng cấp & kết nối tầng lớp mới (-85 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.6, "message": "Gặp được đối tác tiềm năng trong phòng VIP (+14 Địa vị, +10 Giao tiếp)!", "statModifiers": { "money": -85000000, "socialStatus": 14, "charisma": 10, "happiness": 8 } },
+          { "probability": 0.4, "message": "Tốn bộn tiền cho những mối quan hệ xã giao hào nhoáng (-85 Triệu đ).", "statModifiers": { "money": -85000000, "socialStatus": 5, "financialLiteracy": -4 } }
+        ]
+      },
+      {
+        "id": "opt_exp21_stay_humble",
+        "label": "Kiên định lối sống giản dị, giữ vốn tái đầu tư",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bạn giữ vững kỷ luật tài chính đáng nể (+8 Tài chính, +6 Kỷ luật).", "statModifiers": { "financialLiteracy": 8, "discipline": 6 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_22_friend_unpaid_debt",
+    "title": "💸 Bạn Thân Vỡ Nợ Đòi Khất Khoản Vay Năm Xưa",
+    "category": "relationship",
+    "minAge": 23,
+    "maxAge": 65,
+    "priority": 77,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 45000000 }
+    ],
+    "description": "Người bạn từng chung lưng đấu cật kinh doanh thua lỗ, vừa không trả nổi tiền cũ vừa cầu xin bạn ứng cứu thêm.",
+    "options": [
+      {
+        "id": "opt_exp22_help_final",
+        "label": "Cho mượn thêm lần cuối trong giới hạn chịu được (-30 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.35, "message": "Bạn ấy vực dậy thành công và mang ơn hoàn trả bạn gấp đôi (+60 Triệu đ, +10 Phúc đức)!", "statModifiers": { "money": 60000000, "karma": 10, "happiness": 10 } },
+          { "probability": 0.65, "message": "Khoản tiền khó lòng quay lại — bài học đắt giá khi cho người thân vay tiền (-30 Triệu đ).", "statModifiers": { "money": -30000000, "karma": 6, "stress": 8, "financialLiteracy": 4 } }
+        ]
+      },
+      {
+        "id": "opt_exp22_refuse_firm",
+        "label": "Từ chối khéo, chỉ giới thiệu việc làm để bạn tự đứng lên",
+        "outcomes": [
+          { "probability": 1.0, "message": "Bảo toàn được dòng vốn dù tình cảm sứt mẻ đôi chút (+6 Tài chính).", "statModifiers": { "financialLiteracy": 6, "charisma": -4, "stress": 4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_23_smartphone_theft",
+    "title": "📲 Rơi Mất Điện Thoại Trong Lúc Chen Chúc Ga Tàu / Lễ Hội",
+    "category": "culture",
+    "minAge": 18,
+    "maxAge": 55,
+    "priority": 73,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 16000000 }
+    ],
+    "description": "Một phút sơ sẩy giữa đám đông, chiếc điện thoại chứa đầy app ngân hàng và công việc đã không cánh mà bay.",
+    "options": [
+      {
+        "id": "opt_exp23_lock_and_replace",
+        "label": "Khóa SIM khẩn cấp bảo vệ tài khoản & mua máy mới (-15 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tài khoản ngân hàng an toàn tuyệt đối, chỉ xót tiền mua máy mới.", "statModifiers": { "money": -15000000, "stress": 5, "discipline": 3 } }
+        ]
+      },
+      {
+        "id": "opt_exp23_buy_budget",
+        "label": "Mua điện thoại giá rẻ dùng tạm và đổi toàn bộ mật khẩu (-4.5 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Chấp nhận máy hơi giật lag một thời gian để giữ tiền mặt.", "statModifiers": { "money": -4500000, "stress": 7, "happiness": -4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_24_supply_chain_shock",
+    "title": "📦 Đứt Gãy Nguồn Hàng & Phí Lưu Kho Tăng Phi Mã",
+    "category": "career",
+    "minAge": 26,
+    "maxAge": 70,
+    "priority": 79,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1500000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 130000000 }
+    ],
+    "description": "Cảng biển ùn tắc khiến lô hàng đầu tư của bạn bị đội cước vận tải và phí lưu container suốt nhiều tuần.",
+    "options": [
+      {
+        "id": "opt_exp24_air_freight",
+        "label": "Chấp nhận bù lỗ vận chuyển nhanh để giữ chữ tín (-110 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Đối tác đánh giá cao uy tín giao đúng hẹn dù thị trường biến động (+10 Kinh doanh, +8 Địa vị).", "statModifiers": { "money": -110000000, "businessAcuity": 10, "socialStatus": 8 } }
+        ]
+      },
+      {
+        "id": "opt_exp24_wait",
+        "label": "Chờ thông quan chậm, gánh phạt trễ hạn giao (-65 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tổn thất ít hơn nhưng một vài khách hàng lớn bỏ sang đối thủ (-6 Địa vị).", "statModifiers": { "money": -65000000, "socialStatus": -6, "stress": 10 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_25_home_appliances_breakdown",
+    "title": "🧺 Combo Tủ Lạnh & Máy Giặt Đồng Loạt Đình Công",
+    "category": "family_culture",
+    "minAge": 23,
+    "maxAge": 70,
+    "priority": 73,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 18000000 }
+    ],
+    "description": "Đồ gia dụng dùng nhiều năm cùng nhau hỏng hóc đúng tháng bạn vừa định trích tiền đi đầu tư.",
+    "options": [
+      {
+        "id": "opt_exp25_buy_pair",
+        "label": "Thay bộ đôi mới bảo hành dài hạn (-16 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Sinh hoạt gia đình trở lại ngăn nắp, tiết kiệm điện năng lâu dài.", "statModifiers": { "money": -16000000, "happiness": 3 } }
+        ]
+      },
+      {
+        "id": "opt_exp25_secondhand",
+        "label": "Mua đồ thanh lý hoặc gọi thợ sửa tận dụng lại (-6 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Cắt giảm được 10 Triệu tiền mặt chi tiêu đột xuất.", "statModifiers": { "money": -6000000, "practicalSkills": 3, "stress": 4 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_26_mandatory_insurance_package",
+    "title": "🛡️ Quy Định Đóng Bảo Hiểm Rủi Ro & Quỹ Dự Phòng Nghề Nghiệp",
+    "category": "career",
+    "minAge": 24,
+    "maxAge": 62,
+    "priority": 75,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
+    ],
+    "description": "Ngành nghề của bạn yêu cầu đóng gói bảo hiểm trách nhiệm nghề nghiệp và bảo hiểm sức khỏe bổ sung trước khi ký hợp đồng mới.",
+    "options": [
+      {
+        "id": "opt_exp26_full_shield",
+        "label": "Mua gói bảo vệ toàn diện cao cấp (-24 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Tạo lá chắn tài chính vững vàng cho bản thân và gia đình (+8 Tài chính, -8 Lo âu).", "statModifiers": { "money": -24000000, "financialLiteracy": 8, "stress": -8 } }
+        ]
+      },
+      {
+        "id": "opt_exp26_minimal",
+        "label": "Chỉ đóng mức tối thiểu theo quy định (-9 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Đủ điều kiện ký hợp đồng mà vẫn giữ được phần lớn tiền mặt.", "statModifiers": { "money": -9000000, "financialLiteracy": 2 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_27_charity_gala_pressure",
+    "title": "🎩 Đêm Tiệc Đấu Giá Từ Thiện Giới Doanh Nhân",
+    "category": "culture",
+    "minAge": 30,
+    "maxAge": 82,
+    "priority": 79,
+    "isOneTime": false,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 12000000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 600000000 }
+    ],
+    "description": "Bạn được mời dự bàn VIP đêm gala gây quỹ xây trường học vùng cao. Mọi ánh mắt giới tinh hoa đang hướng về mức đấu giá của bạn.",
+    "options": [
+      {
+        "id": "opt_exp27_win_bid",
+        "label": "Thắng đấu giá bức tranh sơn mài gây quỹ (-500 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Báo chí đăng tin biểu dương tấm lòng vàng, mạng lưới quan hệ VIP rộng mở (+20 Địa vị, +18 Phúc đức)!", "statModifiers": { "money": -500000000, "socialStatus": 20, "karma": 18, "happiness": 12 } }
+        ]
+      },
+      {
+        "id": "opt_exp27_support",
+        "label": "Ủng hộ quỹ lặng lẽ ở mức vừa phải (-120 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Làm việc thiện thiết thực mà không bị cuốn vào cuộc đua phô trương (+8 Phúc đức).", "statModifiers": { "money": -120000000, "karma": 8, "socialStatus": 5 } }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "exp_28_market_margin_call",
+    "title": "📉 Phiên Giảm Sàn Bất Ngờ & Áp Lực Bổ Sung Tài Sản Đảm Bảo",
+    "category": "finance",
+    "minAge": 22,
+    "maxAge": 75,
+    "priority": 82,
+    "isOneTime": true,
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 800000000 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 120000000 }
+    ],
+    "description": "Thị trường tài chính chao đảo bởi tin tức vĩ mô bất ngờ, công ty chứng khoán yêu cầu nộp thêm tiền ký quỹ hoặc cắt lỗ danh mục.",
+    "options": [
+      {
+        "id": "opt_exp28_top_up",
+        "label": "Bơm thêm tiền mặt giữ vị thế chờ phục hồi (-100 Triệu đ)",
+        "outcomes": [
+          { "probability": 0.55, "conditionFormula": "financialLiteracy >= 70", "message": "Thị trường hồi phục chữ V sau 2 tuần, bạn không chỉ thoát hiểm mà còn lãi ngược (+140 Triệu đ, +10 Tài chính)!", "statModifiers": { "money": 140000000, "financialLiteracy": 10, "stress": 8 } },
+          { "probability": 0.45, "message": "Nhịp giảm kéo dài khiến khoản bơm thêm bốc hơi gần hết (-100 Triệu đ, +16 Lo âu).", "statModifiers": { "money": -100000000, "stress": 16, "happiness": -8 } }
+        ]
+      },
+      {
+        "id": "opt_exp28_cut_loss",
+        "label": "Chấp nhận cắt lỗ kỷ luật để bảo toàn phần vốn còn lại (-45 Triệu đ)",
+        "outcomes": [
+          { "probability": 1.0, "message": "Cắt lỗ dứt khoát giúp giữ an toàn bảng cân đối tài chính (+6 Tài chính, +5 Kỷ luật).", "statModifiers": { "money": -45000000, "financialLiteracy": 6, "discipline": 5 } }
+        ]
+      }
+    ]
+  }
+]

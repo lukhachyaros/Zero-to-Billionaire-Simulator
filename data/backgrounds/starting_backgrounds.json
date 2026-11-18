@@ -1,0 +1,98 @@
+[
+  {
+    "backgroundId": "bg_orphan",
+    "name": "Mái Ấm Tình Thương",
+    "subtitle": "Khởi đầu từ con số 0 tròn trĩnh",
+    "description": "Bạn lớn lên tại một mái ấm tình thương ở ngoại thành. Không có chỗ dựa tài chính từ gia đình, nhưng ý chí tự lập và nghị lực vượt khó của bạn mạnh mẽ hơn bất kỳ ai.",
+    "badge": "🔥 Độ khó: Thử thách",
+    "initialCash": 0,
+    "pocketMoneyChild": 0,
+    "pocketMoneyTeen": 500000,
+    "comingOfAgeGrant": 3000000,
+    "familyAllowancePerYear": 0,
+    "statBonuses": {
+      "health": -5,
+      "intelligence": 5,
+      "happiness": -10,
+      "discipline": 20,
+      "luck": 0,
+      "parentRelationship": 30,
+      "socialStatus": 5,
+      "charisma": 5,
+      "karma": 15
+    },
+    "startingFlags": ["bg_orphan"]
+  },
+  {
+    "backgroundId": "bg_working_class",
+    "name": "Gia Đình Lao Động Bình Dân",
+    "subtitle": "Cơm nhà dưa cà, ấm áp tình thân",
+    "description": "Bố chạy xe công nghệ, mẹ bán tạp hóa nhỏ đầu ngõ. Cuộc sống tuy chắt chiu từng đồng học phí nhưng gia đình luôn yêu thương và dạy bạn biết quý trọng sức lao động.",
+    "badge": "⚖️ Độ khó: Cân bằng",
+    "initialCash": 0,
+    "pocketMoneyChild": 200000,
+    "pocketMoneyTeen": 1200000,
+    "comingOfAgeGrant": 8000000,
+    "familyAllowancePerYear": 4000000,
+    "statBonuses": {
+      "health": 5,
+      "intelligence": 0,
+      "happiness": 10,
+      "discipline": 10,
+      "luck": 0,
+      "parentRelationship": 85,
+      "socialStatus": 20,
+      "practicalSkills": 10,
+      "karma": 10
+    },
+    "startingFlags": ["bg_working_class"]
+  },
+  {
+    "backgroundId": "bg_intellectual",
+    "name": "Gia Đình Công Chức Trí Thức",
+    "subtitle": "Nề nếp gia phong, kỳ vọng học vấn cao",
+    "description": "Bố là kỹ sư, mẹ là giáo viên cấp 3 tại thành phố lớn. Bạn được đầu tư học hành bài bản từ sớm nhưng cũng chịu không ít áp lực 'con nhà người ta'.",
+    "badge": "📚 Độ khó: Thuận lợi",
+    "initialCash": 0,
+    "pocketMoneyChild": 600000,
+    "pocketMoneyTeen": 3000000,
+    "comingOfAgeGrant": 25000000,
+    "familyAllowancePerYear": 12000000,
+    "statBonuses": {
+      "health": 5,
+      "intelligence": 18,
+      "happiness": 0,
+      "discipline": 15,
+      "stress": 10,
+      "parentRelationship": 75,
+      "socialStatus": 45,
+      "financialLiteracy": 10
+    },
+    "startingFlags": ["bg_intellectual"]
+  },
+  {
+    "backgroundId": "bg_wealthy_dynasty",
+    "name": "Trâm Anh Thế Phiệt",
+    "subtitle": "Ngậm thìa vàng từ vạch đích",
+    "description": "Bạn sinh ra trong một gia tộc kinh doanh bất động sản có tiếng tại Sài Gòn / Hà Nội. Tiền bạc không thiếu, quan hệ rộng khắp, nhưng giữ được cơ nghiệp hay phá gia chi tử là ở bạn.",
+    "badge": "💎 Độ khó: Khởi đầu Đại gia",
+    "initialCash": 0,
+    "pocketMoneyChild": 2000000,
+    "pocketMoneyTeen": 10000000,
+    "comingOfAgeGrant": 150000000,
+    "familyAllowancePerYear": 36000000,
+    "statBonuses": {
+      "health": 10,
+      "appearance": 10,
+      "happiness": 10,
+      "discipline": -10,
+      "stress": 5,
+      "parentRelationship": 65,
+      "socialStatus": 80,
+      "financialLiteracy": 15,
+      "businessAcuity": 15,
+      "charisma": 10
+    },
+    "startingFlags": ["bg_wealthy_dynasty"]
+  }
+]
