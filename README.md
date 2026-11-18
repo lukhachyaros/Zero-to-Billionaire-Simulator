@@ -151,7 +151,7 @@ flowchart TD
 ```
 Zero-to-Billionaire-Simulator/
 ├── .github/
-│   ├── workflows/                 # CI/CD kiểm tra dữ liệu & deploy GitHub Pages (deploy-pages.yml)
+│   ├── workflows/                 # CI kiểm tra dữ liệu, mô phỏng & cú pháp JS/C# (ci.yml)
 │   └── ISSUE_TEMPLATE/            # Mẫu báo cáo lỗi & đóng góp kịch bản
 ├── data/
 │   ├── backgrounds/               # 4 Hoàn cảnh xuất thân (starting_backgrounds.json)
@@ -172,7 +172,7 @@ Zero-to-Billionaire-Simulator/
 │   ├── audio.js                   # Âm thanh tổng hợp Web Audio & rung Haptic
 │   ├── game.js                    # Vòng lặp mô phỏng đầy đủ + Lưu LocalStorage
 │   └── game_data.js               # Bundle dữ liệu tự đồng bộ từ data/
-├── index.html                     # Trang chuyển hướng nhanh tới bản Web 3D cho GitHub Pages
+├── index.html                     # Bản Web 3D đồng bộ tại thư mục gốc (deploy trực tiếp từ nhánh main)
 ├── .nojekyll                      # Tắt Jekyll processing trên GitHub Pages
 ├── unity/                         # Dự án Unity Game Client (URP / iOS Metal)
 │   ├── Packages/manifest.json     # Khai báo URP, TextMeshPro, InputSystem, Test Framework
