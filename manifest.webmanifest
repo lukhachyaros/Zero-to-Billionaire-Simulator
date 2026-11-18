@@ -1,0 +1,24 @@
+{
+  "name": "Zero to Billionaire Simulator",
+  "short_name": "Zero to Billionaire",
+  "description": "Từ Tay Trắng Đến Tỷ Phú — Mô phỏng cuộc đời 3D Việt Nam",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090e1c",
+  "theme_color": "#090e1c",
+  "icons": [
+    {
+      "src": "./web/icons/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./web/icons/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

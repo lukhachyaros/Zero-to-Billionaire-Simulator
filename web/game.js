@@ -261,10 +261,56 @@
       };
     }
 
-    init() {
-      if (window.Diorama3D) {
-        window.Diorama3D.init("diorama-canvas");
+    updateLoadingUI(pct, stepLabel, stageIdx) {
+      const clamped = clamp(Math.round(pct || 0), 0, 100);
+      const bar = el("loading-bar-fill");
+      const pctEl = el("loading-pct");
+      const txtEl = el("loading-step-text");
+      const row = el("loading-stages-row");
+
+      if (bar) bar.style.width = `${clamped}%`;
+      if (pctEl) pctEl.textContent = `${clamped}%`;
+      if (txtEl && stepLabel) txtEl.textContent = stepLabel;
+      if (row && typeof stageIdx === "number") {
+        row.querySelectorAll(".load-stage-pill").forEach((pill) => {
+          const idx = parseInt(pill.getAttribute("data-stage") || "0", 10);
+          pill.classList.toggle("done", idx < stageIdx || clamped >= 100);
+          pill.classList.toggle("active", idx === stageIdx && clamped < 100);
+        });
       }
+    }
+
+    dismissLoadingScreen() {
+      const overlay = el("game-loading-screen");
+      if (!overlay || overlay.classList.contains("hidden")) return;
+      overlay.classList.add("fade-out");
+      setTimeout(() => {
+        overlay.classList.add("hidden");
+      }, 480);
+    }
+
+    async init() {
+      const LOADING_TIPS = [
+        "💡 Mẹo: Tích lũy quỹ dự phòng tiền mặt trước chu kỳ Suy thoái để tránh bị ngân hàng phát mãi tài sản!",
+        "💡 Mẹo: Bạn có tối đa 5 lượt lùi tuổi miễn phí mỗi đời — từ lần thứ 6 sẽ phải đánh đổi ít nhất 25% tài sản!",
+        "💡 Mẹo: Nâng chỉ số Kinh doanh & Kỷ luật trước khi mở nhiều chuỗi cửa hàng để không bị thất thoát quản trị!",
+        "💡 Mẹo: Trên iPhone, chọn Chia sẻ -> Thêm vào Màn hình chính để chơi toàn màn hình kèm biểu tượng riêng!",
+        "💡 Mẹo: Lập Quỹ Tín Thác Gia Tộc trước tuổi xế chiều để con cháu kế thừa 100% tiền mặt không mất thuế di sản!"
+      ];
+      const tipEl = el("loading-tip-text");
+      if (tipEl) {
+        tipEl.textContent = LOADING_TIPS[randInt(0, LOADING_TIPS.length - 1)];
+      }
+      this.updateLoadingUI(8, "Đang nạp cấu trúc dữ liệu & sự kiện...", 0);
+
+      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 5000);
+
+      this.bindStaticUI();
+
+      window.addEventListener("beforeunload", () => this.saveToStorage());
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") this.saveToStorage();
+      });
 
       if (window.ZTBLiveBoard) {
         window.ZTBLiveBoard.init({
@@ -277,27 +323,42 @@
         });
       }
 
-      this.bindStaticUI();
-
-      window.addEventListener("beforeunload", () => this.saveToStorage());
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") this.saveToStorage();
-      });
-
       const loaded = this.loadFromStorage();
-      if (loaded) {
-        if ((this.monetization.totalLivesStarted || 0) === 0) {
-          this.monetization.totalLivesStarted = 1;
-          this.saveMonetization();
+      if (!loaded) {
+        this.startNewLife("Nguyễn Gia Huy", "Nam", this.selectedBackgroundId, true);
+      } else if ((this.monetization.totalLivesStarted || 0) === 0) {
+        this.monetization.totalLivesStarted = 1;
+        this.saveMonetization();
+      }
+
+      // Preload & biên dịch trước toàn bộ 5 cấp phòng 3D + nhân vật + shader trên GPU
+      if (window.Diorama3D && typeof window.Diorama3D.initAsync === "function") {
+        try {
+          await window.Diorama3D.initAsync("diorama-canvas", (pct, msg, stg) => {
+            this.updateLoadingUI(pct, msg, stg);
+          });
+        } catch (err) {
+          console.warn("[ZTBSim] Async 3D preload fallback:", err);
+          window.Diorama3D.init("diorama-canvas");
         }
+      } else if (window.Diorama3D) {
+        window.Diorama3D.init("diorama-canvas");
+      }
+
+      this.publishPlayerToLiveBoard(true);
+      this.renderAll();
+      this.updateLoadingUI(100, "Hoàn tất! Chào mừng đến với thế giới Tỷ Phú!", 4);
+
+      await new Promise((r) => setTimeout(r, 180));
+      clearTimeout(safetyTimer);
+      this.dismissLoadingScreen();
+
+      if (loaded) {
         this.showToast(`📂 Chào mừng ${this.stats.characterName} trở lại!`);
-        this.publishPlayerToLiveBoard(true);
-        this.renderAll();
         if (!this.stats.isAlive) {
           this.openGameOverModal();
         }
       } else {
-        this.startNewLife("Nguyễn Gia Huy", "Nam", this.selectedBackgroundId, true);
         this.openNewLifeModal(true);
       }
     }

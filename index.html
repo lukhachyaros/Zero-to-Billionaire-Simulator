@@ -7,10 +7,51 @@
   <meta name="theme-color" content="#090e1c" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Zero to Billionaire" />
   <title>Zero to Billionaire Simulator — Life Sim 3D</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" sizes="180x180" href="web/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="web/icons/favicon-64.png" />
   <link rel="stylesheet" href="web/styles.css" />
 </head>
 <body>
+  <!-- Màn hình Loading thẩm mỹ & Preload toàn bộ Model/Shader 3D chống lag đầu game -->
+  <div id="game-loading-screen" class="loading-overlay">
+    <div class="loading-bg-glow"></div>
+    <div class="loading-content">
+      <div class="loading-logo-stage">
+        <div class="loading-orbit-ring outer"></div>
+        <div class="loading-orbit-ring inner"></div>
+        <img src="web/icons/logo-512.png" alt="Zero to Billionaire Logo" class="loading-logo-img" id="loading-logo-img" />
+      </div>
+
+      <div class="loading-eyebrow">💎 3D ISOMETRIC LIFE SIM</div>
+      <h1 class="loading-title">ZERO TO BILLIONAIRE</h1>
+      <p class="loading-subtitle">Từ Tay Trắng Đến Tỷ Phú</p>
+
+      <div class="loading-progress-card">
+        <div class="loading-status-head">
+          <span id="loading-step-text">Đang khởi tạo thế giới 3D...</span>
+          <strong id="loading-pct">8%</strong>
+        </div>
+        <div class="loading-bar-track">
+          <div class="loading-bar-fill" id="loading-bar-fill" style="width: 8%"></div>
+        </div>
+        <div class="loading-stages-row" id="loading-stages-row">
+          <span class="load-stage-pill active" data-stage="0">Engine 3D</span>
+          <span class="load-stage-pill" data-stage="1">Vật liệu PBR</span>
+          <span class="load-stage-pill" data-stage="2">5 Phòng 3D</span>
+          <span class="load-stage-pill" data-stage="3">Shader GPU</span>
+          <span class="load-stage-pill" data-stage="4">Live Data</span>
+        </div>
+      </div>
+
+      <div class="loading-tip-box">
+        <p id="loading-tip-text">💡 Mẹo: Tích lũy quỹ dự phòng tiền mặt trước chu kỳ Suy thoái để bảo vệ khối tài sản của bạn!</p>
+      </div>
+    </div>
+  </div>
+
   <div class="app-stage">
     <aside class="desktop-side-info">
       <h1>💎 Zero to Billionaire</h1>

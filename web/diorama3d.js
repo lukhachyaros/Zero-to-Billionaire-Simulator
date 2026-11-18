@@ -74,6 +74,29 @@
       this._rafId = null;
       this._resizeObserver = null;
       this._clockPrev = performance.now();
+      this._warmMaterials = [];
+    }
+
+    startRenderLoop() {
+      if (this._rafId) return;
+      this._clockPrev = performance.now();
+      const tick = (now) => {
+        const dt = Math.min(0.05, Math.max(0.001, (now - this._clockPrev) * 0.001));
+        this._clockPrev = now;
+        this.renderFrame(now * 0.001, dt);
+        this._rafId = requestAnimationFrame(tick);
+      };
+      this._rafId = requestAnimationFrame(tick);
+    }
+
+    attachResizeAndEvents() {
+      this.bindEvents();
+      if (typeof ResizeObserver !== "undefined") {
+        this._resizeObserver = new ResizeObserver(() => this.handleResize());
+        this._resizeObserver.observe(this.canvas);
+      } else {
+        window.addEventListener("resize", () => this.handleResize());
+      }
     }
 
     init(canvasOrId) {
@@ -97,30 +120,155 @@
         }
       }
 
-      this.bindEvents();
-
-      if (typeof ResizeObserver !== "undefined") {
-        this._resizeObserver = new ResizeObserver(() => this.handleResize());
-        this._resizeObserver.observe(this.canvas);
-      } else {
-        window.addEventListener("resize", () => this.handleResize());
-      }
-
+      this.attachResizeAndEvents();
       this.rebuildSceneIfNeeded(true);
       this.applyNightAtmosphere();
+      this.startRenderLoop();
+    }
 
-      if (!this._rafId) {
-        const tick = (now) => {
-          const dt = Math.min(0.05, Math.max(0.001, (now - this._clockPrev) * 0.001));
-          this._clockPrev = now;
-          this.renderFrame(now * 0.001, dt);
-          this._rafId = requestAnimationFrame(tick);
-        };
-        this._rafId = requestAnimationFrame(tick);
+    async initAsync(canvasOrId, onProgress) {
+      const report = (pct, msg, stage) => {
+        if (typeof onProgress === "function") {
+          try { onProgress(pct, msg, stage); } catch (_) {}
+        }
+      };
+      const waitFrame = (ms = 75) => new Promise((resolve) => {
+        requestAnimationFrame(() => setTimeout(resolve, ms));
+      });
+
+      this.canvas = typeof canvasOrId === "string"
+        ? document.getElementById(canvasOrId)
+        : canvasOrId;
+
+      if (!this.canvas) {
+        report(100, "Sẵn sàng!", 4);
+        return;
       }
+
+      const rect = this.canvas.getBoundingClientRect();
+      this.width = Math.max(240, rect.width || 406);
+      this.height = Math.max(160, rect.height || 260);
+
+      report(14, "Đang khởi tạo Engine 3D WebGL & Ánh sáng PBR...", 0);
+      await waitFrame(65);
+
+      if (window.THREE) {
+        try {
+          this.initThreeWebGLCore();
+          this.webglReady = true;
+        } catch (err) {
+          console.warn("[Diorama3D] WebGL unavailable, switching to 2D fallback:", err);
+          this.webglReady = false;
+        }
+      }
+
+      if (this.webglReady) {
+        report(30, "Đang dệt vân gỗ, đá cẩm thạch & bầu trời thành phố...", 1);
+        await waitFrame(70);
+        this.prepareProceduralTextures();
+        this.buildSkylineBackdrop();
+        this.prepareEmojiTextures();
+        this.buildAmbientMotes();
+        this.pinWarmShaderMaterials();
+
+        const prewarmConfigs = [
+          { tier: 0, age: 3, gender: "Nam", intel: 55, vip: false, pct: 46, stage: 2, label: "Đang nạp mô hình Phòng Tuổi Thơ & Nhân vật nhí (1/5)..." },
+          { tier: 1, age: 19, gender: "Nữ", intel: 80, vip: false, pct: 57, stage: 2, label: "Đang nạp mô hình Phòng Trọ 12m² & Góc PC (2/5)..." },
+          { tier: 2, age: 28, gender: "Nam", intel: 82, vip: false, pct: 68, stage: 2, label: "Đang nạp mô hình Chung Cư & Thú cưng Corgi (3/5)..." },
+          { tier: 3, age: 42, gender: "Nữ", intel: 88, vip: true, pct: 78, stage: 3, label: "Đang nạp mô hình Biệt Thự & Siêu xe 3D (4/5)..." },
+          { tier: 4, age: 65, gender: "Nam", intel: 92, vip: true, pct: 88, stage: 3, label: "Đang biên dịch Shader Penthouse & Hồ bơi vô cực (5/5)..." }
+        ];
+
+        const savedState = Object.assign({}, this.state);
+        for (let i = 0; i < prewarmConfigs.length; i++) {
+          const cfg = prewarmConfigs[i];
+          report(cfg.pct, cfg.label, cfg.stage);
+          await waitFrame(75);
+          this.roomTier = cfg.tier;
+          this.state = Object.assign({}, savedState, {
+            age: cfg.age,
+            gender: cfg.gender,
+            intelligence: cfg.intel,
+            vip: cfg.vip,
+            isAlive: true
+          });
+          this.buildThreeRoom();
+          this.buildThreeChibi();
+          this.applyNightAtmosphere();
+          if (this.renderer && typeof this.renderer.compile === "function") {
+            this.renderer.compile(this.scene, this.camera);
+          }
+          if (this.renderer) {
+            this.renderer.render(this.scene, this.camera);
+          }
+        }
+
+        this.state = savedState;
+        this.roomTier = this.computeRoomTier(this.state);
+        this.builtSignature = "";
+      }
+
+      report(95, "Đang đồng bộ 170 sự kiện & Bảng Xếp Hạng Live...", 4);
+      await waitFrame(65);
+
+      this.attachResizeAndEvents();
+      this.handleResize();
+      this.rebuildSceneIfNeeded(true);
+      this.applyNightAtmosphere();
+      if (this.webglReady && this.renderer) {
+        this.renderer.render(this.scene, this.camera);
+      }
+      this.startRenderLoop();
+      report(100, "Sẵn sàng bước vào hành trình Tỷ Phú!", 4);
+    }
+
+    pinWarmShaderMaterials() {
+      if (!this.webglReady || !window.THREE) return;
+      const THREE = window.THREE;
+      // Upload procedural textures to GPU upfront so switching rooms/moods never stutters
+      if (this.renderer && typeof this.renderer.initTexture === "function") {
+        [this.woodTex, this.marbleTex, this.windowGridTex, this.shadowDiscTex, this.moteTex].forEach((tex) => {
+          if (tex) this.renderer.initTexture(tex);
+        });
+        Object.values(this.moodTextures || {}).forEach((tex) => {
+          if (tex) this.renderer.initTexture(tex);
+        });
+      }
+      // Retain 1 reference per PBR shader variant so WebGLProgram cache stays warm across clearGroup()
+      const warmGroup = new THREE.Group();
+      warmGroup.visible = true;
+      warmGroup.position.set(0, -999, 0);
+      const tinyGeo = new THREE.BoxGeometry(0.01, 0.01, 0.01);
+      const variants = [
+        this.makeMat(0xffffff, 0.6, 0.1),
+        this.makeMat(0xffffff, 0.58, 0.06, this.woodTex ? { map: this.woodTex } : {}),
+        this.makeMat(0xffffff, 0.20, 0.22, this.marbleTex ? { map: this.marbleTex } : {}),
+        this.makeMat(0x38bdf8, 0.2, 0.5, { emissive: 0x38bdf8, emissiveIntensity: 0.5 }),
+        this.makeMat(0x06b6d4, 0.08, 0.15, { emissive: 0x0891b2, emissiveIntensity: 0.48, transparent: true, opacity: 0.86 })
+      ];
+      variants.forEach((mat) => {
+        const m = new THREE.Mesh(tinyGeo, mat);
+        m.frustumCulled = false;
+        warmGroup.add(m);
+      });
+      this._warmMaterials = variants;
+      this.scene.add(warmGroup);
+      if (this.renderer && typeof this.renderer.compile === "function") {
+        this.renderer.compile(this.scene, this.camera);
+      }
+      warmGroup.visible = false;
     }
 
     initThreeWebGL() {
+      this.initThreeWebGLCore();
+      this.prepareProceduralTextures();
+      this.buildSkylineBackdrop();
+      this.prepareEmojiTextures();
+      this.buildAmbientMotes();
+      this.pinWarmShaderMaterials();
+    }
+
+    initThreeWebGLCore() {
       const THREE = window.THREE;
       this.renderer = new THREE.WebGLRenderer({
         canvas: this.canvas,
@@ -201,11 +349,6 @@
       this.dioramaGroup.add(this.cityGroup);
       this.dioramaGroup.add(this.roomGroup);
       this.dioramaGroup.add(this.chibiGroup);
-
-      this.prepareProceduralTextures();
-      this.buildSkylineBackdrop();
-      this.prepareEmojiTextures();
-      this.buildAmbientMotes();
     }
 
     prepareProceduralTextures() {
