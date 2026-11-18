@@ -26,8 +26,21 @@ namespace ZeroToBillionaire.Core
         public float lastGrowthPct;
     }
 
+    [System.Serializable]
+    public class OnlinePlayerEntry
+    {
+        public string uid;
+        public string name;
+        public int age;
+        public int generation;
+        public string job;
+        public long netWorth;
+        public bool vip;
+        public bool isOnline;
+    }
+
     /// <summary>
-    /// Quản lý Bảng Xếp Hạng Người Giàu (20 Đại gia & Tỷ phú) cùng biến động tài sản hàng năm.
+    /// Quản lý Bảng Xếp Hạng Người Giàu (20 Đại gia AI & Bảng Xếp Hạng Người Chơi Thực).
     /// </summary>
     public class LeaderboardSystem : MonoBehaviour
     {
@@ -35,6 +48,7 @@ namespace ZeroToBillionaire.Core
 
         private readonly List<RivalDefinition> baseCatalog = new List<RivalDefinition>();
         public List<RivalState> activeRivals = new List<RivalState>();
+        public List<OnlinePlayerEntry> onlinePlayers = new List<OnlinePlayerEntry>();
         public int bestRankAchieved = 21;
 
         [System.Serializable]
@@ -140,6 +154,25 @@ namespace ZeroToBillionaire.Core
             foreach (var r in activeRivals)
             {
                 if (r.netWorth > playerNetWorth) higherCount++;
+            }
+            return higherCount + 1;
+        }
+
+        public void UpsertOnlinePlayer(OnlinePlayerEntry entry)
+        {
+            if (entry == null || string.IsNullOrEmpty(entry.uid)) return;
+            int idx = onlinePlayers.FindIndex(p => p.uid == entry.uid);
+            if (idx >= 0) onlinePlayers[idx] = entry;
+            else onlinePlayers.Add(entry);
+            onlinePlayers.Sort((a, b) => b.netWorth.CompareTo(a.netWorth));
+        }
+
+        public int GetOnlineRank(long playerNetWorth)
+        {
+            int higherCount = 0;
+            foreach (var p in onlinePlayers)
+            {
+                if (p.netWorth > playerNetWorth) higherCount++;
             }
             return higherCount + 1;
         }

@@ -86,6 +86,7 @@ namespace ZeroToBillionaire.Core
             if (EconomySystem.Instance == null) gameObject.AddComponent<EconomySystem>();
             if (RelationshipSystem.Instance == null) gameObject.AddComponent<RelationshipSystem>();
             if (LeaderboardSystem.Instance == null) gameObject.AddComponent<LeaderboardSystem>();
+            if (MonetizationSystem.Instance == null) gameObject.AddComponent<MonetizationSystem>();
             if (AdaptiveFrameRateManager.Instance == null) gameObject.AddComponent<AdaptiveFrameRateManager>();
         }
 
@@ -150,6 +151,7 @@ namespace ZeroToBillionaire.Core
             {
                 currentStats.ApplyModifiers(bg.statBonuses);
             }
+            MonetizationSystem.Instance?.ConsumeReplayAndApplyPerks(currentStats);
             currentStats.ClampStats();
 
             EconomySystem.Instance?.ResetPortfolio();
@@ -162,6 +164,28 @@ namespace ZeroToBillionaire.Core
 
             NotifyStateUpdated();
             TriggerYearCycle();
+            AutoSave();
+        }
+
+        public bool TryRequestNewLife(string name, string gender, string backgroundId = "bg_working_class")
+        {
+            EnsureSubsystems();
+            if (MonetizationSystem.Instance != null && !MonetizationSystem.Instance.CanStartNewLifeFree())
+            {
+                return false;
+            }
+            StartNewLife(name, gender, backgroundId);
+            return true;
+        }
+
+        public void RenameCharacter(string newName)
+        {
+            if (string.IsNullOrWhiteSpace(newName) || currentStats == null) return;
+            string cleaned = newName.Trim();
+            string oldName = currentStats.characterName;
+            currentStats.characterName = cleaned;
+            AddLog($"✍️ Đổi tên nhân vật từ \"{oldName}\" thành \"{cleaned}\".");
+            NotifyStateUpdated();
             AutoSave();
         }
 

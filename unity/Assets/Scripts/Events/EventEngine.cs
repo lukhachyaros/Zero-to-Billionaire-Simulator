@@ -55,7 +55,8 @@ namespace ZeroToBillionaire.Events
                 "Data/pack_youth_school",
                 "Data/pack_career_workplace",
                 "Data/pack_wealth_investments",
-                "Data/pack_family_society_elder"
+                "Data/pack_family_society_elder",
+                "Data/pack_life_expenses_hardcore"
             };
             foreach (string path in resourceFiles)
             {

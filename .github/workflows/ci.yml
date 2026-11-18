@@ -27,6 +27,7 @@ jobs:
         run: |
           test -s web/vendor/three.min.js
           node --check web/audio.js
+          node --check web/live_leaderboard.js
           node --check web/diorama3d.js
           node --check web/game.js
           node --check web/game_data.js

@@ -117,6 +117,33 @@ namespace ZeroToBillionaire.Core
 
         public static bool HasSaveFile() => File.Exists(SavePath);
 
+        public static string ExportSaveCode(GameSnapshot snapshot)
+        {
+            if (snapshot == null) return string.Empty;
+            snapshot.savedAtIso = DateTime.UtcNow.ToString("o");
+            snapshot.checksum = "";
+            string payload = JsonUtility.ToJson(snapshot);
+            snapshot.checksum = ComputeHash(payload);
+            string full = JsonUtility.ToJson(snapshot);
+            return "ZTB2:" + Convert.ToBase64String(Encoding.UTF8.GetBytes(full));
+        }
+
+        public static GameSnapshot ImportSaveCode(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code) || !code.StartsWith("ZTB2:")) return null;
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(code.Substring(5).Trim());
+                string raw = Encoding.UTF8.GetString(bytes);
+                return JsonUtility.FromJson<GameSnapshot>(raw);
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[SaveSystem] Mã khôi phục không hợp lệ: {ex.Message}");
+                return null;
+            }
+        }
+
         private static string ComputeHash(string content)
         {
             using var sha = SHA256.Create();

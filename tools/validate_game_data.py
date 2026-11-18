@@ -386,7 +386,7 @@ def _check_js_balance(source: str, rel_path: str, errors: list[str]):
 
 def validate_web_client(errors: list[str]) -> int:
     web_dir = ROOT / "web"
-    required = ["index.html", "styles.css", "audio.js", "vendor/three.min.js", "diorama3d.js", "game.js", "game_data.js"]
+    required = ["index.html", "styles.css", "live_leaderboard.js", "audio.js", "vendor/three.min.js", "diorama3d.js", "game.js", "game_data.js"]
     for fname in required:
         fpath = web_dir / fname
         if not fpath.exists() or fpath.stat().st_size == 0:
@@ -403,7 +403,7 @@ def validate_web_client(errors: list[str]) -> int:
     if re.search(r'<script[^>]+src=["\']https?://', html_text, re.IGNORECASE):
         errors.append("web/index.html: External CDN script tags break offline file:// compatibility")
 
-    expected_order = ["game_data.js", "audio.js", "vendor/three.min.js", "diorama3d.js", "game.js"]
+    expected_order = ["game_data.js", "live_leaderboard.js", "audio.js", "vendor/three.min.js", "diorama3d.js", "game.js"]
     last_pos = -1
     for script_name in expected_order:
         pos = html_text.find(script_name)
@@ -413,7 +413,7 @@ def validate_web_client(errors: list[str]) -> int:
             errors.append(f"web/index.html: Script '{script_name}' loaded out of order")
         last_pos = max(last_pos, pos)
 
-    js_files = ["audio.js", "diorama3d.js", "game.js"]
+    js_files = ["live_leaderboard.js", "audio.js", "diorama3d.js", "game.js"]
     for js_name in js_files:
         js_path = web_dir / js_name
         if not js_path.exists():
@@ -565,6 +565,7 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         (ROOT / "data" / "events" / "pack_career_workplace.json", unity_data_dir / "pack_career_workplace.json"),
         (ROOT / "data" / "events" / "pack_wealth_investments.json", unity_data_dir / "pack_wealth_investments.json"),
         (ROOT / "data" / "events" / "pack_family_society_elder.json", unity_data_dir / "pack_family_society_elder.json"),
+        (ROOT / "data" / "events" / "pack_life_expenses_hardcore.json", unity_data_dir / "pack_life_expenses_hardcore.json"),
         (ROOT / "data" / "careers" / "careers.json", unity_data_dir / "careers.json"),
         (ROOT / "data" / "economy" / "assets.json", unity_data_dir / "assets.json"),
         (ROOT / "data" / "economy" / "billionaire_leaderboard.json", unity_data_dir / "billionaire_leaderboard.json"),
@@ -599,7 +600,7 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         html = web_index.read_text(encoding="utf-8")
         html = html.replace('href="styles.css"', 'href="web/styles.css"')
         html = re.sub(
-            r'src="(game_data\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)"',
+            r'src="(game_data\.js|live_leaderboard\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)"',
             r'src="web/\1"',
             html,
         )
