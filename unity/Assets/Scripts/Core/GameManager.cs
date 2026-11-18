@@ -12,6 +12,7 @@ namespace ZeroToBillionaire.Core
 
         [Header("Character Data")]
         public CharacterStats currentStats = new CharacterStats();
+        public CharacterStats Stats { get { return currentStats; } }
 
         [Header("Life Log")]
         public List<string> lifeLog = new List<string>();

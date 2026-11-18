@@ -1,0 +1,24 @@
+{
+  "name": "Zero to Billionaire Simulator",
+  "short_name": "Zero to Billionaire",
+  "description": "Life simulation pixel 2D với nhân vật thay đổi theo lựa chọn.",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#090b17",
+  "theme_color": "#090b17",
+  "icons": [
+    {
+      "src": "./icons/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
