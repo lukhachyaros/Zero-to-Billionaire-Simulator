@@ -5,7 +5,7 @@
 using UnityEngine;
 using TMPro;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     [CreateAssetMenu(fileName = "LuxuryTheme", menuName = "Zero to Billionaire/UI Theme Config")]
     public class UIThemeConfig : ScriptableObject

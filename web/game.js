@@ -5,7 +5,8 @@
   const MONETIZATION_KEY = "ztb_monetization_v1";
   const USD_BILLION_VND = 25_000_000_000_000; // 25.000 Tỷ VNĐ (~ $1B)
   const MAX_ACTIVITIES_PER_YEAR = 2;
-  const MAX_TIME_MACHINE = 5;
+  const FREE_TIME_MACHINE_LIMIT = 5;
+  const MAX_TIME_MACHINE_HISTORY = 20;
   const MAX_JOB_APPS_PER_YEAR = 2;
   const ANNUAL_LOAN_RATE = 0.085;
 
@@ -35,13 +36,13 @@
       id: "starter",
       title: "🎁 Gói Khởi Đầu Thuận Lợi",
       price: "19.000đ",
-      perks: "• Nhận ngay +3 Vé Chơi Lại không cần xem quảng cáo<br/>• Hỗ trợ suốt 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ Tuổi 18<br/>• Mở rộng +2 ô Cỗ Máy Thời Gian (tổng 7 ô)"
+      perks: "• Nhận ngay +3 Vé Chơi Lại không cần xem quảng cáo<br/>• Hỗ trợ suốt 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ Tuổi 18<br/>• Tối đa 5 lần lùi tuổi miễn phí/đời"
     },
     vip: {
       id: "vip",
       title: "👑 Gói Tỷ Phú VIP Vĩnh Viễn",
       price: "49.000đ",
-      perks: "• Mở khóa CHƠI LẠI VÔ HẠN trọn đời, không quảng cáo<br/>• Huy hiệu 👑 VIP nổi bật trên Bảng Xếp Hạng Người Chơi Thực<br/>• Hỗ trợ vĩnh viễn: +15 Trí tuệ, +15 May mắn, +50 Triệu đ Quỹ 18t &amp; 8 ô Cỗ Máy Thời Gian"
+      perks: "• Mở khóa CHƠI LẠI VÔ HẠN trọn đời, không quảng cáo<br/>• Huy hiệu 👑 VIP nổi bật trên Bảng Xếp Hạng Người Chơi Thực<br/>• Hỗ trợ vĩnh viễn: +15 Trí tuệ, +15 May mắn, +50 Triệu đ Quỹ 18t &amp; Giảm 20% phí tài sản khi lùi tuổi vượt mốc 5 lần"
     }
   };
 
@@ -56,10 +57,10 @@
   };
 
   const MACRO_CYCLES = [
-    { id: "Boom", label: "📈 Kinh tế Hưng thịnh", mult: 1.45, weight: 0.20 },
-    { id: "Expansion", label: "🌤️ Tăng trưởng Ổn định", mult: 1.0, weight: 0.42 },
-    { id: "Inflation", label: "🔥 Lạm phát Thắt chặt", mult: 0.72, weight: 0.22 },
-    { id: "Recession", label: "🌧️ Suy thoái Phòng thủ", mult: -0.38, weight: 0.16 }
+    { id: "Boom", label: "📈 Kinh tế Hưng thịnh", mult: 1.38, loanRate: 0.095, weight: 0.16 },
+    { id: "Expansion", label: "🌤️ Tăng trưởng Ổn định", mult: 0.96, loanRate: 0.085, weight: 0.38 },
+    { id: "Inflation", label: "🔥 Lạm phát Thắt chặt", mult: 0.65, loanRate: 0.125, weight: 0.25 },
+    { id: "Recession", label: "🌧️ Suy thoái Khốc liệt", mult: -0.45, loanRate: 0.11, weight: 0.21 }
   ];
 
   const ACHIEVEMENTS = [
@@ -192,9 +193,13 @@
     }
 
     getMaxTimeMachineSlots() {
-      if (this.monetization.vipForever) return 8;
-      if ((this.monetization.starterLivesLeft || 0) > 0) return MAX_TIME_MACHINE + 2;
-      return MAX_TIME_MACHINE;
+      return MAX_TIME_MACHINE_HISTORY;
+    }
+
+    getCurrentLoanRate() {
+      return (this.macroCycle && typeof this.macroCycle.loanRate === "number")
+        ? this.macroCycle.loanRate
+        : ANNUAL_LOAN_RATE;
     }
 
     createInitialRivals() {
@@ -250,7 +255,9 @@
         isRetired: false,
         maritalStatus: "Độc thân",
         spouseName: "",
-        childrenCount: 0
+        childrenCount: 0,
+        rewindsUsed: 0,
+        inflationMult: 1.0
       };
     }
 
@@ -322,6 +329,11 @@
       }
 
       el("btn-age-up").addEventListener("click", () => this.ageUp());
+      el("hud-online-pill").addEventListener("click", () => {
+        if (window.ZTBAudio) window.ZTBAudio.tap();
+        this.leaderboardSubTab = "live";
+        this.switchTab("leaderboard");
+      });
       el("hud-rank").addEventListener("click", () => {
         if (window.ZTBAudio) window.ZTBAudio.tap();
         this.leaderboardSubTab = "live";
@@ -465,6 +477,10 @@
       el("btn-buy-vip-pack").addEventListener("click", () => this.openPaymentSheet("vip"));
       el("btn-confirm-payment").addEventListener("click", () => this.confirmPaymentPurchase());
       el("btn-cancel-payment").addEventListener("click", () => el("payment-sheet-modal").classList.remove("open"));
+
+      // Paid Rewind Confirmation Modal (6th+ Rewind)
+      el("btn-confirm-paid-rewind").addEventListener("click", () => this.executePaidRewind());
+      el("btn-cancel-paid-rewind").addEventListener("click", () => el("rewind-confirm-modal").classList.remove("open"));
     }
 
     switchTab(tabId) {
@@ -829,7 +845,7 @@
       const banner = el("new-life-booster-banner");
       const m = this.monetization;
       const boosts = [];
-      if (m.vipForever) boosts.push("👑 VIP (+15 Trí, +15 May, +50Tr Quỹ 18t, 8 ô Quay Ngược)");
+      if (m.vipForever) boosts.push("👑 VIP (+15 Trí, +15 May, +50Tr Quỹ 18t, -20% phí lùi tuổi vượt mốc 5 lần)");
       else if ((m.starterLivesLeft || 0) > 0) boosts.push(`🎁 Gói Khởi Đầu (còn ${m.starterLivesLeft} đời: +12 May, +10 Khỏe, +25Tr Quỹ 18t)`);
       if (m.adBonusPending) boosts.push("🎬 Quà Quảng Cáo (+5 May, +3Tr Quỹ 18t)");
 
@@ -971,6 +987,8 @@
       const snap = JSON.parse(jsonStr);
       this.stats = snap.stats;
       if (!this.stats.lifeId) this.stats.lifeId = `life_${Date.now()}_${randInt(100, 999)}`;
+      if (typeof this.stats.rewindsUsed !== "number") this.stats.rewindsUsed = 0;
+      if (typeof this.stats.inflationMult !== "number") this.stats.inflationMult = 1.0;
       this.portfolio = snap.portfolio || [];
       this.relationships = snap.relationships || [];
       this.cashflowHistory = snap.cashflowHistory || [];
@@ -998,14 +1016,165 @@
       }
     }
 
+    calculatePaidRewindQuote() {
+      if (this.timeMachine.length === 0) return null;
+      const topRaw = this.timeMachine[this.timeMachine.length - 1];
+      const topSnap = JSON.parse(topRaw);
+      const used = this.stats.rewindsUsed || 0;
+      const nextRewindNum = used + 1;
+      const extraIndex = Math.max(1, nextRewindNum - FREE_TIME_MACHINE_LIMIT);
+
+      const snapPortfolioVal = (topSnap.portfolio || []).reduce((s, it) => s + it.currentUnitValue * it.quantity, 0);
+      const snapGrossAssets = (topSnap.stats.cash || 0) + (topSnap.stats.trustFund || 0) + snapPortfolioVal;
+      const snapNetWorth = snapGrossAssets - (topSnap.stats.debt || 0);
+      const currentNetWorth = this.getNetWorth();
+
+      const refWealth = Math.max(0, currentNetWorth, snapNetWorth);
+      const vipMult = this.monetization.vipForever ? 0.80 : 1.0;
+      const rawPct = Math.min(0.75, 0.15 + extraIndex * 0.10);
+      const effectivePct = rawPct * vipMult;
+      const minFloor = Math.round(100_000_000 * extraIndex * vipMult);
+      const cost = Math.max(minFloor, Math.round(refWealth * effectivePct));
+      const canAfford = snapNetWorth >= cost && snapGrossAssets >= cost;
+
+      return {
+        nextRewindNum,
+        extraIndex,
+        targetAge: topSnap.stats.age,
+        snapNetWorth,
+        snapGrossAssets,
+        effectivePct: Math.round(effectivePct * 100),
+        minFloor,
+        cost,
+        canAfford
+      };
+    }
+
+    deductWealthForRewind(totalCost, rewindNum) {
+      let remaining = Math.round(totalCost);
+      const fromCash = Math.min(this.stats.cash, remaining);
+      if (fromCash > 0) {
+        this.stats.cash -= fromCash;
+        remaining -= fromCash;
+        this.recordCashflow(-fromCash, "rewind", `Khấu trừ tiền mặt lùi tuổi lần #${rewindNum}`);
+      }
+
+      if (remaining > 0 && (this.stats.trustFund || 0) > 0) {
+        const fromTrust = Math.min(this.stats.trustFund, remaining);
+        this.stats.trustFund -= fromTrust;
+        remaining -= fromTrust;
+      }
+
+      if (remaining > 0 && this.portfolio.length > 0) {
+        const catPriority = { investment: 1, vehicle: 2, real_estate: 3, business: 4 };
+        this.portfolio.sort((a, b) => (catPriority[a.category] || 5) - (catPriority[b.category] || 5));
+
+        for (let i = 0; i < this.portfolio.length && remaining > 0; i++) {
+          const item = this.portfolio[i];
+          while (item.quantity > 0 && remaining > 0) {
+            const unitVal = item.currentUnitValue;
+            const avgCost = Math.round(item.totalInvestedCost / item.quantity);
+            item.totalInvestedCost -= avgCost;
+            item.quantity -= 1;
+
+            if (unitVal > remaining) {
+              const change = unitVal - remaining;
+              this.stats.cash += change;
+              this.recordCashflow(-remaining, "rewind", `Thanh lý 1 [${item.name}] trả phí lùi tuổi #${rewindNum}`);
+              remaining = 0;
+            } else {
+              remaining -= unitVal;
+              this.recordCashflow(-unitVal, "rewind", `Thanh lý 1 [${item.name}] trả phí lùi tuổi #${rewindNum}`);
+            }
+          }
+        }
+        this.portfolio = this.portfolio.filter((it) => it.quantity > 0);
+      }
+
+      if (remaining > 0) {
+        this.stats.debt += remaining;
+      }
+      this.clampStats();
+    }
+
     useTimeMachine() {
       if (this.timeMachine.length === 0) return;
+      const used = this.stats.rewindsUsed || 0;
+
+      if (used < FREE_TIME_MACHINE_LIMIT) {
+        const snap = this.timeMachine.pop();
+        this.restoreSnapshot(snap);
+        this.stats.rewindsUsed = used + 1;
+        const freeLeft = FREE_TIME_MACHINE_LIMIT - this.stats.rewindsUsed;
+        if (window.ZTBAudio) window.ZTBAudio.success();
+        if (window.Diorama3D) window.Diorama3D.triggerCelebration("happy");
+        this.addLog(
+          `⏪ Cỗ Máy Thời Gian (#${this.stats.rewindsUsed}/${FREE_TIME_MACHINE_LIMIT} miễn phí): Quay lại năm ${this.stats.age} tuổi! (Còn ${freeLeft} lượt miễn phí)`,
+          "milestone"
+        );
+        this.showToast(`⏪ Quay về ${this.stats.age} tuổi! (Còn ${freeLeft}/${FREE_TIME_MACHINE_LIMIT} lượt miễn phí)`);
+        this.saveToStorage();
+        this.publishPlayerToLiveBoard(true);
+        this.renderAll();
+        return;
+      }
+
+      const quote = this.calculatePaidRewindQuote();
+      if (!quote) return;
+
+      el("rewind-modal-title").textContent = `⏳ Lùi Thời Gian Lần #${quote.nextRewindNum} (Trả Bằng Tài Sản)`;
+      el("rewind-modal-body").innerHTML = `
+        Bạn đã dùng hết <strong>${FREE_TIME_MACHINE_LIMIT}/${FREE_TIME_MACHINE_LIMIT} lượt lùi tuổi miễn phí</strong> trong đời này.
+        Để nghịch chuyển về <strong>năm ${quote.targetAge} tuổi</strong>, bạn phải đánh đổi một khoản lớn trong tài sản!
+      `;
+
+      const costBox = el("rewind-cost-box");
+      const confirmBtn = el("btn-confirm-paid-rewind");
+      if (quote.canAfford) {
+        costBox.innerHTML = `
+          <div style="font-size:13px; margin-bottom:4px;">💸 Phí khấu trừ tài sản: <strong style="color:#fbbf24; font-size:15px;">-${formatVND(quote.cost)}</strong></div>
+          <div style="font-size:11px; color:#cbd5e1; line-height:1.45;">
+            • Mức phạt lũy tiến lần vượt #${quote.extraIndex}: <strong>${quote.effectivePct}% tổng tài sản</strong> (tối thiểu ${formatVND(quote.minFloor)})<br/>
+            • Tài sản ròng tại mốc ${quote.targetAge} tuổi: <strong style="color:#34d399;">${formatVND(quote.snapNetWorth)}</strong><br/>
+            • Tự động trừ vào Tiền mặt trước; nếu thiếu sẽ thanh lý Danh mục tài sản đang nắm giữ.
+          </div>
+        `;
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = `⏳ Trừ ${formatVND(quote.cost)} & Lùi Về ${quote.targetAge}t`;
+      } else {
+        costBox.innerHTML = `
+          <div style="font-size:13px; margin-bottom:4px;">❌ Cần tối thiểu: <strong style="color:#f87171; font-size:15px;">${formatVND(quote.cost)}</strong></div>
+          <div style="font-size:11px; color:#fca5a5; line-height:1.45;">
+            Tài sản ròng tại mốc ${quote.targetAge} tuổi chỉ có <strong>${formatVND(quote.snapNetWorth)}</strong> — không đủ để đánh đổi lượt lùi thời gian lần #${quote.nextRewindNum}!
+          </div>
+        `;
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Không đủ tài sản";
+      }
+
+      el("rewind-confirm-modal").classList.add("open");
+    }
+
+    executePaidRewind() {
+      const quote = this.calculatePaidRewindQuote();
+      el("rewind-confirm-modal").classList.remove("open");
+      if (!quote || !quote.canAfford) {
+        this.showToast("❌ Không đủ tài sản để mua thêm lượt lùi tuổi!");
+        return;
+      }
+
       const snap = this.timeMachine.pop();
       this.restoreSnapshot(snap);
-      if (window.ZTBAudio) window.ZTBAudio.success();
-      if (window.Diorama3D) window.Diorama3D.triggerCelebration("happy");
-      this.addLog(`⏪ Cỗ Máy Thời Gian: Quay lại năm ${this.stats.age} tuổi!`, "milestone");
-      this.showToast(`⏪ Đã quay ngược về năm ${this.stats.age} tuổi!`);
+      this.stats.rewindsUsed = quote.nextRewindNum;
+      this.deductWealthForRewind(quote.cost, quote.nextRewindNum);
+
+      if (window.ZTBAudio) window.ZTBAudio.warning();
+      if (window.Diorama3D) window.Diorama3D.triggerCelebration("coin");
+      this.addLog(
+        `⏳ Nghịch chuyển thời gian lần #${quote.nextRewindNum} (vượt mốc 5 lần): Đã khấu trừ -${formatVND(quote.cost)} khỏi khối tài sản để lùi về năm ${this.stats.age} tuổi!`,
+        "danger"
+      );
+      this.showToast(`⏳ Đã trừ ${formatVND(quote.cost)} tài sản để lùi về ${this.stats.age} tuổi!`);
       this.saveToStorage();
       this.publishPlayerToLiveBoard(true);
       this.renderAll();
@@ -1063,19 +1232,59 @@
       if (!career) return;
 
       this.stats.yearsInCurrentJob += 1;
-      this.stats.stress += Math.max(1, career.annualStressDelta - Math.floor(this.stats.discipline / 22));
+      const highPressureExtra = this.stats.monthlyIncome >= 35_000_000 ? 3 : 1;
+      this.stats.stress += Math.max(2, career.annualStressDelta + highPressureExtra - Math.floor(this.stats.discipline / 24));
       this.stats.practicalSkills += 2;
 
-      const perf = 0.68 + (this.stats.discipline + this.stats.intelligence) / 210;
+      // Cơ chế tăng độ khó: Nguy cơ sa thải thời suy thoái hoặc trượt KPI khi kiệt sức
+      const isRecession = this.macroCycle && this.macroCycle.id === "Recession";
+      const kpiScore = this.stats.discipline * 0.5 + this.stats.practicalSkills * 0.3 + this.stats.intelligence * 0.35 - this.stats.stress * 0.25;
+      if (this.stats.age >= 20 && this.stats.yearsInCurrentJob >= 1) {
+        if (isRecession && kpiScore < 58 && Math.random() < 0.22) {
+          const severance = Math.round(this.stats.monthlyIncome * 1.0);
+          const lostTitle = this.stats.currentJob;
+          this.stats.cash += severance;
+          this.recordCashflow(severance, "salary", `Trợ cấp thôi việc (${lostTitle})`);
+          this.stats.currentCareerId = "";
+          this.stats.currentJob = "Thất nghiệp (Cắt giảm)";
+          this.stats.monthlyIncome = 0;
+          this.stats.yearsInCurrentJob = 0;
+          this.stats.stress += 14;
+          this.stats.happiness -= 12;
+          this.clampStats();
+          this.addLog(`📉 Làn sóng sa thải thời suy thoái: Bạn mất việc tại [${lostTitle}] (nhận ${formatVND(severance)} trợ cấp)!`, "danger");
+          this.showToast(`📉 Bị cắt giảm nhân sự tại ${lostTitle}!`);
+          return;
+        }
+        if (this.stats.stress >= 90 && this.stats.discipline < 45 && Math.random() < 0.25) {
+          const lostTitle = this.stats.currentJob;
+          this.stats.currentCareerId = "";
+          this.stats.currentJob = "Tự do / Tìm việc";
+          this.stats.monthlyIncome = 0;
+          this.stats.yearsInCurrentJob = 0;
+          this.stats.happiness -= 10;
+          this.clampStats();
+          this.addLog(`⚠️ Kiệt sức & trượt KPI liên tiếp khiến bạn mất vị trí [${lostTitle}]!`, "danger");
+          return;
+        }
+      }
+
+      const macroSalaryFactor = isRecession ? 0.15 : (this.macroCycle.id === "Inflation" ? 0.65 : 0.92);
+      const perf = (0.55 + (this.stats.discipline + this.stats.intelligence) / 230) * macroSalaryFactor;
       const raise = Math.round(this.stats.monthlyIncome * career.annualRaiseRate * perf);
-      this.stats.monthlyIncome += raise;
+      this.stats.monthlyIncome += Math.max(0, raise);
 
       if (career.promotionCareerId && career.yearsForPromotion > 0 && this.stats.yearsInCurrentJob >= career.yearsForPromotion) {
         const nextJob = (DATA.careers || []).find((c) => c.careerId === career.promotionCareerId);
-        if (nextJob && this.stats.intelligence >= nextJob.minIntelligence - 5 && this.stats.discipline >= nextJob.minDiscipline - 5) {
+        if (
+          nextJob &&
+          this.stats.intelligence >= nextJob.minIntelligence &&
+          this.stats.discipline >= nextJob.minDiscipline &&
+          this.stats.stress < 82
+        ) {
           this.stats.currentCareerId = nextJob.careerId;
           this.stats.currentJob = nextJob.title;
-          this.stats.monthlyIncome = Math.max(Math.round(this.stats.monthlyIncome * 1.22), nextJob.monthlySalary);
+          this.stats.monthlyIncome = Math.max(Math.round(this.stats.monthlyIncome * 1.18), nextJob.monthlySalary);
           this.stats.yearsInCurrentJob = 0;
           this.stats.happiness += 12;
           this.stats.socialStatus += 10;
@@ -1085,7 +1294,7 @@
       }
 
       if (this.stats.age >= 62 && !this.stats.isRetired && this.stats.age > career.maxAge) {
-        const pension = Math.round(this.stats.monthlyIncome * 0.45);
+        const pension = Math.round(this.stats.monthlyIncome * 0.40);
         this.stats.currentCareerId = "";
         this.stats.isRetired = true;
         this.stats.currentJob = "Hưu trí an nhàn";
@@ -1204,22 +1413,80 @@
         this.recordCashflow(this.stats.familyAllowancePerYear, "family", "Trợ cấp học tập từ gia đình");
       }
 
-      // Tách dòng tiền thụ động dương & chi phí bảo dưỡng (xe/du thuyền)
+      // Lạm phát tích lũy theo năm trưởng thành (làm tăng dần chi phí sinh hoạt nền)
+      if (this.stats.age >= 18) {
+        const infStep = this.macroCycle.id === "Inflation"
+          ? 1.048
+          : (this.macroCycle.id === "Boom" ? 1.030 : (this.macroCycle.id === "Expansion" ? 1.020 : 1.008));
+        this.stats.inflationMult = Math.min(4.8, (this.stats.inflationMult || 1.0) * infStep);
+      }
+      const infMult = this.stats.inflationMult || 1.0;
+
+      // Tính dòng tiền thụ động thực tế: có bão hòa chuỗi, giới hạn năng lực quản trị & rủi ro thua lỗ KD thời suy thoái
       let posPassiveMonthly = 0;
       let negUpkeepMonthly = 0;
-      for (const item of this.portfolio) {
-        const line = item.monthlyPassivePerUnit * item.quantity;
-        if (line >= 0) posPassiveMonthly += line;
-        else negUpkeepMonthly += -line;
+      let bizLossAnnual = 0;
+      const totalBizUnits = this.portfolio
+        .filter((it) => it.category === "business")
+        .reduce((s, it) => s + it.quantity, 0);
+      const bizManageCap = 1 + Math.floor(((this.stats.businessAcuity || 20) + (this.stats.discipline || 20)) / 36);
+      const overloadPenalty = totalBizUnits > bizManageCap
+        ? Math.max(0.38, 1 - (totalBizUnits - bizManageCap) * 0.14)
+        : 1.0;
+
+      if (totalBizUnits > bizManageCap && this.stats.age >= 18) {
+        const extraUnits = totalBizUnits - bizManageCap;
+        this.stats.stress += Math.min(14, extraUnits * 3);
+        this.addLog(
+          `⚠️ Quá tải quản trị (${totalBizUnits}/${bizManageCap} cơ sở KD): Thất thoát vận hành ${Math.round((1 - overloadPenalty) * 100)}%! Hãy nâng Kinh doanh & Kỷ luật.`,
+          "danger"
+        );
       }
 
-      // Cân bằng kinh tế thực tế hơn nhưng vẫn giữ: chưa đi làm/học sinh (<18 hoặc 0 thu nhập) = 0 đ sinh hoạt phí tự động
+      for (const item of this.portfolio) {
+        if (item.monthlyPassivePerUnit < 0) {
+          negUpkeepMonthly += (-item.monthlyPassivePerUnit) * item.quantity;
+          continue;
+        }
+        if (item.category === "business") {
+          // Bão hòa khi mở nhiều chi nhánh trùng nhau + biến động lợi nhuận theo vĩ mô
+          const satFactor = item.quantity <= 2 ? 1.0 : (1 / (1 + (item.quantity - 2) * 0.24));
+          const skillFactor = 0.65 + ((this.stats.businessAcuity || 20) + (this.stats.financialLiteracy || 20)) / 240;
+          let macroBizMult = 0.88;
+          if (this.macroCycle.id === "Boom") macroBizMult = 1.12;
+          else if (this.macroCycle.id === "Inflation") macroBizMult = 0.62;
+          else if (this.macroCycle.id === "Recession") {
+            macroBizMult = (this.stats.businessAcuity || 20) >= 75 ? 0.18 : -0.22;
+          }
+          const rawMonthly = item.monthlyPassivePerUnit * item.quantity * satFactor * overloadPenalty;
+          if (macroBizMult >= 0) {
+            posPassiveMonthly += Math.round(rawMonthly * macroBizMult * skillFactor);
+          } else {
+            bizLossAnnual += Math.round(rawMonthly * Math.abs(macroBizMult) * 12);
+          }
+        } else {
+          // BĐS cho thuê cũng có tỷ lệ trống phòng mùa suy thoái
+          const occupancy = this.macroCycle.id === "Recession" ? 0.74 : (this.macroCycle.id === "Inflation" ? 0.88 : 0.96);
+          posPassiveMonthly += Math.round(item.monthlyPassivePerUnit * item.quantity * occupancy);
+        }
+      }
+
+      // Tăng độ khó sinh hoạt phí: Tuổi trưởng thành (>=22t) bắt buộc tốn chi phí sinh tồn cơ bản dù thất nghiệp!
+      const ownsHome = this.getHighestRealEstateTier() >= 1;
       const grossMonthlyInflow = this.stats.monthlyIncome + posPassiveMonthly;
-      if (this.stats.age >= 18 && grossMonthlyInflow > 0) {
-        const ownsHome = this.getHighestRealEstateTier() >= 1;
-        const baseRate = (ownsHome ? 0.34 : 0.42) + (this.macroCycle.id === "Inflation" ? 0.06 : 0);
-        const rawLiving = Math.round(this.stats.monthlyIncome * baseRate + posPassiveMonthly * 0.18) + this.stats.childrenCount * 2_500_000;
-        this.stats.monthlyExpense = Math.min(rawLiving, Math.round(grossMonthlyInflow * 0.78));
+      if (this.stats.age >= 18) {
+        const minAdultFloor = this.stats.age >= 22
+          ? Math.round(((ownsHome ? 2_100_000 : 3_500_000) + this.stats.childrenCount * 2_800_000) * infMult)
+          : 0;
+
+        if (grossMonthlyInflow > 0) {
+          const baseRate = (ownsHome ? 0.40 : 0.50) + (this.macroCycle.id === "Inflation" ? 0.08 : 0);
+          const rawLiving = Math.round(this.stats.monthlyIncome * baseRate + posPassiveMonthly * 0.24)
+            + Math.round(this.stats.childrenCount * 3_200_000 * infMult);
+          this.stats.monthlyExpense = Math.max(minAdultFloor, Math.min(rawLiving, Math.round(grossMonthlyInflow * 0.86)));
+        } else {
+          this.stats.monthlyExpense = minAdultFloor;
+        }
       } else {
         this.stats.monthlyExpense = 0;
       }
@@ -1233,7 +1500,27 @@
       if (posPassiveMonthly > 0) {
         const annualPassiveIn = posPassiveMonthly * 12;
         this.stats.cash += annualPassiveIn;
-        this.recordCashflow(annualPassiveIn, "passive", "Thu nhập thụ động BĐS, Cổ tức & KD");
+        this.recordCashflow(annualPassiveIn, "passive", "Thu nhập thụ động ròng sau vận hành");
+      }
+
+      if (bizLossAnnual > 0) {
+        this.stats.cash -= bizLossAnnual;
+        this.recordCashflow(-bizLossAnnual, "upkeep", "Bù lỗ mặt bằng & nhân sự mùa suy thoái");
+        this.addLog(`📉 Chuỗi kinh doanh ế ẩm thời suy thoái, phải bù lỗ vận hành -${formatVND(bizLossAnnual)}!`, "danger");
+      }
+
+      // Nguy cơ đóng cửa 1 cơ sở kinh doanh nhỏ khi suy thoái và thiếu kỹ năng quản trị
+      if (this.macroCycle.id === "Recession" && totalBizUnits > 0 && (this.stats.businessAcuity || 20) < 58 && Math.random() < 0.20) {
+        const riskyIdx = this.portfolio.findIndex((p) => p.category === "business");
+        if (riskyIdx >= 0) {
+          const closedBiz = this.portfolio[riskyIdx];
+          const avgCost = Math.round(closedBiz.totalInvestedCost / closedBiz.quantity);
+          closedBiz.totalInvestedCost -= avgCost;
+          closedBiz.quantity -= 1;
+          if (closedBiz.quantity <= 0) this.portfolio.splice(riskyIdx, 1);
+          this.stats.stress += 10;
+          this.addLog(`💥 Phá sản 1 cơ sở [${closedBiz.name}] do sức mua lao dốc và thiếu kinh nghiệm quản trị!`, "danger");
+        }
       }
 
       if (this.stats.monthlyExpense > 0) {
@@ -1242,34 +1529,36 @@
         this.recordCashflow(-annualLiving, "living", "Thuê nhà & Sinh hoạt phí cả năm");
       }
 
-      // Thuế Thu nhập Cá nhân & Bảo hiểm lũy tiến khi thu nhập năm > 180 Triệu đ
+      // Thuế Thu nhập Cá nhân & Bảo hiểm lũy tiến chặt chẽ hơn (từ 132 Triệu/năm, lên tới 35%)
       const annualGross = grossMonthlyInflow * 12;
-      if (this.stats.age >= 18 && annualGross > 180_000_000) {
-        let baseTaxRate = 0.10;
-        if (annualGross > 2_400_000_000) baseTaxRate = 0.25;
-        else if (annualGross > 600_000_000) baseTaxRate = 0.18;
-        const literacyRelief = (this.stats.financialLiteracy || 0) * 0.0008;
-        const effRate = Math.max(0.06, baseTaxRate - literacyRelief);
-        const annualTax = Math.round((annualGross - 150_000_000) * effRate);
+      if (this.stats.age >= 18 && annualGross > 132_000_000) {
+        let baseTaxRate = 0.12;
+        if (annualGross > 5_000_000_000) baseTaxRate = 0.35;
+        else if (annualGross > 1_800_000_000) baseTaxRate = 0.28;
+        else if (annualGross > 500_000_000) baseTaxRate = 0.20;
+        const literacyRelief = (this.stats.financialLiteracy || 0) * 0.0006;
+        const effRate = Math.max(0.08, baseTaxRate - literacyRelief);
+        const annualTax = Math.round((annualGross - 132_000_000) * effRate);
         if (annualTax > 0) {
           this.stats.cash -= annualTax;
-          this.recordCashflow(-annualTax, "tax", "Thuế TNCN & Bảo hiểm bắt buộc");
+          this.recordCashflow(-annualTax, "tax", "Thuế TNCN lũy tiến & Bảo hiểm");
         }
       }
 
       if (negUpkeepMonthly > 0) {
-        const annualUpkeep = negUpkeepMonthly * 12;
+        const annualUpkeep = Math.round(negUpkeepMonthly * 12 * Math.min(2.2, infMult));
         this.stats.cash -= annualUpkeep;
         this.recordCashflow(-annualUpkeep, "upkeep", "Bảo dưỡng Xe & Du thuyền");
       }
 
-      // Phí quản trị & bảo trì danh mục tài sản lớn (>= 2 Tỷ)
+      // Thuế tài sản & phí quản trị cơ ngơi hàng năm (áp dụng trên toàn bộ danh mục >= 1.5 Tỷ, kể cả khi thiếu tiền mặt)
       const curPortVal = this.getPortfolioValue();
-      if (this.stats.age >= 22 && this.getNetWorth() >= 2_000_000_000 && this.stats.cash >= 30_000_000 && curPortVal > 0) {
-        const assetFee = Math.min(Math.round(this.stats.cash * 0.18), Math.round(curPortVal * 0.009));
+      if (this.stats.age >= 22 && curPortVal >= 1_500_000_000) {
+        const wealthRate = curPortVal >= 50_000_000_000 ? 0.016 : 0.011;
+        const assetFee = Math.round(curPortVal * wealthRate);
         if (assetFee >= 1_000_000) {
           this.stats.cash -= assetFee;
-          this.recordCashflow(-assetFee, "upkeep", "Thuế & phí bảo trì cơ ngơi");
+          this.recordCashflow(-assetFee, "upkeep", "Thuế tài sản & phí quản trị cơ ngơi");
         }
       }
 
@@ -1277,29 +1566,53 @@
         const def = (DATA.assets || []).find((a) => a.assetId === item.assetId);
         const baseRate = def ? def.annualAppreciationRate : 0.06;
         const vol = def ? def.volatility : 0.05;
-        const skillEdge = (this.stats.financialLiteracy + this.stats.businessAcuity) * 0.00035;
-        const swing = (Math.random() * 2 - 1) * vol;
+        const skillEdge = (this.stats.financialLiteracy + this.stats.businessAcuity) * 0.00025;
+        const swing = (Math.random() * 2 - 1) * vol * 1.15;
         const effective = baseRate >= 0
-          ? (baseRate * this.macroCycle.mult + swing + skillEdge)
+          ? (baseRate * 0.82 * this.macroCycle.mult + swing + skillEdge)
           : (baseRate + swing * 0.5);
 
         item.currentUnitValue = Math.max(1_000_000, Math.round(item.currentUnitValue * (1 + effective)));
       }
 
+      // Lãi vay thả nổi theo vĩ mô + Cơ chế ngân hàng xiết nợ khi mất khả năng thanh toán
       if (this.stats.debt > 0) {
-        const interest = Math.round(this.stats.debt * ANNUAL_LOAN_RATE);
+        const loanRate = this.getCurrentLoanRate();
+        const ratePctLabel = (loanRate * 100).toFixed(1);
+        const interest = Math.round(this.stats.debt * loanRate);
         if (this.stats.cash >= interest) {
           this.stats.cash -= interest;
-          this.recordCashflow(-interest, "bank", "Trả lãi vay ngân hàng (8.5%)");
+          this.recordCashflow(-interest, "bank", `Trả lãi vay thả nổi (${ratePctLabel}%)`);
         } else {
-          const paidCash = this.stats.cash;
+          const paidCash = Math.max(0, this.stats.cash);
           this.stats.debt += (interest - paidCash);
           this.stats.cash = 0;
           if (paidCash > 0) {
-            this.recordCashflow(-paidCash, "bank", "Trả một phần lãi vay ngân hàng");
+            this.recordCashflow(-paidCash, "bank", `Trả một phần lãi vay (${ratePctLabel}%)`);
           }
-          this.stats.stress += 10;
-          this.addLog(`⚠️ Lãi vay dồn vào nợ gốc! Tổng nợ: ${formatVND(this.stats.debt)}.`, "danger");
+          this.stats.stress += 12;
+          this.addLog(`⚠️ Không đủ trả lãi vay (${ratePctLabel}%/năm), nợ gốc phình lên ${formatVND(this.stats.debt)}!`, "danger");
+
+          // Xiết nợ (Foreclosure) nếu tổng nợ vượt ngưỡng an toàn 75% tài sản
+          const collateral = this.getPortfolioValue();
+          if (collateral > 0 && this.stats.debt > Math.max(80_000_000, collateral * 0.75)) {
+            const seized = this.portfolio[this.portfolio.length - 1];
+            const fireSaleVal = Math.round(seized.currentUnitValue * 0.80);
+            const avgCost = Math.round(seized.totalInvestedCost / seized.quantity);
+            seized.totalInvestedCost -= avgCost;
+            seized.quantity -= 1;
+            if (seized.quantity <= 0) this.portfolio.pop();
+
+            const debtReduced = Math.min(this.stats.debt, fireSaleVal);
+            this.stats.debt -= debtReduced;
+            if (fireSaleVal > debtReduced) {
+              this.stats.cash += (fireSaleVal - debtReduced);
+            }
+            this.stats.happiness -= 14;
+            this.stats.socialStatus -= 8;
+            this.recordCashflow(fireSaleVal, "bank", `Ngân hàng phát mãi [${seized.name}] (giá 80%)`);
+            this.addLog(`🏦 XIẾT NỢ NGÂN HÀNG: Phát mãi 1 [${seized.name}] thu ${formatVND(fireSaleVal)} (chiết khấu 20%) để cấn trừ nợ quá hạn!`, "danger");
+          }
         }
       }
 
@@ -1309,9 +1622,11 @@
         this.stats.peakNetWorth = net;
       }
 
+      // Đối thủ Tỷ phú AI tăng trưởng quyết liệt hơn
       if (this.rivals.length === 0) this.rivals = this.createInitialRivals();
       for (const rival of this.rivals) {
-        const growth = 0.04 * this.macroCycle.mult + (Math.random() * 0.08 - 0.03);
+        const baseRivalGrowth = this.macroCycle.id === "Recession" ? 0.025 : 0.068 * Math.max(0.6, this.macroCycle.mult);
+        const growth = baseRivalGrowth + (Math.random() * 0.09 - 0.025);
         rival.lastGrowthPct = Number((growth * 100).toFixed(1));
         rival.netWorth = Math.max(10_000_000, Math.round(rival.netWorth * (1 + growth)));
       }
@@ -1353,9 +1668,39 @@
         });
       }
 
-      for (const npc of this.relationships) {
+      for (let i = this.relationships.length - 1; i >= 0; i--) {
+        const npc = this.relationships[i];
         if (!npc.isAlive) continue;
         npc.age += 1;
+
+        // Độ thân thiết giảm dần nếu bỏ bê hoặc căng thẳng cao -> nguy cơ chia tay / ly hôn chia tài sản
+        if (this.stats.age >= 18 && (npc.role === "Người yêu" || npc.role === "Vợ/Chồng")) {
+          const neglect = (this.stats.stress >= 75 ? 6 : 3) + randInt(0, 3);
+          npc.closeness = clamp(npc.closeness - neglect, 0, 100);
+
+          if (npc.role === "Người yêu" && npc.closeness < 30 && Math.random() < 0.45) {
+            this.relationships.splice(i, 1);
+            this.stats.maritalStatus = "Độc thân";
+            this.stats.happiness -= 14;
+            this.addLog(`💔 Mối tình với ${npc.fullName} tan vỡ vì thiếu sự quan tâm vun đắp!`, "danger");
+            continue;
+          }
+          if (npc.role === "Vợ/Chồng" && npc.closeness < 26 && Math.random() < 0.35) {
+            const settlement = Math.round(this.stats.cash * 0.35);
+            this.stats.cash -= settlement;
+            if (settlement > 0) {
+              this.recordCashflow(-settlement, "social", `Phân chia tài sản ly hôn với ${npc.fullName}`);
+            }
+            this.relationships.splice(i, 1);
+            this.stats.maritalStatus = "Đã ly hôn";
+            this.stats.spouseName = "";
+            this.stats.happiness -= 22;
+            this.stats.stress += 12;
+            this.addLog(`⚖️ Hôn nhân đổ vỡ với ${npc.fullName}! Bạn mất -${formatVND(settlement)} phân chia tài sản sau ly hôn.`, "danger");
+            continue;
+          }
+        }
+
         if ((npc.role === "Cha" || npc.role === "Mẹ") && npc.age > 78 && Math.random() < 0.14) {
           npc.isAlive = false;
           this.stats.happiness -= 18;
@@ -1367,18 +1712,28 @@
     }
 
     processAnnualHealth() {
-      if (this.stats.stress >= 85) {
-        this.stats.health -= 7;
-        this.stats.happiness -= 8;
+      if (this.stats.stress >= 82) {
+        this.stats.health -= 8;
+        this.stats.happiness -= 9;
         this.addLog("⚠️ Căng thẳng kéo dài đang bào mòn sức khỏe của bạn!", "danger");
       }
 
-      if (this.stats.age > 50) {
-        const decay = this.stats.age > 75 ? randInt(3, 8) : randInt(1, 4);
+      // Cấp cứu y tế đắt đỏ khi kiệt sức hoặc sức khỏe suy kiệt ở tuổi trưởng thành
+      if (this.stats.age >= 20 && (this.stats.stress >= 88 || this.stats.health <= 28) && Math.random() < 0.32) {
+        const wealthShare = Math.round(Math.max(0, this.getNetWorth()) * 0.03);
+        const medBill = clamp(Math.max(6_000_000, wealthShare), 6_000_000, 450_000_000);
+        this.stats.cash -= medBill;
+        this.recordCashflow(-medBill, "living", "Viện phí cấp cứu suy nhược / bệnh nặng");
+        this.stats.health -= 6;
+        this.addLog(`🏥 Nhập viện điều trị khẩn cấp vì suy kiệt! Viện phí: -${formatVND(medBill)}.`, "danger");
+      }
+
+      if (this.stats.age > 48) {
+        const decay = this.stats.age > 72 ? randInt(4, 9) : randInt(2, 5);
         this.stats.health -= decay;
       }
 
-      if (this.stats.age >= 85 && Math.random() < (this.stats.age - 80) * 0.04) {
+      if (this.stats.age >= 83 && Math.random() < (this.stats.age - 78) * 0.045) {
         this.stats.health = 0;
         this.stats.causeOfDeath = "Ra đi thanh thản ở tuổi đại thọ bên con cháu";
       }
@@ -1713,22 +2068,31 @@
       this.renderAll();
     }
 
+    getAssetBuyFee(def) {
+      if (def.category === "real_estate" || def.category === "business") {
+        return Math.round(def.cost * 0.02);
+      }
+      return 0;
+    }
+
     buyAsset(def) {
       if (this.stats.age < 18) {
         this.showToast("Cần đủ 18 tuổi để đứng tên mua tài sản.");
         return;
       }
-      if (this.stats.cash < def.cost) {
-        this.showToast(`Không đủ tiền mặt! Cần ${formatVND(def.cost)}.`);
+      const buyFee = this.getAssetBuyFee(def);
+      const totalCost = def.cost + buyFee;
+      if (this.stats.cash < totalCost) {
+        this.showToast(`Không đủ tiền mặt! Cần ${formatVND(totalCost)} (gồm ${buyFee > 0 ? "2% phí pháp lý" : "giá gốc"}).`);
         return;
       }
 
-      this.stats.cash -= def.cost;
-      this.recordCashflow(-def.cost, "asset", `Mua: ${def.name}`);
+      this.stats.cash -= totalCost;
+      this.recordCashflow(-totalCost, "asset", `Mua: ${def.name}${buyFee > 0 ? " (+2% phí)" : ""}`);
       const existing = this.portfolio.find((p) => p.assetId === def.assetId);
       if (existing) {
         existing.quantity += 1;
-        existing.totalInvestedCost += def.cost;
+        existing.totalInvestedCost += totalCost;
       } else {
         this.portfolio.push({
           assetId: def.assetId,
@@ -1736,7 +2100,7 @@
           category: def.category,
           tier: def.tier,
           quantity: 1,
-          totalInvestedCost: def.cost,
+          totalInvestedCost: totalCost,
           currentUnitValue: def.cost,
           monthlyPassivePerUnit: def.monthlyPassiveIncome
         });
@@ -1748,7 +2112,7 @@
       this.clampStats();
       this.checkAchievements();
 
-      this.addLog(`🏛️ Mua thành công [${def.name}] giá ${formatVND(def.cost)}.`, "milestone");
+      this.addLog(`🏛️ Mua thành công [${def.name}] tổng chi ${formatVND(totalCost)}.`, "milestone");
       this.showToast(`🏛️ Đã sở hữu: ${def.name}!`);
       if (window.ZTBAudio) window.ZTBAudio.coin();
       if (window.Diorama3D) window.Diorama3D.triggerCelebration("coin");
@@ -1761,12 +2125,16 @@
       const idx = this.portfolio.findIndex((p) => p.assetId === assetId);
       if (idx === -1) return;
       const item = this.portfolio[idx];
-      const proceeds = item.currentUnitValue;
+      const grossProceeds = item.currentUnitValue;
       const avgCost = Math.round(item.totalInvestedCost / item.quantity);
-      const profit = proceeds - avgCost;
+      const brokerFee = item.assetId === "inv_bank_saving" ? 0 : Math.round(grossProceeds * 0.02);
+      const rawProfit = grossProceeds - brokerFee - avgCost;
+      const capGainsTax = (item.assetId !== "inv_bank_saving" && rawProfit > 0) ? Math.round(rawProfit * 0.10) : 0;
+      const netProceeds = Math.max(0, grossProceeds - brokerFee - capGainsTax);
+      const netProfit = netProceeds - avgCost;
 
-      this.stats.cash += proceeds;
-      this.recordCashflow(proceeds, "asset", `Bán: ${item.name}`);
+      this.stats.cash += netProceeds;
+      this.recordCashflow(netProceeds, "asset", `Bán ròng: ${item.name}`);
       item.totalInvestedCost -= avgCost;
       item.quantity -= 1;
       if (item.quantity <= 0) {
@@ -1775,9 +2143,9 @@
 
       this.stats.financialLiteracy += 2;
       this.clampStats();
-      const pnl = profit >= 0 ? `Lãi +${formatVND(profit)}` : `Lỗ ${formatVND(profit)}`;
-      this.addLog(`💰 Bán 1 [${item.name}] thu ${formatVND(proceeds)} (${pnl}).`);
-      this.showToast(`💰 Đã bán thu ${formatVND(proceeds)} (${pnl})`);
+      const pnl = netProfit >= 0 ? `Lãi ròng +${formatVND(netProfit)}` : `Lỗ ${formatVND(netProfit)}`;
+      this.addLog(`💰 Bán 1 [${item.name}] thực nhận ${formatVND(netProceeds)} sau phí & thuế (${pnl}).`);
+      this.showToast(`💰 Đã bán thực nhận ${formatVND(netProceeds)} (${pnl})`);
       if (window.ZTBAudio) window.ZTBAudio.coin();
       this.saveToStorage();
       this.publishPlayerToLiveBoard(false);
@@ -1785,8 +2153,8 @@
     }
 
     getMaxLoanLimit() {
-      const base = Math.max(0, Math.floor(this.getNetWorth() / 2) + this.stats.monthlyIncome * 24);
-      return Math.max(20_000_000, base);
+      const base = Math.max(0, Math.floor(this.getNetWorth() * 0.38) + this.stats.monthlyIncome * 18);
+      return Math.max(15_000_000, base);
     }
 
     borrowLoan(amount) {
@@ -1950,10 +2318,17 @@
       this.renderAll();
     }
 
+    getEstateKeepRatio() {
+      if (this.flags.family_trust_protected) return 1.0;
+      const net = this.getNetWorth();
+      if (net >= 100_000_000_000) return 0.65;
+      if (net >= 10_000_000_000) return 0.75;
+      return 0.85;
+    }
+
     inheritWithChild(child) {
-      const hasTrust = !!this.flags.family_trust_protected;
       const hasElite = !!this.flags.heir_elite_trained;
-      const ratio = hasTrust ? 1.0 : 0.85;
+      const ratio = this.getEstateKeepRatio();
       const totalLegacyCash = (this.stats.cash || 0) + (this.stats.trustFund || 0);
       const inheritedCash = Math.round(totalLegacyCash * ratio);
       const inheritedDebt = this.stats.debt;
@@ -2015,12 +2390,13 @@
     openGameOverModal() {
       this.updateHallOfFame();
       const net = this.getNetWorth();
+      const keepPct = Math.round(this.getEstateKeepRatio() * 100);
       el("gameover-summary").innerHTML = `
         <strong>${escapeHtml(this.stats.characterName)}</strong> (Đời thứ ${this.stats.generation})<br/>
         • Hưởng thọ: <strong>${this.stats.age} tuổi</strong> — ${escapeHtml(this.stats.causeOfDeath)}<br/>
         • Nghề nghiệp cuối cùng: <strong>${escapeHtml(this.stats.currentJob)}</strong><br/>
         • Tài sản ròng đỉnh cao: <strong style="color:#fbbf24;">${formatVND(this.stats.peakNetWorth)}</strong><br/>
-        • Di sản để lại (${this.flags.family_trust_protected ? "100% nhờ Quỹ tín thác" : "85% sau thuế thừa kế"}): <strong style="color:#34d399;">${formatVND(net)}</strong>
+        • Di sản để lại (${this.flags.family_trust_protected ? "100% nhờ Quỹ tín thác" : `${keepPct}% sau thuế thừa kế lũy tiến`}): <strong style="color:#34d399;">${formatVND(net)}</strong>
       `;
 
       const heirList = el("heir-selection-list");
@@ -2036,7 +2412,7 @@
           row.innerHTML = `
             <div class="item-info">
               <div class="item-title">👑 ${escapeHtml(child.fullName)} (${child.age} tuổi)</div>
-              <div class="item-meta">Kế thừa bất động sản, doanh nghiệp &amp; ${this.flags.family_trust_protected ? "100%" : "85%"} tiền mặt</div>
+              <div class="item-meta">Kế thừa bất động sản, doanh nghiệp &amp; ${keepPct}% tiền mặt</div>
             </div>
           `;
           const btn = document.createElement("button");
@@ -2099,8 +2475,20 @@
         el("room-tier-badge").textContent = window.Diorama3D.getRoomTierLabel();
       }
       el("generation-badge").textContent = `👑 Đời ${this.stats.generation} • ${this.stats.backgroundName}`;
-      el("time-machine-count").textContent = String(this.timeMachine.length);
-      el("btn-time-machine").disabled = this.timeMachine.length === 0;
+      const usedRewinds = this.stats.rewindsUsed || 0;
+      const freeRewindsLeft = Math.max(0, FREE_TIME_MACHINE_LIMIT - usedRewinds);
+      const tmBadge = el("time-machine-count");
+      const tmBtn = el("btn-time-machine");
+      if (freeRewindsLeft > 0) {
+        tmBadge.textContent = String(freeRewindsLeft);
+        tmBadge.classList.remove("paid");
+        tmBtn.title = `Cỗ Máy Thời Gian: Còn ${freeRewindsLeft}/${FREE_TIME_MACHINE_LIMIT} lượt lùi tuổi miễn phí`;
+      } else {
+        tmBadge.textContent = "💸";
+        tmBadge.classList.add("paid");
+        tmBtn.title = "Đã hết 5 lượt miễn phí — Bấm để đánh đổi Tài sản lùi tuổi thêm!";
+      }
+      tmBtn.disabled = this.timeMachine.length === 0;
     }
 
     renderHUD() {
@@ -2110,6 +2498,15 @@
       el("hud-job").textContent = s.currentJob;
       el("hud-macro").textContent = this.macroCycle.label;
       el("autosave-indicator").textContent = `✓ ${this.lastSavedLabel}`;
+
+      const liveSnap = window.ZTBLiveBoard
+        ? window.ZTBLiveBoard.getLeaderboardSnapshot()
+        : { connected: false, onlineCount: 1 };
+      const onlinePill = el("hud-online-pill");
+      onlinePill.textContent = liveSnap.connected
+        ? `🟢 ${liveSnap.onlineCount} online`
+        : `🟡 ${liveSnap.onlineCount} local`;
+      onlinePill.classList.toggle("offline", !liveSnap.connected);
 
       const hudRank = this.getLiveOrAiHudRank();
       el("hud-rank").textContent = `${hudRank.prefix} #${hudRank.rank}`;
@@ -2397,13 +2794,14 @@
       if (this.assetsSubTab === "bank") {
         const maxLoan = this.getMaxLoanLimit();
         const availLoan = Math.max(0, maxLoan - this.stats.debt);
+        const curLoanPct = (this.getCurrentLoanRate() * 100).toFixed(1);
         const bankCard = el("bank-desk-card");
         bankCard.innerHTML = `
           <div class="section-title">
-            <span>🏦 Tín dụng Ngân hàng (8.5%/năm)</span>
+            <span>🏦 Tín dụng Thả nổi (${curLoanPct}%/năm)</span>
             <span>Hạn mức còn: ${formatVND(availLoan)}</span>
           </div>
-          <div class="item-meta" style="margin-bottom:6px;">Vay vốn giúp tận dụng đòn bẩy mua tài sản, nhưng nhớ tất toán kịp trước khi lãi kép ăn mòn dòng tiền!</div>
+          <div class="item-meta" style="margin-bottom:6px;">Lãi suất biến động theo chu kỳ vĩ mô (8.5% – 12.5%/năm). Nếu nợ vượt 75% tài sản mà mất khả năng trả lãi, ngân hàng sẽ phát mãi tài sản (giá 80%)!</div>
         `;
         const bankBtns = document.createElement("div");
         bankBtns.className = "bank-actions-grid";
@@ -2485,14 +2883,16 @@
       (DATA.assets || [])
         .filter((a) => this.assetFilter === "all" || a.category === this.assetFilter)
         .forEach((def) => {
-          const canBuy = this.stats.isAlive && this.stats.age >= 18 && this.stats.cash >= def.cost;
+          const buyFee = this.getAssetBuyFee(def);
+          const totalCost = def.cost + buyFee;
+          const canBuy = this.stats.isAlive && this.stats.age >= 18 && this.stats.cash >= totalCost;
           const row = document.createElement("div");
           row.className = "item-row";
           row.innerHTML = `
             <div class="item-info">
               <div class="item-title">${escapeHtml(def.name)}</div>
               <div class="item-meta">
-                Giá: <strong style="color:#fbbf24;">${formatVND(def.cost)}</strong> •
+                Giá: <strong style="color:#fbbf24;">${formatVND(def.cost)}</strong>${buyFee > 0 ? ` <span style="color:#94a3b8;">(+2% phí)</span>` : ""} •
                 Thụ động: ${formatVND(def.monthlyPassiveIncome)}/th •
                 Tăng TB: ${(def.annualAppreciationRate * 100).toFixed(1)}%/năm<br/>
                 ${escapeHtml(def.description)}
@@ -2616,9 +3016,13 @@
           ? window.ZTBLiveBoard.getLeaderboardSnapshot()
           : { connected: false, brokerHost: "offline", onlineCount: 1, totalPlayers: 1, entries: [] };
 
+        el("live-active-count-badge").innerHTML = `
+          <span class="pulse-dot" style="${snap.connected ? "" : "background:#f59e0b;"}"></span>
+          <span>Đang hoạt động trực tuyến: <strong>${snap.onlineCount} người chơi</strong></span>
+        `;
         el("live-board-status").innerHTML = snap.connected
-          ? `🟢 <strong>Live Online</strong> • ${snap.onlineCount} đang chơi (${snap.totalPlayers} hồ sơ)`
-          : `🟡 <strong>Cục bộ / Đang kết nối</strong> • ${snap.totalPlayers} người chơi đã lưu`;
+          ? `🟢 Đã kết nối máy chủ Live (${escapeHtml(snap.brokerHost)}) • Tổng ${snap.totalPlayers} người chơi đã ghi danh`
+          : `🟡 Chế độ cục bộ / Đang kết nối máy chủ • ${snap.totalPlayers} người chơi đã lưu`;
 
         el("leaderboard-list-title").textContent = `🌐 Bảng Xếp Hạng Người Chơi Thực (${snap.entries.length})`;
 
@@ -2629,12 +3033,12 @@
         if (snap.entries.length <= 1) {
           hero.innerHTML = `
             <div class="section-title"><span>🌐 Thứ hạng Người Chơi Thực</span><span style="color:#fbbf24;">Hạng #1 / 1</span></div>
-            <div class="item-meta">Bạn là người đầu tiên đang online lúc này! Khi người chơi khác mở game, tên và tài sản ròng của họ sẽ tự động cập nhật trực tiếp tại đây.</div>
+            <div class="item-meta">Hiện có <strong>${snap.onlineCount} người chơi</strong> đang hoạt động. Khi có người chơi thực khác mở game trên thiết bị bất kỳ, số người đang online và tài sản ròng của họ sẽ tự động đồng bộ trực tiếp tại đây!</div>
           `;
         } else if (rank === 1) {
           hero.innerHTML = `
             <div class="section-title"><span>👑 QUÁN QUÂN NGƯỜI CHƠI</span><span style="color:#fbbf24;">Hạng #1 / ${snap.entries.length}</span></div>
-            <div class="item-meta">Bạn đang dẫn đầu toàn bộ <strong>${snap.entries.length}</strong> người chơi thực với tài sản ròng <strong style="color:#34d399;">${formatVND(playerNet)}</strong>!</div>
+            <div class="item-meta">Bạn đang dẫn đầu toàn bộ <strong>${snap.entries.length}</strong> người chơi thực (<strong>${snap.onlineCount} đang hoạt động</strong>) với tài sản ròng <strong style="color:#34d399;">${formatVND(playerNet)}</strong>!</div>
           `;
         } else {
           const nextP = snap.entries[rankIdx - 1];
@@ -2643,6 +3047,7 @@
           hero.innerHTML = `
             <div class="section-title"><span>🌐 Thứ hạng Người Chơi Thực</span><span style="color:#fbbf24;">Hạng #${rank} / ${snap.entries.length}</span></div>
             <div class="item-meta" style="margin-bottom:6px;">
+              Đang hoạt động: <strong style="color:#34d399;">${snap.onlineCount} người chơi</strong> •
               Mục tiêu kế tiếp (#${rank - 1}): <strong>${escapeHtml(nextP.name)}</strong> (${formatVND(nextP.netWorth)})<br/>
               Cần thêm: <strong style="color:#34d399;">${formatVND(gap)}</strong> để vượt mặt!
             </div>
@@ -2655,10 +3060,13 @@
         snap.entries.forEach((entry, idx) => {
           const pos = idx + 1;
           const medal = pos === 1 ? "🥇" : (pos === 2 ? "🥈" : (pos === 3 ? "🥉" : `#${pos}`));
-          const minsAgo = Math.max(1, Math.floor((Date.now() - (entry.ts || Date.now())) / 60000));
+          const rawDeltaMin = Math.floor((Date.now() - (entry.ts || Date.now())) / 60000);
+          const offlineLabel = rawDeltaMin > 0
+            ? (rawDeltaMin < 60 ? `${rawDeltaMin}p trước` : (rawDeltaMin < 1440 ? `${Math.floor(rawDeltaMin / 60)}g trước` : `${Math.floor(rawDeltaMin / 1440)} ngày trước`))
+            : "Ngoại tuyến";
           const presence = entry.isOnline
-            ? `<span style="color:#34d399;">🟢 Đang chơi</span>`
-            : `<span style="color:#94a3b8;">🕒 ${minsAgo < 60 ? `${minsAgo}p` : `${Math.floor(minsAgo / 60)}g`} trước</span>`;
+            ? `<span style="color:#34d399;">🟢 Đang hoạt động</span>`
+            : `<span style="color:#94a3b8;">⚪ ${offlineLabel}</span>`;
           const vipTag = entry.vip ? ` <span class="vip-tag">VIP</span>` : "";
 
           const row = document.createElement("div");

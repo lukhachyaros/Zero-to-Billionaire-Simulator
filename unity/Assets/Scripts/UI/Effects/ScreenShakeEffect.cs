@@ -5,7 +5,7 @@
 using System.Collections;
 using UnityEngine;
 
-namespace ZeroBillionaire.UI
+namespace ZeroToBillionaire.UI
 {
     public class ScreenShakeEffect : MonoBehaviour
     {

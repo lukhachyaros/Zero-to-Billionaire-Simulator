@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#090e1c" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Zero to Billionaire Simulator — Life Sim 3D</title>
@@ -72,6 +73,7 @@
             </div>
           </div>
           <div class="hud-right-pills">
+            <button type="button" class="hud-online-pill" id="hud-online-pill" title="Số người chơi đang hoạt động trực tuyến">🟢 1</button>
             <button type="button" class="hud-rank-pill" id="hud-rank" title="Xem Bảng Xếp Hạng Người Chơi">🌐 #1</button>
             <div class="hud-age-box">
               <div id="hud-age">0 Tuổi</div>
@@ -198,7 +200,13 @@
 
           <div class="section-card" id="live-board-status-card">
             <div class="live-status-row">
-              <span id="live-board-status">🟡 Đang kết nối máy chủ Live...</span>
+              <div class="live-status-left">
+                <div class="live-online-counter" id="live-active-count-badge">
+                  <span class="pulse-dot"></span>
+                  <span>Đang hoạt động: <strong>1 người chơi</strong></span>
+                </div>
+                <div class="live-sub-status" id="live-board-status">🟡 Đang kết nối máy chủ Live...</div>
+              </div>
               <button type="button" class="btn-sm btn-ghost" id="btn-sync-leaderboard">↻ Đồng bộ</button>
             </div>
           </div>
@@ -338,7 +346,7 @@
                 <strong>🎁 Gói Khởi Đầu Thuận Lợi</strong>
                 <span class="pack-price">19.000đ</span>
               </div>
-              <div class="pack-perks">3 Vé Chơi Lại không quảng cáo • Hỗ trợ 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ 18t &amp; +2 Cỗ Máy Thời Gian</div>
+              <div class="pack-perks">3 Vé Chơi Lại không quảng cáo • Hỗ trợ 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ 18t (Tối đa 5 lần lùi tuổi miễn phí/đời)</div>
               <button type="button" class="btn-sm btn-gold" style="width:100%; margin-top:7px;" id="btn-buy-starter-pack">💳 Mở Gói Khởi Đầu (19.000đ)</button>
             </div>
 
@@ -347,7 +355,7 @@
                 <strong>👑 Gói Tỷ Phú VIP Vĩnh Viễn</strong>
                 <span class="pack-price">49.000đ</span>
               </div>
-              <div class="pack-perks">Chơi lại VÔ HẠN không quảng cáo • Huy hiệu 👑 VIP trên BXH Thực • +15 Trí tuệ &amp; May mắn, +50 Triệu đ Quỹ 18t, tối đa 8 Cỗ Máy Thời Gian</div>
+              <div class="pack-perks">Chơi lại VÔ HẠN không quảng cáo • Huy hiệu 👑 VIP trên BXH Thực • +15 Trí tuệ &amp; May mắn, +50 Triệu đ Quỹ 18t &amp; Giảm 20% phí tài sản khi lùi tuổi vượt mốc 5 lần</div>
               <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:7px;" id="btn-buy-vip-pack">👑 Nâng Cấp VIP Vĩnh Viễn (49.000đ)</button>
             </div>
           </div>
@@ -408,6 +416,20 @@
             <button type="button" class="btn-sm btn-danger" id="btn-wipe-save">🗑️ Xóa Save</button>
           </div>
           <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:10px; padding:8px;" id="btn-close-save-modal">Đóng</button>
+        </div>
+      </div>
+
+      <!-- Modal Xác nhận Đánh đổi Tài sản để Lùi Tuổi (từ lần thứ 6+) -->
+      <div class="sheet-backdrop modal-center" id="rewind-confirm-modal">
+        <div class="modal-card">
+          <div class="event-badge" style="background:rgba(239,68,68,0.2); color:#fca5a5;">VƯỢT GIỚI HẠN 5 LẦN LÙI TUỔI MIỄN PHÍ</div>
+          <h2 style="margin:0 0 6px; font-size:16.5px;" id="rewind-modal-title">⏳ Đánh Đổi Tài Sản Lùi Thời Gian</h2>
+          <p class="modal-sub" id="rewind-modal-body">Bạn đã sử dụng hết 5/5 lượt lùi tuổi miễn phí trong cuộc đời này.</p>
+          <div class="ad-stage-box" id="rewind-cost-box" style="border-color:rgba(245,158,11,0.45);"></div>
+          <div style="display:flex; gap:8px; margin-top:12px;">
+            <button type="button" class="btn-sm btn-gold" style="flex:1; padding:10px;" id="btn-confirm-paid-rewind">⏳ Chấp Nhận Trừ Tài Sản</button>
+            <button type="button" class="btn-sm btn-ghost" id="btn-cancel-paid-rewind">Hủy</button>
+          </div>
         </div>
       </div>
 
