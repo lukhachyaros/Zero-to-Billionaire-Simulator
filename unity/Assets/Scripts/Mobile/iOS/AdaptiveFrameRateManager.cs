@@ -26,7 +26,7 @@ namespace ZeroToBillionaire.Mobile.iOS
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 QualitySettings.vSyncCount = 0;
                 WakeUp(2.0f);
             }

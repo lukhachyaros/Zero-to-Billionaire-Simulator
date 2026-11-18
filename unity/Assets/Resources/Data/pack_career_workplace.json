@@ -15,20 +15,25 @@
         "label": "Họp phòng phân chia lịch trực nhật và quỹ sinh hoạt công bằng rõ ràng",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Căn phòng gọn gàng hẳn lên, cả hai trở thành cặp bạn cùng phòng ăn ý!",
-            "statModifiers": { "charisma": 8, "discipline": 8, "stress": -8 }
+            "probability": 0.65,
+            "message": "Bạn cùng phòng tiếp thu thiện chí, căn phòng gọn gàng hơn hẳn.",
+            "statModifiers": { "charisma": 4, "discipline": 4, "stress": -4 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Bạn cùng phòng tự ái cãi vã căng thẳng suốt tuần khiến không khí phòng trọ ngột ngạt!",
+            "statModifiers": { "stress": 8, "happiness": -4 }
           }
         ]
       },
       {
         "id": "opt_headphones_ignore",
-        "label": "Chỉ dọn phần góc của mình rồi đeo tai nghe tập trung cày kỹ năng nghề",
+        "label": "Chi 1.5 triệu mua hộp khóa riêng & tai nghe chống ồn để tự tập trung học nghề",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Tốc độ học kỹ năng của bạn tăng vọt dù đôi lúc hơi bực mình nhẹ.",
-            "statModifiers": { "practicalSkills": 10, "stress": 6 }
+            "message": "Tốn 1.5 triệu trang bị góc riêng yên tĩnh giúp bạn tập trung rèn kỹ năng nghề.",
+            "statModifiers": { "cash": -1500000, "practicalSkills": 4, "stress": 6 }
           }
         ]
       }
@@ -42,28 +47,30 @@
     "maxAge": 21,
     "priority": 70,
     "isOneTime": true,
-    "description": "Một tháng mặc quân phục xanh gấp chăn vuông góc như bao diêm, sáng 5 rưỡi tập thể dục, tối đàn hát giao lưu cùng đại đội.",
-    "conditions": [],
+    "description": "Một tháng mặc quân phục xanh gấp chăn vuông góc như bao diêm, sáng 5 rưỡi tập thể dục, cần đóng phí quân trang và sinh hoạt chung.",
+    "conditions": [
+      { "field": "educationLevel", "operatorType": "==", "stringValue": "Đại học" }
+    ],
     "options": [
       {
         "id": "opt_shine_boot_camp",
-        "label": "Chấp hành kỷ luật nghiêm túc và làm tiểu đội trưởng gương mẫu",
+        "label": "Đóng 1.5 triệu phí quân trang, chấp hành kỷ luật nghiêm túc và làm tiểu đội trưởng",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Thể lực dẻo dai hơn hẳn và kết bạn thân với hàng chục sinh viên khoa khác!",
-            "statModifiers": { "health": 10, "discipline": 14, "charisma": 8, "happiness": 10 }
+            "message": "Tốn 1.5 triệu chi phí nhưng thể lực dẻo dai và tính kỷ luật được tôi luyện cứng cáp hơn.",
+            "statModifiers": { "cash": -1500000, "health": 4, "discipline": 6, "charisma": 3, "stress": 6 }
           }
         ]
       },
       {
         "id": "opt_night_snack_fun",
-        "label": "Tham gia văn nghệ buổi tối và ăn đêm cùng đồng đội",
+        "label": "Tham gia văn nghệ buổi tối và chi 2 triệu ăn đêm căng-tin cùng đồng đội",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Kỷ niệm thanh xuân không thể nào quên thời sinh viên!",
-            "statModifiers": { "happiness": 15, "stress": -10, "charisma": 6 }
+            "message": "Tốn 2 triệu khao anh em ở căng-tin đổi lại kỷ niệm thanh xuân rộn rã tiếng cười.",
+            "statModifiers": { "cash": -2000000, "happiness": 6, "stress": -4, "charisma": 3 }
           }
         ]
       }
@@ -77,7 +84,7 @@
     "maxAge": 25,
     "priority": 74,
     "isOneTime": true,
-    "description": "Người quen mời bạn tới hội trường khách sạn nghe diễn giả mặc vest hô hào 'đầu tư 10 triệu để tự do tài chính sau 3 tháng'.",
+    "description": "Người quen mời bạn tới hội trường khách sạn nghe diễn giả mặc vest hô hào 'đóng gói khởi nghiệp 8 triệu để tự do tài chính sau 3 tháng'.",
     "conditions": [],
     "options": [
       {
@@ -86,19 +93,41 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Bạn giữ nguyên ví tiền an toàn và nâng cao cảnh giác tài chính!",
-            "statModifiers": { "financialLiteracy": 12, "intelligence": 6 }
+            "message": "Bạn giữ nguyên ví tiền an toàn và rút ra bài học cảnh giác tài chính.",
+            "statModifiers": { "financialLiteracy": 4, "intelligence": 2 }
           }
         ]
       },
       {
         "id": "opt_warn_friends",
-        "label": "Chụp lại tài liệu phân tích lỗ hổng mô hình để cảnh báo bạn bè trong ký túc xá",
+        "label": "Phân tích lỗ hổng mô hình để cảnh báo bạn bè trong ký túc xá",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Nhiều bạn sinh viên thoát cảnh vay nợ oan nhờ bài phân tích sắc bén của bạn!",
-            "statModifiers": { "karma": 15, "socialStatus": 10, "financialLiteracy": 10 }
+            "probability": 0.6,
+            "message": "Nhiều bạn sinh viên tỉnh ngộ thoát cảnh vay nợ oan nhờ lời cảnh báo của bạn.",
+            "statModifiers": { "karma": 5, "socialStatus": 3, "financialLiteracy": 3 }
+          },
+          {
+            "probability": 0.4,
+            "message": "Một số người đang say mồi quay ra công kích bạn ghen ăn tức ở, khiến quan hệ rạn nứt!",
+            "statModifiers": { "socialStatus": -4, "stress": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_join_mlm_pack",
+        "label": "Thử đóng 8 triệu nhập gói 'khởi nghiệp vàng' xem có kiếm được hoa hồng nhanh không",
+        "outcomes": [
+          {
+            "probability": 0.15,
+            "conditionFormula": "charisma >= 60",
+            "message": "Bạn kịp đẩy được số hàng tồn cho người quen trước khi hệ thống sập, gỡ lại vốn và lời mỏng 2 triệu.",
+            "statModifiers": { "cash": 2000000, "stress": 8 }
+          },
+          {
+            "probability": 0.85,
+            "message": "Công ty ôm tiền đóng cửa mất hút! Bạn mất trắng 8 triệu và mang tiếng xấu đi lôi kéo bạn bè!",
+            "statModifiers": { "cash": -8000000, "stress": 16, "happiness": -12, "socialStatus": -5 }
           }
         ]
       }
@@ -112,33 +141,43 @@
     "maxAge": 42,
     "priority": 68,
     "isOneTime": true,
-    "description": "Người sếp từng dìu dắt bạn nay đầu quân sang tập đoàn đối thủ làm Giám đốc, ngỏ lời mời bạn theo sang giữ vị trí chủ chốt.",
-    "conditions": [],
+    "description": "Người sếp từng dìu dắt bạn nay sang tập đoàn mới và mời bạn đầu quân, nhưng cấu trúc công ty mới còn nhiều biến động.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 52 },
+      { "field": "discipline", "operatorType": ">=", "numberValue": 50 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_follow_mentor",
-        "label": "Tin tưởng đi theo sếp cũ nhận mức thưởng chuyển việc hấp dẫn",
+        "label": "Nhận lời sang công ty mới của sếp cũ thử sức vị trí áp lực cao",
         "outcomes": [
           {
-            "probability": 0.8,
-            "message": "Hai thầy trò phối hợp ăn ý tạo nên doanh số kỷ lục ngay năm đầu!",
-            "statModifiers": { "cash": 45000000, "socialStatus": 12, "businessAcuity": 10 }
+            "probability": 0.45,
+            "conditionFormula": "discipline >= 65",
+            "message": "Vượt qua kỳ thử việc khốc liệt, bạn nhận khoản thưởng ký kết ròng 14 triệu đồng!",
+            "statModifiers": { "cash": 14000000, "socialStatus": 5, "businessAcuity": 4, "stress": 10 }
           },
           {
-            "probability": 0.2,
-            "message": "Môi trường mới áp lực tái cơ cấu nặng nề nhưng thu nhập khá tốt.",
-            "statModifiers": { "cash": 20000000, "stress": 14 }
+            "probability": 0.55,
+            "message": "Công ty mới tái cơ cấu cắt giảm ngay sau thử việc và truy thu phí đào tạo! Bạn hụt thu mất 18 triệu đồng!",
+            "statModifiers": { "cash": -18000000, "stress": 20, "happiness": -12, "socialStatus": -5 }
           }
         ]
       },
       {
         "id": "opt_stay_loyal",
-        "label": "Ở lại công ty hiện tại khẳng định lòng trung thành và vị thế nội bộ",
+        "label": "Ở lại công ty hiện tại khẳng định sự gắn bó và vị thế nội bộ",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Ban lãnh đạo ghi nhận sự gắn bó của bạn và trao thêm quyền lợi dự án!",
-            "statModifiers": { "karma": 10, "socialStatus": 10, "discipline": 8, "cash": 15000000 }
+            "probability": 0.55,
+            "message": "Ban lãnh đạo ghi nhận sự ổn định của bạn và thưởng giữ chân 5 triệu đồng.",
+            "statModifiers": { "cash": 5000000, "karma": 4, "socialStatus": 4, "discipline": 3 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Công ty giữ lương và đóng băng thưởng cuối năm trong khi bạn phải gánh thêm việc của người nghỉ!",
+            "statModifiers": { "stress": 12, "happiness": -4 }
           }
         ]
       }
@@ -152,34 +191,44 @@
     "maxAge": 48,
     "priority": 66,
     "isOneTime": true,
-    "description": "Đối tác từ Tokyo và Singapore đang ngồi trong phòng họp lớn lắng nghe bản đề xuất trị giá hàng tỷ đồng của đội bạn.",
-    "conditions": [],
+    "description": "Đối tác từ Tokyo và Singapore đang lắng nghe bản đề xuất của đội bạn. Nếu trượt thầu, bạn phải tự gánh phần chi phí chuẩn bị và tiếp đón.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 55 },
+      { "field": "charisma", "operatorType": ">=", "numberValue": 45 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_pitch_confidently",
-        "label": "Trình bày lưu loát bằng tiếng Anh kèm số liệu ROI thuyết phục",
+        "label": "Trình bày bằng tiếng Anh kèm số liệu ROI thuyết phục",
         "outcomes": [
           {
-            "probability": 0.78,
-            "conditionFormula": "intelligence >= 65",
-            "message": "Hợp đồng được ký kết ngay tại bàn họp! Bạn nhận khoản hoa hồng hậu hĩnh!",
-            "statModifiers": { "cash": 65000000, "charisma": 12, "socialStatus": 14, "businessAcuity": 10 }
+            "probability": 0.45,
+            "conditionFormula": "intelligence >= 72",
+            "message": "Đối tác ký hợp đồng thử nghiệm! Bạn nhận thưởng hoa hồng ròng 18 triệu đồng!",
+            "statModifiers": { "cash": 18000000, "charisma": 5, "socialStatus": 5, "businessAcuity": 4 }
           },
           {
-            "probability": 0.22,
-            "message": "Đối tác hẹn xem xét thêm báo giá nhưng khen ngợi tác phong chuyên nghiệp của bạn.",
-            "statModifiers": { "charisma": 6, "practicalSkills": 6 }
+            "probability": 0.55,
+            "message": "Trượt gói thầu lớn vì đối thủ bỏ giá thấp hơn! Bạn tốn 10 triệu chi phí tiếp khách và đi lại!",
+            "statModifiers": { "cash": -10000000, "stress": 14, "happiness": -6 }
           }
         ]
       },
       {
         "id": "opt_focus_demo_live",
-        "label": "Tập trung demo sản phẩm chạy mượt mà thực tế để chứng minh năng lực",
+        "label": "Tập trung demo sản phẩm chạy thực tế trực tiếp",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Sản phẩm chạy trơn tru không lỗi khiến khách hàng gật đầu ngay lập tức!",
-            "statModifiers": { "practicalSkills": 12, "cash": 35000000, "socialStatus": 8 }
+            "probability": 0.50,
+            "conditionFormula": "practicalSkills >= 55",
+            "message": "Bản demo chạy mượt giúp chốt đơn thành công, bạn nhận thưởng 10 triệu đồng.",
+            "statModifiers": { "cash": 10000000, "practicalSkills": 5, "socialStatus": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Phần mềm dính lỗi nghiêm trọng ngay lúc demo trực tiếp! Đội bị phạt hợp đồng mất 8 triệu đồng!",
+            "statModifiers": { "cash": -8000000, "stress": 14, "socialStatus": -5 }
           }
         ]
       }
@@ -194,32 +243,41 @@
     "priority": 62,
     "isOneTime": true,
     "description": "Tim bạn ngừng đập 3 giây khi phát hiện tin nhắn than thở 'Deadline vô lý quá' vừa gửi thẳng vào nhóm chat có cả Tổng Giám đốc!",
-    "conditions": [],
+    "conditions": [
+      { "field": "discipline", "operatorType": ">=", "numberValue": 35 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_own_up_solution",
-        "label": "Không thu hồi muộn màng — nhắn tiếp ngay giải pháp tối ưu tiến độ chuyên nghiệp",
+        "label": "Nhận trách nhiệm thẳng thắn và nhắn tiếp ngay giải pháp tối ưu tiến độ",
         "outcomes": [
           {
-            "probability": 0.8,
-            "message": "Cú xoay tình thế cực đỉnh! Sếp bất ngờ ghi nhận sự thẳng thắn và lắng nghe góp ý của bạn!",
-            "statModifiers": { "charisma": 12, "socialStatus": 8, "discipline": 6 }
+            "probability": 0.45,
+            "conditionFormula": "charisma >= 60",
+            "message": "Sếp đánh giá cao sự thẳng thắn và giải pháp thực tế của bạn nên bỏ qua sự cố.",
+            "statModifiers": { "charisma": 5, "socialStatus": 4, "discipline": 3 }
           },
           {
-            "probability": 0.2,
-            "message": "Bị nhắc nhở nhẹ trong cuộc họp giao ban nhưng mọi chuyện êm xuôi nhanh chóng.",
-            "statModifiers": { "stress": 10, "discipline": 5 }
+            "probability": 0.55,
+            "message": "Sếp nổi giận cho rằng bạn thiếu chuyên nghiệp và cắt 8 triệu tiền thưởng KPI quý!",
+            "statModifiers": { "cash": -8000000, "stress": 16, "socialStatus": -6, "happiness": -6 }
           }
         ]
       },
       {
         "id": "opt_apologize_privately",
-        "label": "Thu hồi khẩn cấp và nhắn tin xin lỗi chân thành trực tiếp tới sếp",
+        "label": "Thu hồi tin nhắn và xin lỗi trực tiếp sếp cùng cả phòng",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Sếp mỉm cười bỏ qua sự cố 'người mới' và dặn dò cẩn thận hơn.",
-            "statModifiers": { "stress": 8, "karma": 4 }
+            "probability": 0.50,
+            "message": "Bạn tốn 3 triệu đặt trà bánh khao cả phòng xin lỗi để xoa dịu tình hình.",
+            "statModifiers": { "cash": -3000000, "stress": 10, "karma": 2 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Nhân sự lập biên bản cảnh cáo và trừ 10 triệu thưởng chuyên cần cuối năm!",
+            "statModifiers": { "cash": -10000000, "stress": 14, "socialStatus": -5 }
           }
         ]
       }
@@ -233,34 +291,43 @@
     "maxAge": 50,
     "priority": 68,
     "isOneTime": true,
-    "description": "Kinh tế thắt chặt khiến công ty phải cắt giảm 20% chi phí vận hành. Phòng nhân sự triệu tập cuộc họp toàn thể.",
-    "conditions": [],
+    "description": "Kinh tế thắt chặt khiến công ty cắt giảm 20% chi phí vận hành và nhân sự. Phòng nhân sự gửi thông báo rà soát từng vị trí.",
+    "conditions": [
+      { "field": "age", "operatorType": ">=", "numberValue": 25 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_prove_core_value",
-        "label": "Chứng minh hiệu suất vượt trội và nhận kiêm nhiệm tối ưu hệ thống",
+        "label": "Chứng minh hiệu suất vượt trội và nhận kiêm nhiệm gánh thêm việc",
         "outcomes": [
           {
-            "probability": 0.8,
-            "conditionFormula": "discipline >= 55",
-            "message": "Bạn không những giữ vững vị trí mà còn được thăng làm nhân sự nòng cốt kèm thưởng!",
-            "statModifiers": { "cash": 25000000, "discipline": 10, "socialStatus": 10, "stress": 10 }
+            "probability": 0.45,
+            "conditionFormula": "discipline >= 68",
+            "message": "Bạn trụ lại thành công qua đợt cắt giảm và nhận khoản phụ cấp kiêm nhiệm 8 triệu đồng.",
+            "statModifiers": { "cash": 8000000, "discipline": 4, "socialStatus": 4, "stress": 14, "health": -4 }
           },
           {
-            "probability": 0.2,
-            "message": "Khối lượng công việc tăng gấp rưỡi nhưng kỹ năng quản trị khủng hoảng của bạn nâng tầm rõ rệt.",
-            "statModifiers": { "practicalSkills": 10, "stress": 16 }
+            "probability": 0.55,
+            "message": "Tái cấu trúc vẫn quét qua phòng bạn! Bị cắt giảm lương thưởng đột ngột khiến bạn hụt thu 24 triệu đồng!",
+            "statModifiers": { "cash": -24000000, "stress": 24, "happiness": -14, "socialStatus": -6, "discipline": -4 }
           }
         ]
       },
       {
         "id": "opt_upskill_freelance",
-        "label": "Chủ động chuẩn bị hồ sơ năng lực và tìm thêm nguồn thu dự án ngoài",
+        "label": "Chủ động tìm việc ngoài đề phòng mất việc",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Nhờ chuẩn bị phương án B từ sớm, bạn luôn giữ thế chủ động tài chính!",
-            "statModifiers": { "cash": 18000000, "financialLiteracy": 10, "practicalSkills": 8 }
+            "probability": 0.40,
+            "conditionFormula": "practicalSkills >= 58",
+            "message": "Bạn kịp nhận được hợp đồng tự do bù đắp thu nhập với khoản dư 6 triệu đồng.",
+            "statModifiers": { "cash": 6000000, "financialLiteracy": 4, "stress": 12 }
+          },
+          {
+            "probability": 0.60,
+            "message": "Bị sa thải đúng lúc thị trường đóng băng tuyển dụng! Khoảng trống 3 tháng thất nghiệp ngốn mất 18 triệu!",
+            "statModifiers": { "cash": -18000000, "stress": 20, "happiness": -12, "socialStatus": -5 }
           }
         ]
       }
@@ -274,28 +341,42 @@
     "maxAge": 45,
     "priority": 60,
     "isOneTime": true,
-    "description": "Trong cuộc họp chiến lược, một đồng nghiệp trình bày nguyên bản kế hoạch tối ưu chi phí mà bạn thức trắng soạn tuần trước mà không nhắc tên bạn.",
-    "conditions": [],
+    "description": "Trong cuộc họp chiến lược, một đồng nghiệp trình bày nguyên bản kế hoạch bạn soạn tuần trước mà không nhắc tên bạn.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 48 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_present_deep_data",
-        "label": "Lịch sự xin bổ sung phần số liệu chi tiết và bản thiết kế gốc chỉ mình bạn nắm rõ",
+        "label": "Lịch sự xin bổ sung phần số liệu chi tiết chỉ mình bạn nắm rõ",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Ban giám đốc nhận ra ngay ai mới là tác giả thực sự của sáng kiến này!",
-            "statModifiers": { "intelligence": 8, "socialStatus": 14, "charisma": 10 }
+            "probability": 0.50,
+            "conditionFormula": "charisma >= 58",
+            "message": "Bạn lật lại tình thế khéo léo giúp ban giám đốc nhận ra ai mới là tác giả thực sự.",
+            "statModifiers": { "intelligence": 4, "socialStatus": 6, "charisma": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Người kia được sếp ưu ái nên bạn bị quy chụp gây chia rẽ nội bộ và mất suất thưởng dự án 6 triệu!",
+            "statModifiers": { "cash": -6000000, "stress": 14, "socialStatus": -6, "happiness": -6 }
           }
         ]
       },
       {
         "id": "opt_document_future",
-        "label": "Giữ bình tĩnh trong cuộc họp và từ nay luôn gửi email cc tài liệu trước khi trao đổi",
+        "label": "Giữ bình tĩnh trong cuộc họp và rút kinh nghiệm lưu bằng chứng từ nay",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bài học chốn công sở giúp bạn bảo vệ thành quả chuyên môn chặt chẽ hơn.",
-            "statModifiers": { "discipline": 10, "businessAcuity": 6 }
+            "probability": 0.60,
+            "message": "Bạn giữ hòa khí công sở và siết chặt quy trình bảo vệ thành quả chuyên môn.",
+            "statModifiers": { "discipline": 4, "businessAcuity": 3 }
+          },
+          {
+            "probability": 0.40,
+            "message": "Người kia hưởng trọn công lao và giật luôn suất tăng lương 5 triệu vốn thuộc về bạn!",
+            "statModifiers": { "cash": -5000000, "stress": 10, "happiness": -4 }
           }
         ]
       }
@@ -304,33 +385,43 @@
   {
     "eventId": "p2_09_singapore_business_trip",
     "category": "career",
-    "title": "Chuyến Công Tác Quốc Tế Đầu Tiên Tại Singapore",
+    "title": "Chuyến Công Tác Quốc Tế Tại Singapore",
     "minAge": 25,
     "maxAge": 45,
     "priority": 64,
     "isOneTime": true,
-    "description": "Lần đầu đặt chân đến trung tâm tài chính châu Á dự hội nghị công nghệ và đầu tư quy mô khu vực.",
-    "conditions": [],
+    "description": "Bạn tham dự hội nghị công nghệ và đầu tư khu vực tại Singapore, tự chi trả phần chi phí mở rộng kết nối và trải nghiệm.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 58 },
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 30 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_network_summit",
-        "label": "Tích cực giao lưu trao đổi danh thiếp với các nhà sáng lập quốc tế",
+        "label": "Tự chi 6 triệu phí giao lưu tiệc tối với các nhà sáng lập quốc tế",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bạn kết nối được nhiều cố vấn tầm cỡ và mở mang tư duy toàn cầu!",
-            "statModifiers": { "businessAcuity": 14, "charisma": 10, "socialStatus": 12 }
+            "probability": 0.55,
+            "conditionFormula": "charisma >= 60",
+            "message": "Chi 6 triệu mở rộng quan hệ, bạn kết nối được vài cố vấn chuyên môn chất lượng.",
+            "statModifiers": { "cash": -6000000, "businessAcuity": 5, "charisma": 4, "socialStatus": 5 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Tốn 6 triệu tham dự tiệc giao lưu nhưng ai cũng xã giao hời hợt, không thu được kết nối thực chất.",
+            "statModifiers": { "cash": -6000000, "stress": 10, "happiness": -4 }
           }
         ]
       },
       {
         "id": "opt_study_urban_model",
-        "label": "Quan sát mô hình vận hành bán lẻ thông minh & bất động sản xanh tại đảo quốc",
+        "label": "Chi 5 triệu khảo sát mô hình bán lẻ & tài chính tại đảo quốc",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Nhiều ý tưởng kinh doanh giá trị cao được bạn ghi chép đầy sổ tay mang về Việt Nam.",
-            "statModifiers": { "financialLiteracy": 12, "intelligence": 8 }
+            "message": "Tốn 5 triệu chi phí khảo sát thực địa nhưng bạn ghi chép được một số kinh nghiệm thực tế.",
+            "statModifiers": { "cash": -5000000, "financialLiteracy": 4, "intelligence": 3, "stress": 6 }
           }
         ]
       }
@@ -345,27 +436,36 @@
     "priority": 60,
     "isOneTime": true,
     "description": "Một trường đại học cũ mời bạn quay lại chia sẻ kinh nghiệm thực chiến cho sinh viên năm cuối vào cuối tuần.",
-    "conditions": [],
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 62 },
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 35 }
+    ],
     "options": [
       {
         "id": "opt_teach_passionately",
-        "label": "Nhận lời truyền lửa cho thế hệ trẻ và tuyển thực tập sinh tài năng",
+        "label": "Nhận lời truyền lửa cho thế hệ trẻ",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bài giảng chật kín hội trường! Bạn vừa có thêm thu nhập thù lao vừa nâng tầm uy tín cá nhân.",
-            "statModifiers": { "cash": 15000000, "socialStatus": 14, "karma": 12, "charisma": 8 }
+            "probability": 0.55,
+            "conditionFormula": "charisma >= 58",
+            "message": "Buổi chia sẻ thu hút đông đảo sinh viên và mang về khoản thù lao khiêm tốn 5 triệu đồng.",
+            "statModifiers": { "cash": 5000000, "socialStatus": 5, "karma": 4, "charisma": 3 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Bạn mất cả tuần soạn bài không thù lao và gặp nhiều câu hỏi hóc búa từ khán giả!",
+            "statModifiers": { "stress": 10, "socialStatus": -4 }
           }
         ]
       },
       {
         "id": "opt_donate_back_scholar",
-        "label": "Tặng toàn bộ thù lao giảng dạy vào quỹ học bổng khoa",
+        "label": "Tự trích thêm 5 triệu tiền túi góp vào quỹ học bổng khoa",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Sinh viên và thầy cô vô cùng kính trọng tấm lòng của bạn!",
-            "statModifiers": { "karma": 22, "socialStatus": 16, "happiness": 15 }
+            "message": "Tốn 5 triệu tiền túi nhưng bạn nhận được sự quý mến từ thầy cô và sinh viên.",
+            "statModifiers": { "cash": -5000000, "karma": 10, "socialStatus": 6, "happiness": 6 }
           }
         ]
       }
@@ -379,34 +479,43 @@
     "maxAge": 42,
     "priority": 70,
     "isOneTime": true,
-    "description": "Video chia sẻ câu chuyện chân thật của bạn bất ngờ lên xu hướng hàng đầu, hàng chục nghìn người ùa vào xem livestream.",
-    "conditions": [],
+    "description": "Video của bạn bất ngờ lên xu hướng, hàng chục nghìn người ùa vào xem livestream. Cơ hội kiếm tiền đi kèm rủi ro bom hàng, hoàn trả và thị phi.",
+    "conditions": [
+      { "field": "charisma", "operatorType": ">=", "numberValue": 48 },
+      { "field": "practicalSkills", "operatorType": ">=", "numberValue": 32 }
+    ],
     "options": [
       {
         "id": "opt_launch_flash_sale",
-        "label": "Bình tĩnh giữ tương tác tự nhiên và gắn giỏ hàng sản phẩm chất lượng",
+        "label": "Gắn giỏ hàng chạy doanh số ngay trên sóng livestream",
         "outcomes": [
           {
-            "probability": 0.78,
-            "conditionFormula": "charisma >= 45",
-            "message": "Đơn hàng nổ ting ting không kịp thở! Phiên live mang về lợi nhuận ròng khủng!",
-            "statModifiers": { "cash": 85000000, "businessAcuity": 12, "charisma": 10, "happiness": 18 }
+            "probability": 0.40,
+            "conditionFormula": "charisma >= 65",
+            "message": "Chốt đơn mượt mà và kiểm soát tốt khâu vận chuyển, bạn thu lãi ròng 22 triệu đồng!",
+            "statModifiers": { "cash": 22000000, "businessAcuity": 5, "charisma": 4, "happiness": 8 }
           },
           {
-            "probability": 0.22,
-            "message": "Lượng đơn tăng đột biến làm hơi quá tải khâu đóng gói nhưng vẫn thu lãi tốt.",
-            "statModifiers": { "cash": 25000000, "stress": 12, "practicalSkills": 8 }
+            "probability": 0.60,
+            "message": "Khách bom hàng hàng loạt cộng phí sàn và phạt chậm giao ngốn mất 20 triệu đồng vốn!",
+            "statModifiers": { "cash": -20000000, "stress": 20, "happiness": -12, "socialStatus": -6 }
           }
         ]
       },
       {
         "id": "opt_build_personal_brand",
-        "label": "Không vội bán hàng, tập trung xây dựng cộng đồng người theo dõi trung thành",
+        "label": "Tập trung xây dựng cộng đồng người theo dõi và nhận hợp đồng quảng cáo",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Lượt theo dõi tăng vọt hàng trăm nghìn, các nhãn hàng lớn bắt đầu chủ động mời hợp tác!",
-            "statModifiers": { "socialStatus": 18, "charisma": 12, "cash": 30000000 }
+            "probability": 0.45,
+            "conditionFormula": "intelligence >= 60",
+            "message": "Xử lý nội dung khéo léo giúp bạn nhận hợp đồng tài trợ nhỏ trị giá 8 triệu đồng.",
+            "statModifiers": { "cash": 8000000, "socialStatus": 6, "charisma": 5 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Vạ miệng trên sóng bị cộng đồng mạng tẩy chay và mất sạch tiền chạy quảng cáo 8 triệu đồng!",
+            "statModifiers": { "cash": -8000000, "stress": 16, "happiness": -10, "socialStatus": -6 }
           }
         ]
       }
@@ -420,28 +529,43 @@
     "maxAge": 45,
     "priority": 54,
     "isOneTime": false,
-    "description": "Ngoài phố pháo hoa chuẩn bị bắn rực trời, nhưng hệ thống thanh toán / vận hành bất ngờ báo động đỏ đúng 23 giờ 15 phút!",
-    "conditions": [],
+    "description": "Đúng 23 giờ 15 phút đêm Giao thừa, hệ thống thanh toán / vận hành bất ngờ báo động đỏ! Nếu xử lý chậm SLA sẽ bị phạt nặng.",
+    "conditions": [
+      { "field": "discipline", "operatorType": ">=", "numberValue": 45 },
+      { "field": "practicalSkills", "operatorType": ">=", "numberValue": 35 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_fix_bug_hero",
-        "label": "Bật laptop xử lý sự cố dứt điểm trước thời khắc đếm ngược",
+        "label": "Bật laptop trực chiến xử lý sự cố trước giao thừa",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Hệ thống thông suốt trở lại đúng 23:55! Sếp thưởng nóng đậm tay cho tinh thần trách nhiệm!",
-            "statModifiers": { "cash": 18000000, "practicalSkills": 10, "discipline": 8, "stress": 10 }
+            "probability": 0.45,
+            "conditionFormula": "practicalSkills >= 58",
+            "message": "Khắc phục kịp trước thời khắc giao thừa và nhận thưởng trực lễ 5.5 triệu đồng.",
+            "statModifiers": { "cash": 5500000, "practicalSkills": 4, "discipline": 3, "stress": 12, "health": -3 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Lỗi nghiêm trọng kéo dài quá SLA bị trừ thưởng 9 triệu đồng và kiệt sức suốt dịp Tết!",
+            "statModifiers": { "cash": -9000000, "health": -5, "stress": 16, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_delegate_backup",
-        "label": "Kích hoạt hệ thống dự phòng tự động theo quy trình đã chuẩn bị",
+        "label": "Kích hoạt hệ thống dự phòng tự động",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Chuyển đổi mượt mà chỉ trong 2 phút để bạn kịp ra ban công ngắm pháo hoa cùng gia đình!",
-            "statModifiers": { "intelligence": 8, "happiness": 12 }
+            "probability": 0.50,
+            "message": "Hệ thống dự phòng chạy ổn định giúp bạn đón giao thừa trọn vẹn cùng gia đình.",
+            "statModifiers": { "intelligence": 3, "happiness": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Hệ thống dự phòng chuyển mạch lỗi gây gián đoạn giao dịch, bạn bị phạt 6 triệu đồng trách nhiệm!",
+            "statModifiers": { "cash": -6000000, "stress": 14, "socialStatus": -4 }
           }
         ]
       }
@@ -455,28 +579,43 @@
     "maxAge": 52,
     "priority": 64,
     "isOneTime": true,
-    "description": "Chương trình kinh tế buổi tối liên hệ ghi hình phóng sự về hành trình vươn lên và góc nhìn nghề nghiệp của bạn.",
-    "conditions": [],
+    "description": "Chương trình kinh tế buổi tối liên hệ ghi hình phóng sự về hành trình nghề nghiệp của bạn — truyền thông là con dao hai lưỡi.",
+    "conditions": [
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 45 },
+      { "field": "charisma", "operatorType": ">=", "numberValue": 55 }
+    ],
     "options": [
       {
         "id": "opt_share_practical_tips",
-        "label": "Chia sẻ chân thành những vấp ngã và bài học quản trị tài chính thực tế",
+        "label": "Chia sẻ những vấp ngã và bài học quản trị tài chính thực tế",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Phóng sự phát sóng nhận hàng ngàn bình luận tích cực, uy tín thương hiệu cá nhân tăng mạnh!",
-            "statModifiers": { "socialStatus": 18, "charisma": 10, "appearance": 5 }
+            "probability": 0.55,
+            "conditionFormula": "charisma >= 65",
+            "message": "Phát ngôn chừng mực nhận được phản hồi tích cực, tăng uy tín cá nhân.",
+            "statModifiers": { "socialStatus": 6, "charisma": 4, "appearance": 2 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Phát ngôn bị cắt ghép ngoài ngữ cảnh gây tranh cãi dữ dội trên mạng xã hội!",
+            "statModifiers": { "socialStatus": -6, "stress": 14, "happiness": -6 }
           }
         ]
       },
       {
         "id": "opt_promote_viet_products",
-        "label": "Tranh thủ giới thiệu sản phẩm chất lượng của đội ngũ Việt ra công chúng",
+        "label": "Đầu tư gói tài trợ phát sóng để quảng bá sản phẩm",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Lượng khách hàng tìm đến tăng vọt ngay sau buổi phát sóng!",
-            "statModifiers": { "cash": 40000000, "businessAcuity": 12, "socialStatus": 12 }
+            "probability": 0.42,
+            "conditionFormula": "businessAcuity >= 58",
+            "message": "Hiệu ứng lên sóng mang về lượng khách hàng mới giúp bạn lãi ròng 12 triệu đồng.",
+            "statModifiers": { "cash": 12000000, "businessAcuity": 5, "socialStatus": 4 }
+          },
+          {
+            "probability": 0.58,
+            "message": "Chi phí truyền thông 15 triệu không mang lại đơn hàng tương xứng và còn bị soi xét trái chiều!",
+            "statModifiers": { "cash": -15000000, "socialStatus": -8, "stress": 16 }
           }
         ]
       }
@@ -490,35 +629,36 @@
     "maxAge": 55,
     "priority": 58,
     "isOneTime": true,
-    "description": "Một người đồng nghiệp từng giúp đỡ bạn nhiều bỗng gọi điện giọng run run cần vay gấp 15 triệu đồng đóng viện phí cho người nhà.",
+    "description": "Một người đồng nghiệp thân gọi điện giọng run run cần vay gấp 15 triệu đồng đóng viện phí cho người nhà.",
     "conditions": [
       { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
     ],
     "options": [
       {
         "id": "opt_lend_support",
-        "label": "Chuyển khoản ngay 15 triệu giúp bạn qua cơn hoạn nạn",
+        "label": "Chuyển khoản cho vay 15 triệu giúp đồng nghiệp qua cơn hoạn nạn",
         "outcomes": [
           {
-            "probability": 0.75,
-            "message": "Người nhà bạn ấy bình phục và họ trả đủ tiền kèm lòng biết ơn sâu sắc, sau này giới thiệu bạn thương vụ lớn!",
-            "statModifiers": { "cash": 10000000, "karma": 20, "happiness": 14, "socialStatus": 8 }
+            "probability": 0.40,
+            "conditionFormula": "luck >= 55",
+            "message": "Đồng nghiệp xoay xở trả đủ gốc lẫn 5 triệu tiền cảm ơn sau khi gia đình ổn định.",
+            "statModifiers": { "cash": 5000000, "karma": 10, "happiness": 6, "socialStatus": 4 }
           },
           {
-            "probability": 0.25,
-            "message": "Hoàn cảnh bạn ấy còn chật vật nên mới trả trước được một nửa, coi như làm việc thiện.",
-            "statModifiers": { "cash": -7500000, "karma": 18 }
+            "probability": 0.60,
+            "message": "Đồng nghiệp nghỉ việc chuyển đi nơi khác và mất liên lạc, bạn mất trắng khoản vay 15 triệu!",
+            "statModifiers": { "cash": -15000000, "stress": 10, "karma": 8 }
           }
         ]
       },
       {
         "id": "opt_gift_and_fundraise",
-        "label": "Gửi tặng hẳn 3 triệu không cần trả và đứng ra kêu gọi công đoàn hỗ trợ thêm",
+        "label": "Gửi tặng thẳng 5 triệu không cần trả và kêu gọi công đoàn hỗ trợ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cả phòng ban chung tay giúp gia đình đồng nghiệp vượt qua giai đoạn khó khăn!",
-            "statModifiers": { "cash": -3000000, "karma": 20, "socialStatus": 12, "happiness": 12 }
+            "message": "Tốn 5 triệu nhưng bạn giữ được lòng thanh thản và tình cảm quý mến từ đồng nghiệp.",
+            "statModifiers": { "cash": -5000000, "karma": 10, "socialStatus": 5, "happiness": 6 }
           }
         ]
       }
@@ -532,28 +672,36 @@
     "maxAge": 52,
     "priority": 56,
     "isOneTime": false,
-    "description": "Ngồi nhìn màn hình 11 tiếng mỗi ngày bắt đầu khiến cổ vai gáy của bạn cứng đơ và dạ dày biểu tình.",
-    "conditions": [],
+    "description": "Ngồi nhìn màn hình 11 tiếng mỗi ngày khiến cột sống và cổ vai gáy của bạn bắt đầu đau nhức nghiêm trọng.",
+    "conditions": [
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_ergonomic_setup",
-        "label": "Đầu tư ghế công thái học 8 triệu và tập giãn cơ mỗi 60 phút",
+        "label": "Chi 10 triệu đầu tư ghế công thái học và đi trị liệu cơ xương khớp",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cột sống được giải phóng, năng suất làm việc và giấc ngủ cải thiện rõ rệt!",
-            "statModifiers": { "cash": -8000000, "health": 12, "stress": -10 }
+            "message": "Tốn 10 triệu nhưng tình trạng đau lưng thuyên giảm rõ rệt, giúp bạn ngủ ngon hơn.",
+            "statModifiers": { "cash": -10000000, "health": 7, "stress": -6 }
           }
         ]
       },
       {
         "id": "opt_free_stretch_routine",
-        "label": "Tự đặt báo thức đi bộ leo cầu thang bộ và uống đủ 2 lít nước mỗi ngày",
+        "label": "Tự tập giãn cơ tại nhà và đi bộ cầu thang bộ",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Thói quen tốt không tốn một xu giúp cơ thể dẻo dai trở lại!",
-            "statModifiers": { "health": 8, "discipline": 8, "stress": -6 }
+            "probability": 0.40,
+            "conditionFormula": "discipline >= 60",
+            "message": "Kiên trì tập đúng tư thế mỗi ngày giúp cơ thể đỡ mỏi hơn đôi chút.",
+            "statModifiers": { "health": 3, "discipline": 3, "stress": -3 }
+          },
+          {
+            "probability": 0.60,
+            "message": "Tập sai kỹ thuật kết hợp ngồi lâu khiến bệnh đau lưng tái phát nặng, tốn 6 triệu đi vật lý trị liệu!",
+            "statModifiers": { "cash": -6000000, "health": -5, "stress": 10 }
           }
         ]
       }
@@ -567,28 +715,36 @@
     "maxAge": 55,
     "priority": 50,
     "isOneTime": false,
-    "description": "Cuối tuần công ty và đối tác tổ chức giải chạy bộ quanh Hồ Gươm / Thủ Thiêm, mỗi km hoàn thành sẽ quyên góp tiền trồng rừng.",
-    "conditions": [],
+    "description": "Cuối tuần công ty tổ chức giải chạy bộ thiện nguyện, nhân viên đóng phí mua bib chạy và trang phục.",
+    "conditions": [
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_run_21km",
-        "label": "Đăng ký cự ly 21km bứt phá giới hạn bản thân",
+        "label": "Đóng 1.5 triệu phí bib & giày chạy cự ly 21km",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Về đích dưới nắng sớm trong tiếng reo hò! Ý chí và thể lực tăng vượt bậc!",
-            "statModifiers": { "health": 12, "discipline": 10, "karma": 8, "happiness": 12 }
+            "probability": 0.65,
+            "conditionFormula": "health >= 65",
+            "message": "Hoàn thành đường chạy 21km bền bỉ và góp một phần nhỏ vào quỹ trồng rừng.",
+            "statModifiers": { "cash": -1500000, "health": 4, "discipline": 4, "karma": 3 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Chạy quá sức khiến bạn bị căng cơ đầu gối, tốn thêm 4 triệu tiền thuốc và phục hồi!",
+            "statModifiers": { "cash": -4000000, "health": -5, "stress": 8 }
           }
         ]
       },
       {
         "id": "opt_run_5km_connect",
-        "label": "Chạy nhẹ nhàng 5km trò chuyện cùng lãnh đạo và đối tác mới",
+        "label": "Đóng 1 triệu chạy nhẹ nhàng 5km giao lưu đồng nghiệp",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không khí thể thao cởi mở giúp bạn kết thân với nhiều nhân vật quan trọng!",
-            "statModifiers": { "health": 6, "charisma": 10, "socialStatus": 8 }
+            "message": "Tốn 1 triệu lệ phí tham gia để vận động nhẹ và giữ kết nối cùng mọi người.",
+            "statModifiers": { "cash": -1000000, "health": 2, "charisma": 4, "socialStatus": 3 }
           }
         ]
       }
@@ -602,34 +758,43 @@
     "maxAge": 55,
     "priority": 66,
     "isOneTime": true,
-    "description": "Thấy công việc buôn bán của bạn ngày càng đông khách, chủ nhà bất ngờ đòi tăng tiền thuê mặt bằng gấp đôi vào tháng tới.",
-    "conditions": [],
+    "description": "Chủ nhà bất ngờ đòi tăng tiền thuê mặt bằng kinh doanh gấp đôi vào tháng tới, buộc bạn phải thương lượng hoặc dời địa điểm gấp.",
+    "conditions": [
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 35 },
+      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
+    ],
     "options": [
       {
         "id": "opt_negotiate_long_lease",
-        "label": "Đàm phán hợp đồng dài hạn 5 năm với mức tăng hợp lý 15%",
+        "label": "Đàm phán hợp đồng dài hạn chấp nhận tăng nhẹ 15% và đặt cọc thêm",
         "outcomes": [
           {
-            "probability": 0.75,
-            "conditionFormula": "charisma >= 50",
-            "message": "Lập luận sắc bén về tính ổn định dài hạn thuyết phục được chủ nhà ký phụ lục 5 năm!",
-            "statModifiers": { "businessAcuity": 12, "charisma": 8, "stress": -6 }
+            "probability": 0.45,
+            "conditionFormula": "charisma >= 62",
+            "message": "Thương lượng thành công mức tăng 15% nhưng bạn vẫn phải chi thêm 12 triệu tiền chênh lệch và cọc mới.",
+            "statModifiers": { "cash": -12000000, "businessAcuity": 4, "charisma": 4 }
           },
           {
-            "probability": 0.25,
-            "message": "Bạn chấp nhận nhượng bộ nhẹ 25% để giữ vị trí kinh doanh đắc địa.",
-            "statModifiers": { "stress": 8, "businessAcuity": 6 }
+            "probability": 0.55,
+            "message": "Chủ nhà nhất quyết không nhượng bộ! Bạn buộc phải gánh giá thuê tăng vọt tốn mất 32 triệu đồng!",
+            "statModifiers": { "cash": -32000000, "stress": 16, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_move_online_hub",
-        "label": "Chủ động dời sang mặt bằng ngõ rộng giá rẻ hơn và đẩy mạnh bán online",
+        "label": "Trả mặt bằng, chuyển kho sang ngõ nhỏ và đẩy mạnh bán online",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Chi phí cố định giảm mạnh giúp biên lợi nhuận ròng tăng cao hơn trước!",
-            "statModifiers": { "cash": 30000000, "businessAcuity": 14, "financialLiteracy": 10 }
+            "probability": 0.40,
+            "conditionFormula": "businessAcuity >= 55",
+            "message": "Chuyển đổi sang kênh trực tuyến suôn sẻ giúp bạn tiết kiệm chi phí và dư ra 6 triệu đồng.",
+            "statModifiers": { "cash": 6000000, "businessAcuity": 5, "financialLiteracy": 4 }
+          },
+          {
+            "probability": 0.60,
+            "message": "Mất lượng khách quen tại điểm cũ cùng chi phí cải tạo kho mới khiến bạn lỗ 25 triệu đồng!",
+            "statModifiers": { "cash": -25000000, "stress": 16, "happiness": -8 }
           }
         ]
       }
@@ -643,28 +808,42 @@
     "maxAge": 58,
     "priority": 72,
     "isOneTime": true,
-    "description": "Khi kiểm tra báo cáo tài chính quý, bạn nhận ra con số chi phí nguyên vật liệu tăng bất thường không khớp hóa đơn thực tế.",
-    "conditions": [],
+    "description": "Khi kiểm tra báo cáo tài chính quý, bạn phát hiện lỗ hổng thất thoát tiền vật tư kéo dài nhiều tháng. Chi phí xử lý và khắc phục rất tốn kém.",
+    "conditions": [
+      { "field": "discipline", "operatorType": ">=", "numberValue": 50 },
+      { "field": "financialLiteracy", "operatorType": ">=", "numberValue": 40 }
+    ],
     "options": [
       {
         "id": "opt_full_audit",
-        "label": "Thuê kiểm toán độc lập rà soát toàn bộ sổ sách và thu hồi thất thoát",
+        "label": "Thuê kiểm toán độc lập rà soát toàn bộ sổ sách và truy thu thất thoát",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Ngăn chặn kịp thời lỗ hổng tài chính lớn và thiết lập hệ thống kiểm soát minh bạch!",
-            "statModifiers": { "cash": 45000000, "financialLiteracy": 14, "businessAcuity": 12, "discipline": 10 }
+            "probability": 0.40,
+            "conditionFormula": "financialLiteracy >= 65",
+            "message": "Bắt quả tang chứng cứ rõ ràng và thu hồi được phần tiền thất thoát còn dư 12 triệu sau phí kiểm toán.",
+            "statModifiers": { "cash": 12000000, "financialLiteracy": 5, "stress": 10 }
+          },
+          {
+            "probability": 0.60,
+            "message": "Đối tượng liên quan đã tẩu tán tài sản, cộng thêm tiền phạt truy thu thuế khiến bạn mất trắng 35 triệu đồng!",
+            "statModifiers": { "cash": -35000000, "stress": 20, "happiness": -10 }
           }
         ]
       },
       {
         "id": "opt_software_erp",
-        "label": "Triển khai phần mềm ERP theo dõi thu chi thời gian thực",
+        "label": "Triển khai phần mềm ERP bịt lỗ hổng quản trị",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Mọi hóa đơn xuất nhập kho được số hóa minh bạch 100%!",
-            "statModifiers": { "practicalSkills": 12, "businessAcuity": 10, "financialLiteracy": 10 }
+            "probability": 0.65,
+            "message": "Tốn 18 triệu mua bản quyền và đào tạo nhân viên dùng ERP để kiểm soát hóa đơn chặt chẽ.",
+            "statModifiers": { "cash": -18000000, "practicalSkills": 6, "businessAcuity": 4, "financialLiteracy": 4 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Triển khai ERP thất bại vì dữ liệu cũ sai lệch, tốn tổng cộng 32 triệu đồng sửa lỗi!",
+            "statModifiers": { "cash": -32000000, "stress": 16 }
           }
         ]
       }
@@ -678,28 +857,43 @@
     "maxAge": 50,
     "priority": 64,
     "isOneTime": true,
-    "description": "Lượng người dùng truy cập tăng gấp 20 lần dự kiến khiến máy chủ quá tải đúng lúc chiến dịch quảng cáo vừa chạy!",
-    "conditions": [],
+    "description": "Lượng truy cập tăng vọt làm máy chủ quá tải và sập đúng lúc chiến dịch quảng cáo vừa chạy! Khách hàng đòi bồi thường.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 55 },
+      { "field": "practicalSkills", "operatorType": ">=", "numberValue": 40 }
+    ],
     "options": [
       {
         "id": "opt_scale_cloud_fast",
-        "label": "Nâng cấp cụm server Cloud dự phòng ngay lập tức và gửi mã tri ân khách",
+        "label": "Nâng cấp cụm server Cloud khẩn cấp và xử lý đơn hàng tồn đọng",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Hệ thống hồi phục sau 12 phút và cơn sốt mua hàng bùng nổ kỷ lục!",
-            "statModifiers": { "cash": 50000000, "practicalSkills": 10, "businessAcuity": 10, "stress": 12 }
+            "probability": 0.45,
+            "conditionFormula": "practicalSkills >= 62",
+            "message": "Khôi phục hệ thống kịp giờ vàng và chốt được lượng đơn hàng bù chi phí, lãi ròng 15 triệu đồng.",
+            "statModifiers": { "cash": 15000000, "practicalSkills": 4, "businessAcuity": 4, "stress": 12 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Server chết quá lâu làm cháy tiền quảng cáo và phải hoàn tiền phạt SLA hết 28 triệu đồng!",
+            "statModifiers": { "cash": -28000000, "stress": 20, "socialStatus": -6, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_turn_into_meme",
-        "label": "Đăng bài xin lỗi hài hước 'Vì được yêu thương quá mức nên server ngất xỉu'",
+        "label": "Đăng bài xin lỗi hài hước để xoa dịu cộng đồng mạng",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Cộng đồng mạng thích thú chia sẻ rầm rộ biến sự cố thành chiến dịch PR miễn phí!",
-            "statModifiers": { "charisma": 14, "socialStatus": 12, "happiness": 10 }
+            "probability": 0.35,
+            "conditionFormula": "charisma >= 62",
+            "message": "Cộng đồng thông cảm với sự chân thành giúp bạn giữ được uy tín thương hiệu.",
+            "statModifiers": { "charisma": 5, "socialStatus": 4 }
+          },
+          {
+            "probability": 0.65,
+            "message": "Khách hàng cho rằng bạn đùa cợt thiếu trách nhiệm! Phải đền bù và mất khách hết 18 triệu đồng!",
+            "statModifiers": { "cash": -18000000, "socialStatus": -8, "stress": 16, "happiness": -6 }
           }
         ]
       }
@@ -713,28 +907,42 @@
     "maxAge": 58,
     "priority": 66,
     "isOneTime": true,
-    "description": "Trên mạng xã hội bỗng xuất hiện hàng loạt tài khoản ảo tung tin bịa đặt nhằm hạ bệ uy tín công việc và sản phẩm của bạn.",
-    "conditions": [],
+    "description": "Trên mạng xã hội xuất hiện hàng loạt tài khoản ảo tung tin bịa đặt nhằm hạ bệ uy tín công việc và sản phẩm của bạn.",
+    "conditions": [
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 35 },
+      { "field": "discipline", "operatorType": ">=", "numberValue": 45 }
+    ],
     "options": [
       {
         "id": "opt_transparent_evidence",
-        "label": "Công bố đầy đủ giấy kiểm định chất lượng và mời khách hàng kiểm chứng trực tiếp",
+        "label": "Chi tiền kiểm định độc lập và công bố bằng chứng minh bạch",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Sự thật minh bạch dập tắt hoàn toàn tin đồn, khách hàng tin yêu gấp bội!",
-            "statModifiers": { "socialStatus": 16, "karma": 10, "businessAcuity": 8 }
+            "probability": 0.50,
+            "conditionFormula": "businessAcuity >= 55",
+            "message": "Tốn 5 triệu phí kiểm định và đính chính truyền thông nhưng tin đồn được dập tắt.",
+            "statModifiers": { "cash": -5000000, "socialStatus": 6, "karma": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Tin xấu lan truyền quá nhanh khiến khách hàng quay lưng, doanh thu sụt giảm mất 18 triệu đồng!",
+            "statModifiers": { "cash": -18000000, "socialStatus": -8, "stress": 14 }
           }
         ]
       },
       {
         "id": "opt_legal_notice",
-        "label": "Lập vi bằng chứng cứ gửi văn bản pháp lý yêu cầu gỡ bỏ tin sai sự thật",
+        "label": "Thuê luật sư lập vi bằng và khởi kiện đối tượng tung tin giả",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Các trang tin phải đăng bài đính chính công khai, uy tín được bảo toàn trọn vẹn.",
-            "statModifiers": { "discipline": 10, "socialStatus": 12, "stress": 6 }
+            "probability": 0.55,
+            "message": "Tốn 12 triệu phí luật sư lập vi bằng nhưng đối phương phải gỡ bài xin lỗi.",
+            "statModifiers": { "cash": -12000000, "discipline": 4, "socialStatus": 5, "stress": 8 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Vụ kiện kéo dài phức tạp và đối phương phản tố khiến bạn tốn 28 triệu theo đuổi hồ sơ!",
+            "statModifiers": { "cash": -28000000, "socialStatus": -6, "stress": 18 }
           }
         ]
       }
@@ -748,36 +956,44 @@
     "maxAge": 52,
     "priority": 68,
     "isOneTime": true,
-    "description": "Chuỗi đồ uống nổi tiếng mở suất nhượng quyền độc quyền tại khu đô thị mới sắp bàn giao 5.000 căn hộ.",
+    "description": "Một chuỗi đồ uống mời chào suất nhượng quyền trị giá 300 triệu tại khu đô thị mới, nhưng mặt bằng khu mới thường vắng khách nhiều năm đầu.",
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 300000000 }
+      { "field": "cash", "operatorType": ">=", "numberValue": 300000000 },
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 45 },
+      { "field": "discipline", "operatorType": ">=", "numberValue": 50 }
     ],
     "options": [
       {
         "id": "opt_buy_franchise",
-        "label": "Rót 300 triệu mở cửa hàng nhượng quyền đón cư dân mới",
+        "label": "Rót 300 triệu mua nhượng quyền mở quán tại khu đô thị mới",
         "outcomes": [
           {
-            "probability": 0.78,
-            "conditionFormula": "businessAcuity >= 35",
-            "message": "Cư dân dọn về đông nghịt! Cửa hàng hoàn vốn siêu tốc và sinh lời ròng cực mạnh!",
-            "statModifiers": { "cash": 450000000, "businessAcuity": 15, "happiness": 18 }
+            "probability": 0.42,
+            "conditionFormula": "businessAcuity >= 68",
+            "message": "Chọn được góc phố đắc địa và quản lý chi phí chặt chẽ, thu lãi ròng 110 triệu đồng!",
+            "statModifiers": { "cash": 110000000, "businessAcuity": 6, "happiness": 8 }
           },
           {
-            "probability": 0.22,
-            "message": "Tiến độ bàn giao chung cư chậm nửa năm nhưng sau đó bắt đầu có lãi ổn định.",
-            "statModifiers": { "cash": 40000000, "stress": 10 }
+            "probability": 0.58,
+            "message": "Khu đô thị thưa thớt cư dân trong khi phí nhượng quyền vẫn thu đều! Bạn lỗ nặng 140 triệu đồng!",
+            "statModifiers": { "cash": -140000000, "stress": 22, "happiness": -16, "businessAcuity": -5 }
           }
         ]
       },
       {
         "id": "opt_build_own_brand",
-        "label": "Không phụ thuộc nhượng quyền — tự xây thương hiệu riêng tiết kiệm phí bản quyền",
+        "label": "Tự mở quán mang thương hiệu riêng để không mất phí bản quyền",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bạn làm chủ hoàn toàn công thức và biên lợi nhuận 100%!",
-            "statModifiers": { "businessAcuity": 14, "practicalSkills": 10, "cash": 120000000 }
+            "probability": 0.40,
+            "conditionFormula": "practicalSkills >= 62",
+            "message": "Đồ uống ngon và kiểm soát tốt nguyên liệu giúp quán có lời ròng 45 triệu đồng.",
+            "statModifiers": { "cash": 45000000, "businessAcuity": 6, "practicalSkills": 4 }
+          },
+          {
+            "probability": 0.60,
+            "message": "Thương hiệu mới không hút nổi khách và tiền thuê nhà đốt sạch vốn, bạn lỗ 95 triệu đồng!",
+            "statModifiers": { "cash": -95000000, "stress": 18, "happiness": -12 }
           }
         ]
       }
@@ -791,28 +1007,44 @@
     "maxAge": 58,
     "priority": 66,
     "isOneTime": true,
-    "description": "Một chuyên gia kiệt xuất từng làm ở tập đoàn Fortune 500 vừa về nước đang cân nhắc gia nhập đội ngũ của bạn.",
-    "conditions": [],
+    "description": "Một chuyên gia cấp cao đang cân nhắc gia nhập đội ngũ của bạn với mức lương thưởng và đòi hỏi quyền lực cực lớn.",
+    "conditions": [
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 500000000 },
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 55 },
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 45 }
+    ],
     "options": [
       {
         "id": "opt_offer_esop_vision",
-        "label": "Chia sẻ tầm nhìn lớn và trao gói cổ phần thưởng theo hiệu quả",
+        "label": "Trả lương cao và trao gói cổ phần thưởng theo hiệu quả",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Nhân tài gật đầu đồng hành! Năng suất cả đội ngũ tăng gấp ba chỉ sau hai quý!",
-            "statModifiers": { "cash": 120000000, "businessAcuity": 14, "socialStatus": 12 }
+            "probability": 0.45,
+            "conditionFormula": "charisma >= 65",
+            "message": "Chuyên gia hòa nhập tốt và kéo doanh số tăng trưởng mang về lợi nhuận ròng 35 triệu đồng.",
+            "statModifiers": { "cash": 35000000, "businessAcuity": 5, "socialStatus": 5 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Xung đột văn hóa làm việc với đội cũ rồi xin nghỉ sớm! Bạn tốn oan 45 triệu lương và phí tuyển dụng!",
+            "statModifiers": { "cash": -45000000, "stress": 16, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_collaborate_project",
-        "label": "Mời hợp tác cố vấn chiến lược theo từng dự án trọng điểm",
+        "label": "Thuê cố vấn chiến lược theo từng dự án trọng điểm",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Chi phí gọn nhẹ mà vẫn giải quyết triệt để các bài toán hóc búa nhất!",
-            "statModifiers": { "cash": 55000000, "intelligence": 8, "financialLiteracy": 8 }
+            "probability": 0.50,
+            "conditionFormula": "financialLiteracy >= 55",
+            "message": "Dự án tư vấn trúng đích giúp tối ưu dòng tiền và mang về khoản dư 18 triệu đồng.",
+            "statModifiers": { "cash": 18000000, "intelligence": 4, "financialLiteracy": 3 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Bản kế hoạch lý thuyết xa rời thực tế không áp dụng được, tốn oan 22 triệu phí tư vấn!",
+            "statModifiers": { "cash": -22000000, "stress": 10 }
           }
         ]
       }
@@ -826,28 +1058,41 @@
     "maxAge": 62,
     "priority": 58,
     "isOneTime": false,
-    "description": "Đoàn liên ngành đến kiểm tra định kỳ hệ thống hóa đơn chứng từ và trang thiết bị phòng cháy chữa cháy tại cơ sở.",
-    "conditions": [],
+    "description": "Đoàn liên ngành đến kiểm tra định kỳ hệ thống hóa đơn chứng từ và trang thiết bị phòng cháy chữa cháy.",
+    "conditions": [
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_full_compliance",
-        "label": "Xuất trình hồ sơ hóa đơn chuẩn chỉnh và trang bị PCCC đầy đủ từ đầu",
+        "label": "Thuê dịch vụ rà soát sổ sách & bảo dưỡng PCCC trước ngày kiểm tra",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Đoàn kiểm tra đánh giá đạt chuẩn tuyệt đối 10/10, hoạt động kinh doanh vững vàng!",
-            "statModifiers": { "discipline": 10, "socialStatus": 8, "stress": -6 }
+            "probability": 0.65,
+            "conditionFormula": "discipline >= 60",
+            "message": "Chi 5 triệu chuẩn bị hồ sơ và bảo trì thiết bị giúp vượt qua đợt kiểm tra suôn sẻ.",
+            "statModifiers": { "cash": -5000000, "discipline": 4, "socialStatus": 3 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Vẫn bị phát hiện thiếu sót hóa đơn và lỗi PCCC nhỏ, bị xử phạt hành chính 18 triệu đồng!",
+            "statModifiers": { "cash": -18000000, "stress": 14, "socialStatus": -5 }
           }
         ]
       },
       {
         "id": "opt_quick_upgrade_gear",
-        "label": "Bổ sung thêm bình chữa cháy và hoàn thiện sổ sách kế toán chuẩn mực",
+        "label": "Tự mua bổ sung bình chữa cháy và hoàn thiện sổ sách đối phó",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Mọi quy chuẩn an toàn được nâng lên mức cao nhất cho nhân viên và khách hàng.",
-            "statModifiers": { "practicalSkills": 8, "karma": 6 }
+            "probability": 0.60,
+            "message": "Tốn 8 triệu mua sắm gấp thiết bị bổ sung nhưng kịp đạt yêu cầu tối thiểu.",
+            "statModifiers": { "cash": -8000000, "practicalSkills": 3, "karma": 3 }
+          },
+          {
+            "probability": 0.40,
+            "message": "Hồ sơ đối phó bị phát hiện chênh lệch chứng từ, bị phạt 15 triệu đồng!",
+            "statModifiers": { "cash": -15000000, "stress": 12 }
           }
         ]
       }
@@ -861,30 +1106,43 @@
     "maxAge": 45,
     "priority": 74,
     "isOneTime": true,
-    "description": "Những đóng góp kinh tế và việc làm bạn tạo ra giúp tên tuổi bạn lọt danh sách Top 10 Gương mặt Doanh nhân Trẻ xuất sắc.",
+    "description": "Tên tuổi bạn lọt danh sách đề cử Giải thưởng Doanh nhân Trẻ — đi kèm chi phí tài trợ sự kiện và áp lực soi xét từ truyền thông.",
     "conditions": [
-      { "field": "socialStatus", "operatorType": ">=", "numberValue": 45 }
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 65 },
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1000000000 },
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 55 }
     ],
     "options": [
       {
         "id": "opt_attend_gala",
-        "label": "Lên sân khấu nhận cúp vinh danh và phát biểu truyền cảm hứng",
+        "label": "Tham dự gala vinh danh và giao lưu mở rộng quan hệ đối tác",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Cúp vàng Doanh nhân Tiêu biểu giúp bạn mở ra cánh cửa hợp tác với các tập đoàn đầu ngành!",
-            "statModifiers": { "socialStatus": 20, "happiness": 20, "charisma": 10, "cash": 80000000 }
+            "probability": 0.50,
+            "conditionFormula": "businessAcuity >= 70",
+            "message": "Danh hiệu uy tín giúp bạn chốt được một hợp đồng B2B mới thu lời ròng 22 triệu đồng.",
+            "statModifiers": { "cash": 22000000, "socialStatus": 8, "happiness": 8, "charisma": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Chi phí đóng góp tổ chức gala và tiếp khách tốn 20 triệu trong khi lại bị truyền thông soi xét đời tư!",
+            "statModifiers": { "cash": -20000000, "stress": 12 }
           }
         ]
       },
       {
         "id": "opt_credit_team",
-        "label": "Mời cộng sự đồng hành cùng lên nhận giải tri ân tập thể",
+        "label": "Trích tiền thưởng cho đội ngũ nhân sự cốt lõi đồng hành",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Đội ngũ gắn kết như một gia đình và cống hiến hết mình vì tương lai chung!",
-            "statModifiers": { "karma": 18, "socialStatus": 16, "businessAcuity": 10 }
+            "probability": 0.60,
+            "message": "Chi 8 triệu thưởng nóng cho anh em trong đội ngũ giúp tinh thần gắn kết hơn.",
+            "statModifiers": { "cash": -8000000, "karma": 6, "socialStatus": 6, "businessAcuity": 4 }
+          },
+          {
+            "probability": 0.40,
+            "message": "Chi phí lễ trao giải và tiệc tri ân phát sinh lên tới 12 triệu đồng.",
+            "statModifiers": { "cash": -12000000, "stress": 8 }
           }
         ]
       }
@@ -898,28 +1156,43 @@
     "maxAge": 60,
     "priority": 62,
     "isOneTime": true,
-    "description": "Tuyến vận tải biển quốc tế tắc nghẽn khiến nguồn cung linh kiện và nguyên liệu đầu vào chậm trễ 2 tháng.",
-    "conditions": [],
+    "description": "Tuyến vận tải biển quốc tế tắc nghẽn làm nguyên liệu đầu vào trễ 2 tháng, đe dọa trực tiếp tiến độ giao hàng.",
+    "conditions": [
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 45 },
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 200000000 }
+    ],
     "options": [
       {
         "id": "opt_localize_suppliers",
-        "label": "Tìm kiếm và chuẩn hóa các nhà cung cấp nội địa Việt Nam chất lượng cao",
+        "label": "Tìm gấp nhà cung cấp nội địa thay thế nguồn nhập khẩu",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Không chỉ vượt bão thành công mà chi phí vận chuyển giảm hẳn 25%!",
-            "statModifiers": { "businessAcuity": 14, "practicalSkills": 10, "cash": 60000000 }
+            "probability": 0.45,
+            "conditionFormula": "practicalSkills >= 60",
+            "message": "Kiểm tra kỹ mẫu thử nội địa đạt chuẩn giúp giao hàng đúng hẹn và dư ra 18 triệu đồng.",
+            "statModifiers": { "cash": 18000000, "businessAcuity": 5, "practicalSkills": 4 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Lô hàng thay thế bị lỗi kỹ thuật hàng loạt, phải đền hợp đồng cho khách mất 45 triệu đồng!",
+            "statModifiers": { "cash": -45000000, "stress": 18, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_air_freight_vip",
-        "label": "Chấp nhận thuê vận tải hàng không cho đơn hàng gấp để giữ chữ tín giao đúng hẹn",
+        "label": "Thuê vận tải hàng không cho đơn gấp để giữ uy tín với khách",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Khách hàng lớn cảm phục uy tín của bạn và ký thêm hợp đồng dài hạn 3 năm!",
-            "statModifiers": { "socialStatus": 14, "karma": 8, "cash": 45000000 }
+            "probability": 0.50,
+            "conditionFormula": "charisma >= 60",
+            "message": "Đàm phán được khách chia sẻ một phần cước bay nên vẫn giữ được lãi 15 triệu đồng.",
+            "statModifiers": { "cash": 15000000, "socialStatus": 5, "karma": 4 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Cước hàng không tăng phi mã thổi bay toàn bộ lợi nhuận và khiến bạn lỗ thêm 35 triệu đồng!",
+            "statModifiers": { "cash": -35000000, "stress": 14 }
           }
         ]
       }
@@ -933,28 +1206,43 @@
     "maxAge": 58,
     "priority": 72,
     "isOneTime": true,
-    "description": "Công nghệ Trí tuệ Nhân tạo bùng nổ giúp rút ngắn 70% thời gian xử lý báo cáo, thiết kế và chăm sóc khách hàng.",
-    "conditions": [],
+    "description": "Làn sóng AI bùng nổ buộc mọi người phải nâng cấp kỹ năng hoặc đầu tư công cụ mới nếu không muốn bị đào thải.",
+    "conditions": [
+      { "field": "intelligence", "operatorType": ">=", "numberValue": 60 },
+      { "field": "discipline", "operatorType": ">=", "numberValue": 50 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_adopt_ai_early",
-        "label": "Tiên phong học và triển khai trợ lý AI cho toàn bộ quy trình công việc",
+        "label": "Đầu tư khóa học và tích hợp công cụ AI vào quy trình làm việc",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Hiệu suất công việc của bạn tăng gấp 4 lần đồng nghiệp, mở đường thu nhập vượt trội!",
-            "statModifiers": { "intelligence": 12, "practicalSkills": 14, "businessAcuity": 10, "cash": 75000000 }
+            "probability": 0.45,
+            "conditionFormula": "intelligence >= 75",
+            "message": "Ứng dụng đúng cách giúp năng suất tăng mạnh và mang về khoản thưởng 22 triệu đồng.",
+            "statModifiers": { "cash": 22000000, "intelligence": 5, "practicalSkills": 5, "businessAcuity": 4 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Tốn tiền mua phần mềm cộng thêm sai sót dữ liệu do AI bịa đặt gây thiệt hại 24 triệu đồng!",
+            "statModifiers": { "cash": -24000000, "stress": 15, "happiness": -6 }
           }
         ]
       },
       {
         "id": "opt_train_colleagues",
-        "label": "Tổ chức buổi chia sẻ hướng dẫn mọi người dùng AI nâng cao tay nghề",
+        "label": "Tổ chức đào tạo nội bộ hướng dẫn đội ngũ dùng AI",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bạn trở thành chuyên gia đổi mới sáng tạo được toàn thể tổ chức săn đón!",
-            "statModifiers": { "socialStatus": 16, "charisma": 10, "intelligence": 8 }
+            "probability": 0.55,
+            "message": "Buổi chia sẻ thực tế giúp đồng nghiệp nâng cao hiệu suất và tăng uy tín của bạn.",
+            "statModifiers": { "socialStatus": 5, "charisma": 4, "intelligence": 3 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Nhân sự phản đối vì sợ mất việc và dự án thử nghiệm thất bại gây lãng phí 10 triệu ngân sách!",
+            "statModifiers": { "cash": -10000000, "stress": 10, "socialStatus": -4 }
           }
         ]
       }

@@ -16,8 +16,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Mồ hôi vã ra nhẹ nhõm, bạn khỏe hẳn lại chỉ sau hai ngày!",
-            "statModifiers": { "health": 4, "parentRelationship": 5 }
+            "message": "Mồ hôi vã ra nhẹ nhõm, bạn khỏe dần lại sau vài ngày nghỉ ngơi.",
+            "statModifiers": { "health": 2, "parentRelationship": 3 }
           }
         ]
       },
@@ -56,8 +56,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Những trang sách mở mang chân trời mới về lãi kép và công nghệ!",
-            "statModifiers": { "intelligence": 5, "financialLiteracy": 7, "businessAcuity": 4 }
+            "message": "Những trang sách mở mang thêm một góc nhìn mới về tài chính cá nhân và công nghệ.",
+            "statModifiers": { "intelligence": 2, "financialLiteracy": 3, "businessAcuity": 1 }
           }
         ]
       },
@@ -66,9 +66,14 @@
         "label": "Thuê trọn bộ truyện tranh Doraemon & Conan đọc ngấu nghiến",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Một cuối tuần cười nghiêng ngả xua tan mọi áp lực bài vở!",
-            "statModifiers": { "happiness": 10, "stress": -8 }
+            "probability": 0.7,
+            "message": "Một cuối tuần giải trí vui vẻ giúp bạn thư giãn đầu óc sau giờ học.",
+            "statModifiers": { "happiness": 5, "stress": -4 }
+          },
+          {
+            "probability": 0.3,
+            "message": "Mải đọc xuyên đêm đến 2 giờ sáng khiến sáng hôm sau bạn ngủ quên trễ học!",
+            "statModifiers": { "discipline": -2, "stress": 4 }
           }
         ]
       }
@@ -90,14 +95,15 @@
         "label": "Lễ phép gửi lại và trò chuyện cởi mở về chuyện đời chuyện nghề",
         "outcomes": [
           {
-            "probability": 0.7,
-            "message": "Hóa ra bác ấy là doanh nhân kỳ cựu! Bác chia sẻ cho bạn nhiều kinh nghiệm thương trường quý báu.",
-            "statModifiers": { "businessAcuity": 8, "charisma": 6, "karma": 6, "luck": 4 }
+            "probability": 0.4,
+            "conditionFormula": "charisma >= 55",
+            "message": "Bác ấy từng làm quản lý lâu năm và chia sẻ cho bạn một vài kinh nghiệm giao tiếp thương trường.",
+            "statModifiers": { "businessAcuity": 3, "charisma": 2, "karma": 2 }
           },
           {
-            "probability": 0.3,
-            "message": "Cuộc trò chuyện chân tình giúp bạn có thêm góc nhìn tích cực về cuộc sống.",
-            "statModifiers": { "happiness": 7, "karma": 4 }
+            "probability": 0.6,
+            "message": "Cuộc trò chuyện xã giao ngắn gọn giúp đầu óc bạn thoải mái hơn đôi chút.",
+            "statModifiers": { "happiness": 3, "karma": 2 }
           }
         ]
       },
@@ -107,8 +113,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Việc tốt nhỏ đầu ngày mang lại năng lượng làm việc tập trung.",
-            "statModifiers": { "discipline": 4, "karma": 3 }
+            "message": "Việc tốt nhỏ đầu ngày giữ nhịp làm việc tập trung.",
+            "statModifiers": { "discipline": 2, "karma": 2 }
           }
         ]
       }
@@ -122,30 +128,28 @@
     "maxAge": 45,
     "priority": 46,
     "isOneTime": false,
-    "description": "Tháng 11 âm lịch tới, bạn nhận liền một lúc 5 tấm thiệp cưới từ đồng nghiệp và bạn học cũ trong cùng một tuần!",
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 5000000 }
-    ],
+    "description": "Tháng 11 âm lịch tới, bạn nhận liền một lúc 5 tấm thiệp cưới từ đồng nghiệp và bạn học cũ trong cùng một tuần — ví mỏng đến mấy cũng không thể né hết!",
+    "conditions": [],
     "options": [
       {
         "id": "opt_attend_all_weddings",
-        "label": "Đi dự đầy đủ, ăn mặc bảnh bao giao lưu kết nối bạn bè",
+        "label": "Đi dự đầy đủ và mừng cưới chỉn chu (tốn 3.5 triệu)",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Ví hơi xẹp đi một chút nhưng bạn kết nối lại được nhiều mối quan hệ làm ăn đắt giá!",
-            "statModifiers": { "cash": -3500000, "charisma": 8, "socialStatus": 6, "happiness": 8 }
+            "message": "Chi 3.5 triệu tiền mừng cưới khiến tài khoản hao hụt rõ rệt, đổi lại bạn giữ được nhiều mối quan hệ tốt.",
+            "statModifiers": { "cash": -3500000, "charisma": 4, "socialStatus": 3, "happiness": 4 }
           }
         ]
       },
       {
         "id": "opt_send_envelope_selectively",
-        "label": "Chỉ dự đám bạn thân nhất, còn lại gửi mừng khoản vừa phải",
+        "label": "Chỉ dự đám bạn thân nhất, còn lại gửi mừng mức tối thiểu (tốn 1.8 triệu)",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cân đối chi tiêu hợp lý mà vẫn giữ trọn lễ nghĩa.",
-            "statModifiers": { "cash": -1800000, "financialLiteracy": 5 }
+            "message": "Tiết kiệm được một phần chi phí nhưng vẫn tốn 1.8 triệu cho mùa bão thiệp hồng.",
+            "statModifiers": { "cash": -1800000, "financialLiteracy": 2, "karma": 2 }
           }
         ]
       }
@@ -159,34 +163,43 @@
     "maxAge": 58,
     "priority": 50,
     "isOneTime": false,
-    "description": "Không khí tiệc cuối năm sôi động, MC đang đọc con số bốc thăm trúng thưởng Giải Đặc Biệt trên sân khấu!",
-    "conditions": [],
+    "description": "Không khí tiệc cuối năm sôi động, đồng nghiệp rủ nhau góp quỹ quay số trúng thưởng và tổ chức tăng hai karaoke.",
+    "conditions": [
+      { "field": "discipline", "operatorType": ">=", "numberValue": 35 },
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "is_retired" }
+    ],
     "options": [
       {
         "id": "opt_pray_lucky_draw",
-        "label": "Nắm chặt lá phiếu may mắn chờ gọi tên mình",
+        "label": "Góp tiền mua thêm phiếu bốc thăm cầu may giải thưởng cuối năm",
         "outcomes": [
           {
-            "probability": 0.45,
-            "conditionFormula": "luck >= 55",
-            "message": "TRÚNG RỒI! Bạn ẵm trọn giải thưởng tiền mặt 20 triệu đồng trong tiếng reo hò!",
-            "statModifiers": { "cash": 20000000, "happiness": 18, "stress": -10 }
+            "probability": 0.15,
+            "conditionFormula": "luck >= 65",
+            "message": "May mắn mỉm cười! Bạn trúng giải nhì trị giá 5 triệu đồng ròng sau khi khao nhẹ đồng nghiệp!",
+            "statModifiers": { "cash": 5000000, "happiness": 8 }
           },
           {
-            "probability": 0.55,
-            "message": "Lệch đúng 1 số cuối! Dù sao bạn cũng có bữa tiệc liên hoan no nê vui vẻ.",
-            "statModifiers": { "happiness": 6, "stress": -5 }
+            "probability": 0.85,
+            "message": "Trượt hết mọi giải! Tiền góp quỹ bốc thăm và cuốc taxi đêm về ngốn mất 1.5 triệu đồng.",
+            "statModifiers": { "cash": -1500000, "happiness": 2 }
           }
         ]
       },
       {
         "id": "opt_sing_karaoke_stage",
-        "label": "Đăng ký lên sân khấu hát máu lửa khuấy động toàn thể công ty",
+        "label": "Lên sân khấu hát văn nghệ và đi tăng hai cùng phòng ban",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Màn trình diễn bùng nổ giúp bạn ghi điểm cực mạnh với Ban Giám đốc!",
-            "statModifiers": { "charisma": 10, "socialStatus": 6, "happiness": 12, "cash": 3000000 }
+            "probability": 0.25,
+            "conditionFormula": "charisma >= 65",
+            "message": "Tiết mục xuất sắc giật giải thưởng văn nghệ 2 triệu đồng của công ty!",
+            "statModifiers": { "cash": 2000000, "charisma": 4, "socialStatus": 3 }
+          },
+          {
+            "probability": 0.75,
+            "message": "Vui hết mình với đồng nghiệp nhưng đến lúc chia bill tăng hai bạn phải chi 1.2 triệu đồng!",
+            "statModifiers": { "cash": -1200000, "charisma": 3, "happiness": 4 }
           }
         ]
       }
@@ -205,29 +218,29 @@
     "options": [
       {
         "id": "opt_diplomatic_talk",
-        "label": "Mang đĩa trái cây sang cười nói khéo léo nhắc bác hàng xóm vặn nhỏ loa",
+        "label": "Sang góp ý khéo léo nhắc hàng xóm vặn nhỏ loa",
         "outcomes": [
           {
-            "probability": 0.85,
-            "conditionFormula": "charisma >= 40",
-            "message": "Bác hàng xóm ngại ngùng tắt loa ngay và hôm sau còn biếu lại túi xoài quê ngon ngọt!",
-            "statModifiers": { "charisma": 6, "stress": -10, "happiness": 8 }
+            "probability": 0.5,
+            "conditionFormula": "charisma >= 58",
+            "message": "Bạn nói chuyện khéo léo nên hàng xóm vui vẻ tắt loa sớm để khu phố nghỉ ngơi.",
+            "statModifiers": { "charisma": 3, "stress": -5, "happiness": 4 }
           },
           {
-            "probability": 0.15,
-            "message": "Hàng xóm đã ngà ngà say nên phải nhờ tổ trưởng dân phố nhắc nhở mới êm xuôi.",
-            "statModifiers": { "stress": 5 }
+            "probability": 0.5,
+            "message": "Hàng xóm đã say và cãi lại gay gắt khiến bạn mất ngủ cả đêm vì bực bội!",
+            "statModifiers": { "stress": 10, "happiness": -5 }
           }
         ]
       },
       {
         "id": "opt_noise_cancelling_work",
-        "label": "Đeo tai nghe chống ồn đọc báo cáo thị trường tìm cơ hội đầu tư mới",
+        "label": "Chi 1.5 triệu mua tai nghe chống ồn hoặc ra quán cà phê đêm làm việc",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Biến nghịch cảnh thành thời gian nghiên cứu hiệu quả!",
-            "statModifiers": { "financialLiteracy": 6, "discipline": 5 }
+            "message": "Tốn 1.5 triệu để đổi lấy sự yên tĩnh tập trung đọc báo cáo và giữ kỷ luật.",
+            "statModifiers": { "cash": -1500000, "financialLiteracy": 3, "discipline": 2 }
           }
         ]
       }
@@ -241,36 +254,37 @@
     "maxAge": 70,
     "priority": 55,
     "isOneTime": false,
-    "description": "Một chủ doanh nghiệp cần tiền mặt gấp trong 48 giờ nên chào bán lại lô hàng / cổ phần thương mại thấp hơn giá thị trường 35%.",
+    "description": "Một chủ doanh nghiệp cần tiền mặt gấp trong 48 giờ nên chào bán lại lô hàng / cổ phần thương mại giá rẻ, nhưng thời gian thẩm định quá gấp rút.",
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 200000000 }
+      { "field": "cash", "operatorType": ">=", "numberValue": 200000000 },
+      { "field": "businessAcuity", "operatorType": ">=", "numberValue": 45 }
     ],
     "options": [
       {
         "id": "opt_buy_distressed",
-        "label": "Thẩm định nhanh trong đêm và giải ngân 200 triệu chốt thương vụ",
+        "label": "Giải ngân 200 triệu chốt nhanh thương vụ tài sản ngộp",
         "outcomes": [
           {
-            "probability": 0.78,
-            "conditionFormula": "financialLiteracy >= 35",
-            "message": "Sang tay thành công chỉ sau 2 tháng, bạn thu lãi ròng 95 triệu đồng!",
-            "statModifiers": { "cash": 95000000, "businessAcuity": 8, "happiness": 12 }
+            "probability": 0.42,
+            "conditionFormula": "financialLiteracy >= 65",
+            "message": "Soi kỹ hợp đồng không vướng nợ xấu, bạn sang tay thu lãi ròng 45 triệu đồng!",
+            "statModifiers": { "cash": 45000000, "businessAcuity": 5, "happiness": 6 }
           },
           {
-            "probability": 0.22,
-            "message": "Hàng tồn thanh lý chậm hơn dự kiến, bạn thu hồi vốn hòa tiền sau phí kho bãi.",
-            "statModifiers": { "financialLiteracy": 5, "stress": 6 }
+            "probability": 0.58,
+            "message": "Tài sản vướng tranh chấp pháp lý và hàng lỗi không thanh lý được! Bạn lỗ nặng 85 triệu đồng!",
+            "statModifiers": { "cash": -85000000, "stress": 18, "happiness": -12, "financialLiteracy": 4 }
           }
         ]
       },
       {
         "id": "opt_keep_cash_king",
-        "label": "Giữ tiền mặt dự phòng cho kế hoạch lớn hơn",
+        "label": "Giữ tiền mặt dự phòng cho kế hoạch an toàn hơn",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Kỷ luật quản trị rủi ro luôn là tấm khiên của nhà đầu tư lão luyện.",
-            "statModifiers": { "discipline": 4, "stress": -4 }
+            "message": "Kỷ luật từ chối các thương vụ vội vàng giúp bạn giữ chặt tiền mặt.",
+            "statModifiers": { "discipline": 3, "stress": -3 }
           }
         ]
       }
@@ -284,28 +298,28 @@
     "maxAge": 98,
     "priority": 52,
     "isOneTime": false,
-    "description": "5 giờ 30 sáng, làn sương mỏng giăng trên mặt hồ yên ả, hội cao niên khu phố rủ bạn tập dưỡng sinh và đánh cờ tướng.",
+    "description": "5 giờ 30 sáng, làn sương mỏng giăng trên mặt hồ yên ả, hội cao niên khu phố rủ bạn tập dưỡng sinh và trò chuyện.",
     "conditions": [],
     "options": [
       {
         "id": "opt_taichi_tea",
-        "label": "Tập bài Thái cực quyền rồi ngồi thưởng trà sen đàm đạo thế sự",
+        "label": "Tập bài Thái cực quyền nhẹ nhàng rồi ngồi uống trà bên hồ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Khí huyết lưu thông, tinh thần sảng khoái giúp tuổi thọ kéo dài thêm!",
-            "statModifiers": { "health": 7, "happiness": 10, "stress": -12 }
+            "message": "Vận động điều độ buổi sáng giúp tinh thần minh mẫn và thư thái hơn.",
+            "statModifiers": { "health": 3, "happiness": 5, "stress": -6 }
           }
         ]
       },
       {
         "id": "opt_mentor_youth",
-        "label": "Dành buổi sáng chia sẻ kinh nghiệm khởi nghiệp cho CLB Doanh nhân trẻ",
+        "label": "Dành buổi sáng chia sẻ kinh nghiệm sống cho CLB Doanh nhân trẻ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Các bạn trẻ vô cùng trân trọng những bài học xương máu từ cuộc đời bạn.",
-            "statModifiers": { "karma": 12, "socialStatus": 8, "happiness": 12 }
+            "message": "Những câu chuyện thực tế của bạn mang lại nhiều bài học quý giá cho thế hệ trẻ.",
+            "statModifiers": { "karma": 5, "socialStatus": 4, "happiness": 5 }
           }
         ]
       }

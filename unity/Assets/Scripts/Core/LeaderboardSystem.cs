@@ -62,7 +62,7 @@ namespace ZeroToBillionaire.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 LoadLeaderboardFromResources();
             }
             else
@@ -123,14 +123,7 @@ namespace ZeroToBillionaire.Core
         {
             if (activeRivals.Count == 0) ResetRivals();
 
-            float macroMult = cycle switch
-            {
-                MacroEconomicCycle.Boom => 1.45f,
-                MacroEconomicCycle.Expansion => 1.0f,
-                MacroEconomicCycle.Inflation => 0.75f,
-                MacroEconomicCycle.Recession => -0.35f,
-                _ => 1.0f
-            };
+            float macroMult = EconomySystem.GetMacroMultiplier(cycle);
 
             foreach (var rival in activeRivals)
             {

@@ -25,6 +25,11 @@ namespace ZeroToBillionaire.UI
         [SerializeField] private Text netWorthText;
         [SerializeField] private Text macroCycleText;
 
+        [Header("R2 Financial & Career Alerts (Optional)")]
+        [SerializeField] private Text debtText;
+        [SerializeField] private Text statusAlertText;
+        [SerializeField] private GameObject creditFrozenBadge;
+
         [Header("Stat Bars")]
         [SerializeField] private Slider healthBar;
         [SerializeField] private Slider happinessBar;
@@ -152,15 +157,53 @@ namespace ZeroToBillionaire.UI
                 : stats.cash - stats.debt;
 
             if (nameAndJobText != null)
-                nameAndJobText.text = $"{stats.characterName} (Đời {stats.generation}) • {stats.currentJob}";
+            {
+                string cooldownNote = stats.careerCooldownYears > 0 ? $" • ⏳ Chờ việc ({stats.careerCooldownYears}n)" : "";
+                nameAndJobText.text = $"{stats.characterName} (Đời {stats.generation}) • {stats.currentJob}{cooldownNote}";
+            }
             if (ageText != null)
                 ageText.text = $"{stats.age} Tuổi";
+            if (debtText != null)
+            {
+                string overdueNote = stats.debtOverdueYears > 0 ? $" (Quá hạn {stats.debtOverdueYears}n)" : "";
+                debtText.text = stats.debt > 0
+                    ? $"Nợ: {CharacterStats.FormatVND(stats.debt)}{overdueNote}"
+                    : "Nợ: 0 đ";
+            }
             if (cashText != null)
-                cashText.text = $"Tiền mặt: {CharacterStats.FormatVND(stats.cash)}";
+            {
+                string inlineDebt = (debtText == null && stats.debt > 0)
+                    ? $" • Nợ: {CharacterStats.FormatVND(stats.debt)}"
+                    : "";
+                cashText.text = $"Tiền mặt: {CharacterStats.FormatVND(stats.cash)}{inlineDebt}";
+            }
             if (netWorthText != null)
                 netWorthText.text = $"Tài sản ròng: {CharacterStats.FormatVND(netWorth)}";
+
+            var alerts = new System.Collections.Generic.List<string>();
+            if (stats.creditFrozenYears > 0) alerts.Add($"🔒 Đóng băng TD ({stats.creditFrozenYears}n)");
+            if (stats.debtOverdueYears > 0) alerts.Add($"⚠️ Quá hạn nợ ({stats.debtOverdueYears}n)");
+            if (stats.bankruptcyCount > 0) alerts.Add($"💥 Phá sản x{stats.bankruptcyCount}");
+            if (stats.layoffCount > 0) alerts.Add($"📉 Sa thải x{stats.layoffCount}");
+            if (stats.careerCooldownYears > 0) alerts.Add($"⏳ Hạ bậc tuyển dụng ({stats.careerCooldownYears}n)");
+
+            string alertSummary = alerts.Count > 0 ? string.Join(" • ", alerts) : "";
+            if (statusAlertText != null)
+            {
+                statusAlertText.text = alertSummary;
+                statusAlertText.gameObject.SetActive(alerts.Count > 0);
+            }
             if (macroCycleText != null && EconomySystem.Instance != null)
-                macroCycleText.text = EconomySystem.Instance.GetCycleVietnameseName();
+            {
+                string cycleLabel = EconomySystem.Instance.GetCycleVietnameseName();
+                macroCycleText.text = (statusAlertText == null && alerts.Count > 0)
+                    ? $"{cycleLabel} • {alertSummary}"
+                    : cycleLabel;
+            }
+            if (creditFrozenBadge != null)
+            {
+                creditFrozenBadge.SetActive(stats.creditFrozenYears > 0);
+            }
 
             if (healthBar != null) healthBar.value = stats.health / 100f;
             if (happinessBar != null) happinessBar.value = stats.happiness / 100f;
