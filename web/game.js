@@ -5,7 +5,8 @@
   const MONETIZATION_KEY = "ztb_monetization_v1";
   const USD_BILLION_VND = 25_000_000_000_000; // 25.000 Tỷ VNĐ (~ $1B)
   const MAX_ACTIVITIES_PER_YEAR = 2;
-  const MAX_TIME_MACHINE = 5;
+  const FREE_TIME_MACHINE_LIMIT = 5;
+  const MAX_TIME_MACHINE_HISTORY = 20;
   const MAX_JOB_APPS_PER_YEAR = 2;
   const ANNUAL_LOAN_RATE = 0.145;
 
@@ -35,13 +36,13 @@
       id: "starter",
       title: "🎁 Gói Khởi Đầu Thuận Lợi",
       price: "19.000đ",
-      perks: "• Nhận ngay +3 Vé Chơi Lại không cần xem quảng cáo<br/>• Hỗ trợ suốt 3 đời: +12 May mắn, +10 Sức khỏe, +4 Triệu đ Quỹ Tuổi 18<br/>• Mở rộng +2 ô Cỗ Máy Thời Gian (tổng 7 ô)"
+      perks: "• Nhận ngay +3 Vé Chơi Lại không cần xem quảng cáo<br/>• Hỗ trợ suốt 3 đời: +12 May mắn, +10 Sức khỏe, +4 Triệu đ Quỹ Tuổi 18<br/>• Tối đa 5 lần lùi tuổi miễn phí/đời"
     },
     vip: {
       id: "vip",
       title: "👑 Gói Tỷ Phú VIP Vĩnh Viễn",
       price: "49.000đ",
-      perks: "• Mở khóa CHƠI LẠI VÔ HẠN trọn đời, không quảng cáo<br/>• Huy hiệu 👑 VIP nổi bật trên Bảng Xếp Hạng Người Chơi Thực<br/>• Hỗ trợ vĩnh viễn: +15 Trí tuệ, +15 May mắn, +8 Triệu đ Quỹ 18t &amp; 8 ô Cỗ Máy Thời Gian"
+      perks: "• Mở khóa CHƠI LẠI VÔ HẠN trọn đời, không quảng cáo<br/>• Huy hiệu 👑 VIP nổi bật trên Bảng Xếp Hạng Người Chơi Thực<br/>• Hỗ trợ vĩnh viễn: +15 Trí tuệ, +15 May mắn, +8 Triệu đ Quỹ 18t &amp; Giảm 20% phí tài sản khi lùi tuổi vượt mốc 5 lần"
     }
   };
 
@@ -200,9 +201,7 @@
     }
 
     getMaxTimeMachineSlots() {
-      if (this.monetization.vipForever) return 8;
-      if ((this.monetization.starterLivesLeft || 0) > 0) return MAX_TIME_MACHINE + 2;
-      return MAX_TIME_MACHINE;
+      return MAX_TIME_MACHINE_HISTORY;
     }
 
     createInitialRivals() {
@@ -263,14 +262,69 @@
         debtOverdueYears: 0,
         bankruptcyCount: 0,
         creditFrozenYears: 0,
-        careerCooldownYears: 0
+        careerCooldownYears: 0,
+        rewindsUsed: 0
       };
     }
 
-    init() {
-      if (window.Diorama3D) {
-        window.Diorama3D.init("diorama-canvas");
+    updateLoadingUI(pct, stepLabel, stageIdx) {
+      const clamped = clamp(Math.round(pct || 0), 0, 100);
+      const bar = el("loading-bar-fill");
+      const pctEl = el("loading-pct");
+      const txtEl = el("loading-step-text");
+      const row = el("loading-stages-row");
+
+      if (bar) bar.style.width = `${clamped}%`;
+      if (pctEl) pctEl.textContent = `${clamped}%`;
+      if (txtEl && stepLabel) txtEl.textContent = stepLabel;
+      if (row && typeof stageIdx === "number") {
+        row.querySelectorAll(".load-stage-pill").forEach((pill) => {
+          const idx = parseInt(pill.getAttribute("data-stage") || "0", 10);
+          pill.classList.toggle("done", idx < stageIdx || clamped >= 100);
+          pill.classList.toggle("active", idx === stageIdx && clamped < 100);
+        });
       }
+    }
+
+    dismissLoadingScreen() {
+      const overlay = el("game-loading-screen");
+      if (!overlay || overlay.classList.contains("hidden")) return;
+      overlay.classList.add("fade-out");
+      setTimeout(() => {
+        overlay.classList.add("hidden");
+      }, 480);
+    }
+
+    async init() {
+      const LOADING_TIPS = [
+        "💡 Mẹo: Tích lũy quỹ dự phòng tiền mặt trước chu kỳ Suy thoái để tránh bị xiết nợ & đóng băng tín dụng!",
+        "💡 Mẹo: Bạn có tối đa 5 lượt lùi tuổi miễn phí mỗi đời — từ lần thứ 6 sẽ phải đánh đổi ít nhất 25% tài sản!",
+        "💡 Mẹo: Nâng chỉ số Kinh doanh & Kỷ luật trước khi mở nhiều chuỗi cửa hàng để không bị thất thoát quản trị!",
+        "💡 Mẹo: Trên iPhone, chọn Chia sẻ -> Thêm vào Màn hình chính để chơi toàn màn hình kèm biểu tượng riêng!",
+        "💡 Mẹo: Lập Quỹ Tín Thác Gia Tộc trước tuổi xế chiều để con cháu kế thừa 100% tiền mặt không mất thuế di sản!"
+      ];
+      const tipEl = el("loading-tip-text");
+      if (tipEl) {
+        tipEl.textContent = LOADING_TIPS[randInt(0, LOADING_TIPS.length - 1)];
+      }
+      this.updateLoadingUI(8, "Đang nạp cấu trúc dữ liệu & sự kiện...", 0);
+
+      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 7000);
+
+      if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+        try {
+          navigator.serviceWorker.getRegistrations().then((regs) => {
+            regs.forEach((r) => r.unregister());
+          }).catch(() => {});
+        } catch (_) {}
+      }
+
+      this.bindStaticUI();
+
+      window.addEventListener("beforeunload", () => this.saveToStorage());
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") this.saveToStorage();
+      });
 
       if (window.ZTBLiveBoard) {
         window.ZTBLiveBoard.init({
@@ -283,27 +337,41 @@
         });
       }
 
-      this.bindStaticUI();
-
-      window.addEventListener("beforeunload", () => this.saveToStorage());
-      document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") this.saveToStorage();
-      });
-
       const loaded = this.loadFromStorage();
-      if (loaded) {
-        if ((this.monetization.totalLivesStarted || 0) === 0) {
-          this.monetization.totalLivesStarted = 1;
-          this.saveMonetization();
+      if (!loaded) {
+        this.startNewLife("Nguyễn Gia Huy", "Nam", this.selectedBackgroundId, true);
+      } else if ((this.monetization.totalLivesStarted || 0) === 0) {
+        this.monetization.totalLivesStarted = 1;
+        this.saveMonetization();
+      }
+
+      if (window.Diorama3D && typeof window.Diorama3D.initAsync === "function") {
+        try {
+          await window.Diorama3D.initAsync("diorama-canvas", (pct, msg, stg) => {
+            this.updateLoadingUI(pct, msg, stg);
+          });
+        } catch (err) {
+          console.warn("[ZTBSim] Async 3D preload fallback:", err);
+          window.Diorama3D.init("diorama-canvas");
         }
+      } else if (window.Diorama3D) {
+        window.Diorama3D.init("diorama-canvas");
+      }
+
+      this.publishPlayerToLiveBoard(true);
+      this.renderAll();
+      this.updateLoadingUI(100, "Hoàn tất! Chào mừng đến với thế giới Tỷ Phú!", 4);
+
+      await new Promise((r) => setTimeout(r, 340));
+      clearTimeout(safetyTimer);
+      this.dismissLoadingScreen();
+
+      if (loaded) {
         this.showToast(`📂 Chào mừng ${this.stats.characterName} trở lại!`);
-        this.publishPlayerToLiveBoard(true);
-        this.renderAll();
         if (!this.stats.isAlive) {
           this.openGameOverModal();
         }
       } else {
-        this.startNewLife("Nguyễn Gia Huy", "Nam", this.selectedBackgroundId, true);
         this.openNewLifeModal(true);
       }
     }
@@ -335,6 +403,14 @@
       }
 
       el("btn-age-up").addEventListener("click", () => this.ageUp());
+      const onlinePillBtn = el("hud-online-pill");
+      if (onlinePillBtn) {
+        onlinePillBtn.addEventListener("click", () => {
+          if (window.ZTBAudio) window.ZTBAudio.tap();
+          this.leaderboardSubTab = "live";
+          this.switchTab("leaderboard");
+        });
+      }
       el("hud-rank").addEventListener("click", () => {
         if (window.ZTBAudio) window.ZTBAudio.tap();
         this.leaderboardSubTab = "live";
@@ -478,6 +554,12 @@
       el("btn-buy-vip-pack").addEventListener("click", () => this.openPaymentSheet("vip"));
       el("btn-confirm-payment").addEventListener("click", () => this.confirmPaymentPurchase());
       el("btn-cancel-payment").addEventListener("click", () => el("payment-sheet-modal").classList.remove("open"));
+
+      // Paid Rewind Confirmation Modal (6th+ Rewind)
+      const confirmRewindBtn = el("btn-confirm-paid-rewind");
+      if (confirmRewindBtn) confirmRewindBtn.addEventListener("click", () => this.executePaidRewind());
+      const cancelRewindBtn = el("btn-cancel-paid-rewind");
+      if (cancelRewindBtn) cancelRewindBtn.addEventListener("click", () => el("rewind-confirm-modal").classList.remove("open"));
     }
 
     switchTab(tabId) {
@@ -744,7 +826,7 @@
       }
       if (this.stats.debt < 0) this.stats.debt = 0;
 
-      for (const k of ["layoffCount", "debtOverdueYears", "bankruptcyCount", "creditFrozenYears", "careerCooldownYears"]) {
+      for (const k of ["layoffCount", "debtOverdueYears", "bankruptcyCount", "creditFrozenYears", "careerCooldownYears", "rewindsUsed"]) {
         this.stats[k] = Math.max(0, Math.round(this.stats[k] || 0));
       }
 
@@ -864,7 +946,7 @@
       const banner = el("new-life-booster-banner");
       const m = this.monetization;
       const boosts = [];
-      if (m.vipForever) boosts.push("👑 VIP (+15 Trí, +15 May, +8Tr Quỹ 18t, 8 ô Quay Ngược)");
+      if (m.vipForever) boosts.push("👑 VIP (+15 Trí, +15 May, +8Tr Quỹ 18t, -20% phí lùi tuổi vượt mốc 5 lần)");
       else if ((m.starterLivesLeft || 0) > 0) boosts.push(`🎁 Gói Khởi Đầu (còn ${m.starterLivesLeft} đời: +12 May, +10 Khỏe, +4Tr Quỹ 18t)`);
       if (m.adBonusPending) boosts.push("🎬 Quà Quảng Cáo (+5 May, +1Tr Quỹ 18t)");
 
@@ -1033,14 +1115,165 @@
       }
     }
 
+    calculatePaidRewindQuote() {
+      if (this.timeMachine.length === 0) return null;
+      const topRaw = this.timeMachine[this.timeMachine.length - 1];
+      const topSnap = JSON.parse(topRaw);
+      const used = this.stats.rewindsUsed || 0;
+      const nextRewindNum = used + 1;
+      const extraIndex = Math.max(1, nextRewindNum - FREE_TIME_MACHINE_LIMIT);
+
+      const snapPortfolioVal = (topSnap.portfolio || []).reduce((s, it) => s + it.currentUnitValue * it.quantity, 0);
+      const snapGrossAssets = (topSnap.stats.cash || 0) + (topSnap.stats.trustFund || 0) + snapPortfolioVal;
+      const snapNetWorth = snapGrossAssets - (topSnap.stats.debt || 0);
+      const currentNetWorth = this.getNetWorth();
+
+      const refWealth = Math.max(0, currentNetWorth, snapNetWorth);
+      const vipMult = this.monetization.vipForever ? 0.80 : 1.0;
+      const rawPct = Math.min(0.75, 0.15 + extraIndex * 0.10);
+      const effectivePct = rawPct * vipMult;
+      const minFloor = Math.round(100_000_000 * extraIndex * vipMult);
+      const cost = Math.max(minFloor, Math.round(refWealth * effectivePct));
+      const canAfford = snapNetWorth >= cost && snapGrossAssets >= cost;
+
+      return {
+        nextRewindNum,
+        extraIndex,
+        targetAge: topSnap.stats.age,
+        snapNetWorth,
+        snapGrossAssets,
+        effectivePct: Math.round(effectivePct * 100),
+        minFloor,
+        cost,
+        canAfford
+      };
+    }
+
+    deductWealthForRewind(totalCost, rewindNum) {
+      let remaining = Math.round(totalCost);
+      const fromCash = Math.min(this.stats.cash, remaining);
+      if (fromCash > 0) {
+        this.stats.cash -= fromCash;
+        remaining -= fromCash;
+        this.recordCashflow(-fromCash, "rewind", `Khấu trừ tiền mặt lùi tuổi lần #${rewindNum}`);
+      }
+
+      if (remaining > 0 && (this.stats.trustFund || 0) > 0) {
+        const fromTrust = Math.min(this.stats.trustFund, remaining);
+        this.stats.trustFund -= fromTrust;
+        remaining -= fromTrust;
+      }
+
+      if (remaining > 0 && this.portfolio.length > 0) {
+        const catPriority = { investment: 1, vehicle: 2, real_estate: 3, business: 4 };
+        this.portfolio.sort((a, b) => (catPriority[a.category] || 5) - (catPriority[b.category] || 5));
+
+        for (let i = 0; i < this.portfolio.length && remaining > 0; i++) {
+          const item = this.portfolio[i];
+          while (item.quantity > 0 && remaining > 0) {
+            const unitVal = item.currentUnitValue;
+            const avgCost = Math.round(item.totalInvestedCost / item.quantity);
+            item.totalInvestedCost -= avgCost;
+            item.quantity -= 1;
+
+            if (unitVal > remaining) {
+              const change = unitVal - remaining;
+              this.stats.cash += change;
+              this.recordCashflow(-remaining, "rewind", `Thanh lý 1 [${item.name}] trả phí lùi tuổi #${rewindNum}`);
+              remaining = 0;
+            } else {
+              remaining -= unitVal;
+              this.recordCashflow(-unitVal, "rewind", `Thanh lý 1 [${item.name}] trả phí lùi tuổi #${rewindNum}`);
+            }
+          }
+        }
+        this.portfolio = this.portfolio.filter((it) => it.quantity > 0);
+      }
+
+      if (remaining > 0) {
+        this.stats.debt += remaining;
+      }
+      this.clampStats();
+    }
+
     useTimeMachine() {
       if (this.timeMachine.length === 0) return;
+      const used = this.stats.rewindsUsed || 0;
+
+      if (used < FREE_TIME_MACHINE_LIMIT) {
+        const snap = this.timeMachine.pop();
+        this.restoreSnapshot(snap);
+        this.stats.rewindsUsed = used + 1;
+        const freeLeft = FREE_TIME_MACHINE_LIMIT - this.stats.rewindsUsed;
+        if (window.ZTBAudio) window.ZTBAudio.success();
+        if (window.Diorama3D) window.Diorama3D.triggerCelebration("happy");
+        this.addLog(
+          `⏪ Cỗ Máy Thời Gian (#${this.stats.rewindsUsed}/${FREE_TIME_MACHINE_LIMIT} miễn phí): Quay lại năm ${this.stats.age} tuổi! (Còn ${freeLeft} lượt miễn phí)`,
+          "milestone"
+        );
+        this.showToast(`⏪ Quay về ${this.stats.age} tuổi! (Còn ${freeLeft}/${FREE_TIME_MACHINE_LIMIT} lượt miễn phí)`);
+        this.saveToStorage();
+        this.publishPlayerToLiveBoard(true);
+        this.renderAll();
+        return;
+      }
+
+      const quote = this.calculatePaidRewindQuote();
+      if (!quote) return;
+
+      el("rewind-modal-title").textContent = `⏳ Lùi Thời Gian Lần #${quote.nextRewindNum} (Trả Bằng Tài Sản)`;
+      el("rewind-modal-body").innerHTML = `
+        Bạn đã dùng hết <strong>${FREE_TIME_MACHINE_LIMIT}/${FREE_TIME_MACHINE_LIMIT} lượt lùi tuổi miễn phí</strong> trong đời này.
+        Để nghịch chuyển về <strong>năm ${quote.targetAge} tuổi</strong>, bạn phải đánh đổi một khoản lớn trong tài sản!
+      `;
+
+      const costBox = el("rewind-cost-box");
+      const confirmBtn = el("btn-confirm-paid-rewind");
+      if (quote.canAfford) {
+        costBox.innerHTML = `
+          <div style="font-size:13px; margin-bottom:4px;">💸 Phí khấu trừ tài sản: <strong style="color:#fbbf24; font-size:15px;">-${formatVND(quote.cost)}</strong></div>
+          <div style="font-size:11px; color:#cbd5e1; line-height:1.45;">
+            • Mức phạt lũy tiến lần vượt #${quote.extraIndex}: <strong>${quote.effectivePct}% tổng tài sản</strong> (tối thiểu ${formatVND(quote.minFloor)})<br/>
+            • Tài sản ròng tại mốc ${quote.targetAge} tuổi: <strong style="color:#34d399;">${formatVND(quote.snapNetWorth)}</strong><br/>
+            • Tự động trừ vào Tiền mặt trước; nếu thiếu sẽ thanh lý Danh mục tài sản đang nắm giữ.
+          </div>
+        `;
+        confirmBtn.disabled = false;
+        confirmBtn.textContent = `⏳ Trừ ${formatVND(quote.cost)} & Lùi Về ${quote.targetAge}t`;
+      } else {
+        costBox.innerHTML = `
+          <div style="font-size:13px; margin-bottom:4px;">❌ Cần tối thiểu: <strong style="color:#f87171; font-size:15px;">${formatVND(quote.cost)}</strong></div>
+          <div style="font-size:11px; color:#fca5a5; line-height:1.45;">
+            Tài sản ròng tại mốc ${quote.targetAge} tuổi chỉ có <strong>${formatVND(quote.snapNetWorth)}</strong> — không đủ để đánh đổi lượt lùi thời gian lần #${quote.nextRewindNum}!
+          </div>
+        `;
+        confirmBtn.disabled = true;
+        confirmBtn.textContent = "Không đủ tài sản";
+      }
+
+      el("rewind-confirm-modal").classList.add("open");
+    }
+
+    executePaidRewind() {
+      const quote = this.calculatePaidRewindQuote();
+      el("rewind-confirm-modal").classList.remove("open");
+      if (!quote || !quote.canAfford) {
+        this.showToast("❌ Không đủ tài sản để mua thêm lượt lùi tuổi!");
+        return;
+      }
+
       const snap = this.timeMachine.pop();
       this.restoreSnapshot(snap);
-      if (window.ZTBAudio) window.ZTBAudio.success();
-      if (window.Diorama3D) window.Diorama3D.triggerCelebration("happy");
-      this.addLog(`⏪ Cỗ Máy Thời Gian: Quay lại năm ${this.stats.age} tuổi!`, "milestone");
-      this.showToast(`⏪ Đã quay ngược về năm ${this.stats.age} tuổi!`);
+      this.stats.rewindsUsed = quote.nextRewindNum;
+      this.deductWealthForRewind(quote.cost, quote.nextRewindNum);
+
+      if (window.ZTBAudio) window.ZTBAudio.warning();
+      if (window.Diorama3D) window.Diorama3D.triggerCelebration("coin");
+      this.addLog(
+        `⏳ Nghịch chuyển thời gian lần #${quote.nextRewindNum} (vượt mốc 5 lần): Đã khấu trừ -${formatVND(quote.cost)} khỏi khối tài sản để lùi về năm ${this.stats.age} tuổi!`,
+        "danger"
+      );
+      this.showToast(`⏳ Đã trừ ${formatVND(quote.cost)} tài sản để lùi về ${this.stats.age} tuổi!`);
       this.saveToStorage();
       this.publishPlayerToLiveBoard(true);
       this.renderAll();
@@ -2358,8 +2591,20 @@
         el("room-tier-badge").textContent = window.Diorama3D.getRoomTierLabel();
       }
       el("generation-badge").textContent = `👑 Đời ${this.stats.generation} • ${this.stats.backgroundName}`;
-      el("time-machine-count").textContent = String(this.timeMachine.length);
-      el("btn-time-machine").disabled = this.timeMachine.length === 0;
+      const usedRewinds = this.stats.rewindsUsed || 0;
+      const freeRewindsLeft = Math.max(0, FREE_TIME_MACHINE_LIMIT - usedRewinds);
+      const tmBadge = el("time-machine-count");
+      const tmBtn = el("btn-time-machine");
+      if (freeRewindsLeft > 0) {
+        tmBadge.textContent = String(freeRewindsLeft);
+        tmBadge.classList.remove("paid");
+        tmBtn.title = `Cỗ Máy Thời Gian: Còn ${freeRewindsLeft}/${FREE_TIME_MACHINE_LIMIT} lượt lùi tuổi miễn phí`;
+      } else {
+        tmBadge.textContent = "💸";
+        tmBadge.classList.add("paid");
+        tmBtn.title = "Đã hết 5 lượt miễn phí — Bấm để đánh đổi Tài sản lùi tuổi thêm!";
+      }
+      tmBtn.disabled = this.timeMachine.length === 0;
     }
 
     renderHUD() {
@@ -2369,6 +2614,17 @@
       el("hud-job").textContent = s.currentJob;
       el("hud-macro").textContent = this.macroCycle.label;
       el("autosave-indicator").textContent = `✓ ${this.lastSavedLabel}`;
+
+      const liveSnap = window.ZTBLiveBoard
+        ? window.ZTBLiveBoard.getLeaderboardSnapshot()
+        : { connected: false, onlineCount: 1 };
+      const onlinePill = el("hud-online-pill");
+      if (onlinePill) {
+        onlinePill.textContent = liveSnap.connected
+          ? `🟢 ${liveSnap.onlineCount} online`
+          : `🟡 ${liveSnap.onlineCount} local`;
+        onlinePill.classList.toggle("offline", !liveSnap.connected);
+      }
 
       const hudRank = this.getLiveOrAiHudRank();
       el("hud-rank").textContent = `${hudRank.prefix} #${hudRank.rank}`;
@@ -2953,9 +3209,16 @@
           ? window.ZTBLiveBoard.getLeaderboardSnapshot()
           : { connected: false, brokerHost: "offline", onlineCount: 1, totalPlayers: 1, entries: [] };
 
+        const activeBadge = el("live-active-count-badge");
+        if (activeBadge) {
+          activeBadge.innerHTML = `
+            <span class="pulse-dot" style="${snap.connected ? "" : "background:#f59e0b;"}"></span>
+            <span>Đang hoạt động trực tuyến: <strong>${snap.onlineCount} người chơi</strong></span>
+          `;
+        }
         el("live-board-status").innerHTML = snap.connected
-          ? `🟢 <strong>Live Online</strong> • ${snap.onlineCount} đang chơi (${snap.totalPlayers} hồ sơ)`
-          : `🟡 <strong>Cục bộ / Đang kết nối</strong> • ${snap.totalPlayers} người chơi đã lưu`;
+          ? `🟢 Đã kết nối máy chủ Live (${escapeHtml(snap.brokerHost)}) • Tổng ${snap.totalPlayers} người chơi đã ghi danh`
+          : `🟡 Chế độ cục bộ / Đang kết nối máy chủ • ${snap.totalPlayers} người chơi đã lưu`;
 
         el("leaderboard-list-title").textContent = `🌐 Bảng Xếp Hạng Người Chơi Thực (${snap.entries.length})`;
 

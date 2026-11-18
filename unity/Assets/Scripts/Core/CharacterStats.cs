@@ -90,10 +90,11 @@ namespace ZeroToBillionaire.Core
         public int creditFrozenYears = 0;
         public int careerCooldownYears = 0;
 
-        // Gia đình
+        // Gia đình & Cỗ máy thời gian
         public string maritalStatus = "Độc thân";
         public string spouseName = "";
         public int childrenCount = 0;
+        public int rewindsUsed = 0;
 
         public LifeStage GetLifeStage()
         {

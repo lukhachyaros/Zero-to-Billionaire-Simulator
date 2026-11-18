@@ -32,7 +32,7 @@ namespace ZeroToBillionaire.Core
     {
         private const string SAVE_FILENAME = "ztb_savegame_v2.json";
         private const string HASH_SALT = "ZeroToBillionaire_VN_2026_Salt";
-        private const int MAX_TIME_MACHINE_SNAPSHOTS = 5;
+        private const int MAX_TIME_MACHINE_SNAPSHOTS = 20;
 
         private static readonly List<string> timeMachineHistory = new List<string>();
 
