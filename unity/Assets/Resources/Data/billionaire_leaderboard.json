@@ -1,0 +1,142 @@
+[
+  {
+    "rivalId": "rank_20_pho_master",
+    "name": "Ông Ba Phở Gia Truyền",
+    "title": "Quán Phở Bò Phố Cổ",
+    "avatar": "🍜",
+    "baseNetWorth": 35000000
+  },
+  {
+    "rivalId": "rank_19_coffee_founder",
+    "name": "Lê Minh Hoàng",
+    "title": "Chuỗi Cà phê Mang đi",
+    "avatar": "☕",
+    "baseNetWorth": 120000000
+  },
+  {
+    "rivalId": "rank_18_indie_dev",
+    "name": "Trần Khánh Vy",
+    "title": "Studio Ứng dụng Di động",
+    "avatar": "📱",
+    "baseNetWorth": 450000000
+  },
+  {
+    "rivalId": "rank_17_home_owner",
+    "name": "Nguyễn Quốc Bảo",
+    "title": "Chuỗi Căn hộ Dịch vụ",
+    "avatar": "🏠",
+    "baseNetWorth": 1800000000
+  },
+  {
+    "rivalId": "rank_16_fnb_chain",
+    "name": "Phạm Thảo Nhi",
+    "title": "Hệ thống Trà sữa & Bánh ngọt",
+    "avatar": "🧋",
+    "baseNetWorth": 5500000000
+  },
+  {
+    "rivalId": "rank_15_shophouse_king",
+    "name": "Hoàng Đức Mạnh",
+    "title": "Đầu tư Nhà phố Thương mại",
+    "avatar": "🏢",
+    "baseNetWorth": 16000000000
+  },
+  {
+    "rivalId": "rank_14_agri_export",
+    "name": "Đặng Thu Hà",
+    "title": "Xuất khẩu Nông sản Châu Âu",
+    "avatar": "🌿",
+    "baseNetWorth": 45000000000
+  },
+  {
+    "rivalId": "rank_13_fintech_ceo",
+    "name": "Vũ Tuấn Kiệt",
+    "title": "Kỳ lân Thanh toán Số",
+    "avatar": "💳",
+    "baseNetWorth": 120000000000
+  },
+  {
+    "rivalId": "rank_12_logistics_lord",
+    "name": "Bùi Thành Long",
+    "title": "Tập đoàn Cảng biển & Kho vận",
+    "avatar": "🚢",
+    "baseNetWorth": 320000000000
+  },
+  {
+    "rivalId": "rank_11_media_queen",
+    "name": "Hồ Bảo Châu",
+    "title": "Tập đoàn Giải trí & Thương hiệu",
+    "avatar": "🎬",
+    "baseNetWorth": 780000000000
+  },
+  {
+    "rivalId": "rank_10_bank_chair",
+    "name": "Đỗ Minh Khang",
+    "title": "Ngân hàng Thương mại Cổ phần",
+    "avatar": "🏦",
+    "baseNetWorth": 1850000000000
+  },
+  {
+    "rivalId": "rank_09_retail_empress",
+    "name": "Nguyễn Phương Linh",
+    "title": "Chuỗi Bán lẻ Toàn quốc",
+    "avatar": "🛍️",
+    "baseNetWorth": 4200000000000
+  },
+  {
+    "rivalId": "rank_08_aviation_mogul",
+    "name": "Trần Quang Dũng",
+    "title": "Hàng không & Du lịch Nghỉ dưỡng",
+    "avatar": "✈️",
+    "baseNetWorth": 9500000000000
+  },
+  {
+    "rivalId": "rank_07_steel_industrial",
+    "name": "Phạm Đình Hùng",
+    "title": "Tập đoàn Công nghiệp Nặng",
+    "avatar": "🏭",
+    "baseNetWorth": 22000000000000
+  },
+  {
+    "rivalId": "rank_06_semicon_giant",
+    "name": "Lý Minh Triết",
+    "title": "Tập đoàn Bán dẫn & Cloud AI",
+    "avatar": "🤖",
+    "baseNetWorth": 42000000000000
+  },
+  {
+    "rivalId": "rank_05_clean_energy",
+    "name": "Võ Hải Đăng",
+    "title": "Đế chế Năng lượng Tái tạo",
+    "avatar": "⚡",
+    "baseNetWorth": 68000000000000
+  },
+  {
+    "rivalId": "rank_04_ev_conglomerate",
+    "name": "Phạm Nhật Minh",
+    "title": "Tập đoàn Đô thị & Xe điện Toàn cầu",
+    "avatar": "🏎️",
+    "baseNetWorth": 95000000000000
+  },
+  {
+    "rivalId": "rank_03_sea_venture",
+    "name": "Elena Tan",
+    "title": "Quỹ Đầu tư Công nghệ Đông Nam Á",
+    "avatar": "💎",
+    "baseNetWorth": 145000000000000
+  },
+  {
+    "rivalId": "rank_02_global_ecomm",
+    "name": "Marcus Vance",
+    "title": "Siêu Tập đoàn Thương mại Vũ trụ",
+    "avatar": "🚀",
+    "baseNetWorth": 230000000000000
+  },
+  {
+    "rivalId": "rank_01_world_apex",
+    "name": "Alexander Sterling",
+    "title": "Huyền thoại AI & Năng lượng Hành tinh",
+    "avatar": "👑",
+    "baseNetWorth": 350000000000000
+  }
+]

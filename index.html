@@ -19,9 +19,9 @@
       </p>
       <ul class="desktop-feature-list">
         <li>🏠 <strong>5 Cấp độ Phòng 3D</strong>: Phòng tuổi thơ ➔ Phòng trọ 12m² ➔ Chung cư ➔ Biệt thự ➔ Penthouse Hồ bơi vô cực.</li>
-        <li>🪙 <strong>Kinh tế Thực tế theo Tuổi</strong>: Sơ sinh 0 đ ➔ Tiêu vặt học sinh ➔ Quỹ hành trang tuổi 18 &amp; Quỹ ủy thác thừa kế.</li>
-        <li>🎓 <strong>4 Hoàn cảnh xuất thân</strong> &amp; <strong>22 Ngành nghề</strong> từ Công nghệ AI, Bác sĩ đến CEO Tập đoàn.</li>
-        <li>👑 <strong>Gia phả Truyền đời</strong> &amp; <strong>Cỗ Máy Thời Gian</strong> sửa chữa quyết định sai lầm.</li>
+        <li>🎭 <strong>140+ Kịch bản Sự kiện</strong>: Từ tuổi thơ Việt Nam, công sở, đầu tư đến đại thọ 90+.</li>
+        <li>📒 <strong>Sổ Lịch sử Dòng tiền Ra/Vào</strong>: Minh bạch mọi khoản thu chi; thất nghiệp/đi học không bị trừ tiền vô lý.</li>
+        <li>👑 <strong>Bảng Xếp hạng Phú hào (Top 21)</strong> &amp; <strong>Điện Danh vọng</strong> ghi nhận kỷ lục các đời.</li>
       </ul>
       <p><em>Mẹo: Kéo ngang trên phòng 3D để xoay góc nhìn và cuộn chuột để phóng to/thu nhỏ!</em></p>
     </aside>
@@ -64,14 +64,17 @@
               <span id="hud-macro">🌤️ Tăng trưởng</span>
             </div>
           </div>
-          <div class="hud-age-box">
-            <div id="hud-age">0 Tuổi</div>
+          <div class="hud-right-pills">
+            <button type="button" class="hud-rank-pill" id="hud-rank" title="Xem Bảng Xếp Hạng Phú Hào">🏆 #21</button>
+            <div class="hud-age-box">
+              <div id="hud-age">0 Tuổi</div>
+            </div>
           </div>
         </div>
 
         <div class="hud-money-row">
-          <div class="money-chip">
-            <span>Tiền mặt</span>
+          <div class="money-chip clickable" id="money-chip-cash" title="Bấm để xem Lịch sử dòng tiền">
+            <span>Tiền mặt 📒</span>
             <strong id="hud-cash">0 đ</strong>
           </div>
           <div class="money-chip gold">
@@ -139,6 +142,8 @@
         <div class="tab-panel" id="tab-assets">
           <div class="section-card" id="finance-summary-card"></div>
 
+          <div class="section-card" id="cashflow-ledger-card"></div>
+
           <div class="section-card" id="bank-desk-card"></div>
 
           <div class="section-card">
@@ -153,7 +158,22 @@
           </div>
         </div>
 
-        <!-- TAB 4: QUAN HỆ & GIA TỘC -->
+        <!-- TAB 4: BẢNG XẾP HẠNG PHÚ HÀO -->
+        <div class="tab-panel" id="tab-leaderboard">
+          <div class="section-card" id="leaderboard-hero-card"></div>
+
+          <div class="section-card">
+            <div class="section-title"><span>👑 Bảng Xếp Hạng Người Giàu (Top 21)</span></div>
+            <div class="list-stack" id="leaderboard-list"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>🏛️ Điện Danh Vọng Cá Nhân (Kỷ lục các Đời)</span></div>
+            <div class="list-stack" id="hall-of-fame-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB 5: QUAN HỆ & GIA TỘC -->
         <div class="tab-panel" id="tab-social">
           <div class="section-card" id="dynasty-banner"></div>
           <div class="section-card" id="social-actions-bar"></div>
@@ -207,6 +227,7 @@
         <button class="tab-btn active" data-tab="life"><span class="tab-ico">🌱</span>Cuộc Đời</button>
         <button class="tab-btn" data-tab="career"><span class="tab-ico">💼</span>Nghề</button>
         <button class="tab-btn" data-tab="assets"><span class="tab-ico">🏦</span>Tài Sản</button>
+        <button class="tab-btn" data-tab="leaderboard"><span class="tab-ico">👑</span>Phú Hào</button>
         <button class="tab-btn" data-tab="social"><span class="tab-ico">❤️</span>Gia Tộc</button>
         <button class="tab-btn" data-tab="profile"><span class="tab-ico">🏆</span>Hồ Sơ</button>
       </nav>

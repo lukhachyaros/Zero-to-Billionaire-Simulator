@@ -48,7 +48,15 @@ namespace ZeroToBillionaire.Events
         {
             if (loadedEvents.Count > 0) return;
 
-            string[] resourceFiles = { "Data/life_events_full", "Data/random_yearly_events" };
+            string[] resourceFiles =
+            {
+                "Data/life_events_full",
+                "Data/random_yearly_events",
+                "Data/pack_youth_school",
+                "Data/pack_career_workplace",
+                "Data/pack_wealth_investments",
+                "Data/pack_family_society_elder"
+            };
             foreach (string path in resourceFiles)
             {
                 TextAsset asset = Resources.Load<TextAsset>(path);

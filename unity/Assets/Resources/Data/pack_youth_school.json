@@ -1,0 +1,963 @@
+[
+  {
+    "eventId": "p1_01_first_words",
+    "category": "childhood",
+    "title": "Từ Đầu Tiên Bé Tập Nói",
+    "minAge": 1,
+    "maxAge": 2,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Cả nhà hồi hộp vây quanh xem tiếng đầu tiên bạn bật ra rõ ràng nhất là gọi Ba hay gọi Mẹ.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_say_mama",
+        "label": "Bập bẹ gọi to 'Mẹ ơi!' đầy ngọt ngào",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mẹ ôm chầm lấy bạn xúc động, còn bố giả vờ dỗi rồi cười xòa.",
+            "statModifiers": { "parentRelationship": 8, "happiness": 8, "charisma": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_say_papa",
+        "label": "Chỉ tay ra cổng gọi vang 'Ba!'",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bố sướng rơn khoe khắp xóm suốt cả tuần lễ!",
+            "statModifiers": { "parentRelationship": 8, "happiness": 8, "intelligence": 4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_02_picky_eater",
+    "category": "childhood",
+    "title": "Cuộc Chiến Bữa Cơm Tuổi Thơ",
+    "minAge": 2,
+    "maxAge": 4,
+    "priority": 65,
+    "isOneTime": true,
+    "description": "Bạn ngậm miếng cháo trong miệng suốt nửa tiếng không chịu nuốt trong khi bố mẹ phải diễn đủ trò làm xiếc.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_eat_bravely",
+        "label": "Nuốt cái ực và đòi ăn thêm miếng thịt băm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn ăn thun thút mau lớn, hai má phúng phính hồng hào!",
+            "statModifiers": { "health": 10, "happiness": 5, "discipline": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_play_spoon",
+        "label": "Đòi cầm thìa tự xúc cơm rơi vãi đầy bàn",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Tuy hơi lấm lem nhưng bạn rèn được tính tự lập từ rất sớm!",
+            "statModifiers": { "practicalSkills": 6, "happiness": 7 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_03_midautumn_lantern",
+    "category": "culture",
+    "title": "Đêm Rằm Trung Thu Rước Đèn Ông Sao",
+    "minAge": 3,
+    "maxAge": 5,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Ánh trăng rằm sáng vằng vặc, tiếng trống múa lân tùng cheng vang khắp ngõ nhỏ cùng mâm ngũ quả và bánh nướng thơm lừng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_carry_lantern",
+        "label": "Cầm đèn ông sao chạy theo đoàn múa lân cùng lũ trẻ trong xóm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đêm hội trăng rằm rộn rã tiếng cười trở thành ký ức tuổi thơ tuyệt đẹp!",
+            "statModifiers": { "happiness": 12, "charisma": 6, "health": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_share_mooncake",
+        "label": "Nhường phần bánh trung thu nhân thập cẩm cho ông bà và em nhỏ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả nhà đều ấm lòng trước sự hiểu chuyện đáng yêu của bạn.",
+            "statModifiers": { "karma": 10, "parentRelationship": 8, "happiness": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_04_vaccine_day",
+    "category": "childhood",
+    "title": "Ngày Đi Tiêm Phòng ở Trạm Y Tế Phường",
+    "minAge": 2,
+    "maxAge": 5,
+    "priority": 62,
+    "isOneTime": true,
+    "description": "Nhìn thấy cô y tá cầm ống tiêm sáng loáng, mấy bạn nhỏ đứng xếp hàng trước mặt đồng loạt òa khóc nức nở.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_brave_shot",
+        "label": "Nín thở nhắm mắt dũng cảm tiêm xong cái rẹt không rơi giọt nước mắt",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cô y tá tặng ngay cho bạn chiếc sticker siêu nhân dũng cảm!",
+            "statModifiers": { "health": 10, "discipline": 8, "socialStatus": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_hug_mom_cry",
+        "label": "Khóc ré lên nhưng sau đó hết sốt khỏe mạnh nhanh chóng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mẹ dỗ bằng hộp sữa chua mát lạnh giúp bạn quên ngay vết tiêm.",
+            "statModifiers": { "health": 8, "parentRelationship": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_05_lost_fountain_pen",
+    "category": "education",
+    "title": "Chiếc Bút Mực Tím Bị Thất Lạc",
+    "minAge": 6,
+    "maxAge": 9,
+    "priority": 60,
+    "isOneTime": false,
+    "description": "Giờ viết chính tả buổi chiều, bạn lục tung cả cặp sách mà không thấy chiếc bút mực mới tinh đâu.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_borrow_calmly",
+        "label": "Bình tĩnh hỏi mượn tạm bạn cùng bàn và rà lại ngăn bàn sau giờ học",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "message": "Bạn tìm thấy bút rơi dưới gầm bàn cuối lớp và rèn tính cẩn thận giữ đồ!",
+            "statModifiers": { "discipline": 6, "charisma": 4 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Dù không tìm lại được bút cũ nhưng bạn học cách sắp xếp cặp gọn gàng hơn.",
+            "statModifiers": { "discipline": 4, "stress": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_report_teacher",
+        "label": "Thưa cô giáo chủ nhiệm để cùng cả lớp kiểm tra lại",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn ngồi cạnh trả lại do nhầm hộp bút giống hệt nhau.",
+            "statModifiers": { "happiness": 6, "discipline": 4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_06_summer_swimming",
+    "category": "childhood",
+    "title": "Lớp Học Bơi Mùa Hè Nóng Nực",
+    "minAge": 7,
+    "maxAge": 11,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Mùa hè nắng như đổ lửa, bố mẹ đăng ký cho bạn đi học bơi ở bể bơi thiếu nhi gần nhà để tăng chiều cao và kỹ năng sinh tồn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_swim_laps",
+        "label": "Chăm chỉ tập bơi ếch và bơi sải không bỏ buổi nào",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cuối khóa bạn bơi vèo vèo cả chiều dài bể 25m, thể lực tăng vọt!",
+            "statModifiers": { "health": 12, "appearance": 6, "discipline": 6, "practicalSkills": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_water_fight",
+        "label": "Bơi thì ít mà té nước chơi đùa cùng đám bạn thì nhiều",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mùa hè sảng khoái tràn đầy năng lượng và tiếng cười!",
+            "statModifiers": { "happiness": 14, "health": 5, "charisma": 5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_07_parent_teacher_meeting",
+    "category": "education",
+    "title": "Ngày Họp Phụ Huynh Cuối Học Kỳ",
+    "minAge": 7,
+    "maxAge": 14,
+    "priority": 66,
+    "isOneTime": false,
+    "description": "Sáng Chủ nhật, bố mẹ mặc áo sơ mi chỉnh tề lên lớp nghe cô chủ nhiệm nhận xét về học lực và hạnh kiểm của bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_show_notebook",
+        "label": "Chủ động đưa trước bài kiểm tra và thành thật nhận lỗi nếu có điểm kém",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "conditionFormula": "intelligence >= 55",
+            "message": "Cô giáo khen bạn tiến bộ vượt bậc trước cả lớp! Mẹ thưởng cho một bữa gà rán no nê.",
+            "statModifiers": { "happiness": 12, "parentRelationship": 10, "socialStatus": 5 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Tuy điểm Toán chưa cao nhưng bố mẹ đánh giá cao sự trung thực của bạn.",
+            "statModifiers": { "karma": 6, "discipline": 6, "parentRelationship": 4 }
+          }
+        ]
+      },
+      {
+        "id": "opt_clean_house_before",
+        "label": "Dọn nhà sạch bong, rửa sẵn ấm chén trước khi bố mẹ đi họp về",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chiến thuật 'lấy công chuộc tội' thành công mỹ mãn!",
+            "statModifiers": { "practicalSkills": 6, "charisma": 6, "parentRelationship": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_08_adopt_dog_vang",
+    "category": "childhood",
+    "title": "Chú Chó Cỏ Tên Vàng",
+    "minAge": 6,
+    "maxAge": 12,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Một chú cún con lông vàng bốn mắt ngơ ngác chạy lạc trước cổng nhà bạn giữa buổi chiều mưa lất phất.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_keep_care_dog",
+        "label": "Xin bố mẹ cho giữ lại nuôi và tự nhận trách nhiệm dọn dẹp cho cún",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cậu Vàng lớn nhanh thông minh, ngày nào đi học về cũng vẫy đuôi đón bạn từ đầu ngõ!",
+            "statModifiers": { "happiness": 14, "karma": 8, "discipline": 6, "stress": -8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_find_owner",
+        "label": "Nhờ bố mẹ đăng tin lên nhóm khu phố tìm lại chủ cũ cho cún",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bác hàng xóm mừng rơi nước mắt nhận lại cún cưng và cảm ơn bạn rối rít.",
+            "statModifiers": { "karma": 12, "socialStatus": 6, "happiness": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_09_snack_card_craze",
+    "category": "culture",
+    "title": "Cơn Sốt Sưu Tầm Thẻ Bài Bim Bim",
+    "minAge": 7,
+    "maxAge": 11,
+    "priority": 55,
+    "isOneTime": false,
+    "description": "Cả trường đang phát cuồng sưu tầm thẻ bài hiếm kẹp trong gói snack cổng trường. Bạn vừa bóc trúng thẻ SSR cực hiếm!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_trade_smart",
+        "label": "Trao đổi khéo léo lấy 5 thẻ thường cho bạn cùng bàn kiếm lời",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thương vụ kinh doanh đầu đời cho thấy tố chất đàm phán bẩm sinh của bạn!",
+            "statModifiers": { "businessAcuity": 8, "financialLiteracy": 5, "charisma": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_keep_collection",
+        "label": "Cất cẩn thận vào hộp sắt làm báu vật kỷ niệm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Niềm vui giản dị mỗi giờ ra chơi ngắm bộ sưu tập cùng bạn bè.",
+            "statModifiers": { "happiness": 10, "stress": -5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_10_teacher_day_show",
+    "category": "culture",
+    "title": "Hội Diễn Văn Nghệ Chào Mừng 20/11",
+    "minAge": 8,
+    "maxAge": 16,
+    "priority": 62,
+    "isOneTime": false,
+    "description": "Lớp đang tuyển thành viên cho tiết mục múa hát và đóng kịch tri ân thầy cô ngày Nhà giáo Việt Nam 20/11.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_lead_mc",
+        "label": "Xung phong làm MC dẫn chương trình cho tiết mục của lớp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Giọng nói truyền cảm và sự tự tin giúp lớp bạn giành giải Nhất toàn trường!",
+            "statModifiers": { "charisma": 12, "socialStatus": 8, "happiness": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_stage_props",
+        "label": "Phụ trách thiết kế đạo cụ, phông nền và âm thanh hậu cần",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sự tỉ mỉ hậu trường giúp tiết mục diễn ra trơn tru không một lỗi nhỏ.",
+            "statModifiers": { "practicalSkills": 10, "discipline": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_11_summer_blackout",
+    "category": "culture",
+    "title": "Đêm Mất Điện Hóng Mát Cả Xóm",
+    "minAge": 6,
+    "maxAge": 14,
+    "priority": 52,
+    "isOneTime": false,
+    "description": "9 giờ tối cả khu phố bỗng tối om vì quá tải điện mùa hè. Mọi người đồng loạt mang chiếu ra đầu ngõ phe phẩy quạt mo.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_stargaze_stories",
+        "label": "Nằm trên chiếu ngắm bầu trời đầy sao và nghe chuyện cổ tích",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không có Wi-Fi nhưng tình làng nghĩa xóm đêm hè ấm áp lạ thường.",
+            "statModifiers": { "happiness": 10, "stress": -10, "parentRelationship": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_count_stars_puzzle",
+        "label": "Thi giải câu đố dân gian cùng các anh chị hàng xóm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn trả lời vanh vách khiến ai cũng khen nhanh trí!",
+            "statModifiers": { "intelligence": 7, "charisma": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_12_rice_cooker_oops",
+    "category": "childhood",
+    "title": "Lần Đầu Tự Cắm Nồi Cơm Điện",
+    "minAge": 8,
+    "maxAge": 12,
+    "priority": 58,
+    "isOneTime": true,
+    "description": "Bố mẹ về muộn nên dặn bạn vo gạo cắm cơm sẵn. Đến tối cả nhà mở nắp nồi ra thì... gạo vẫn ngâm nguyên trong nước lạnh!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_learn_cooking",
+        "label": "Cười trừ nhận lỗi quên bật nút nấu, rồi xin mẹ dạy nấu luôn món trứng rán",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Từ bài học nhớ đời đó, bạn sớm thành thạo việc bếp núc tự lập!",
+            "statModifiers": { "practicalSkills": 10, "parentRelationship": 5, "happiness": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_quick_noodle",
+        "label": "Nhanh trí úp mì trứng cho cả nhà ăn tạm trong lúc chờ cơm chín",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bát mì thơm phức nóng hổi cứu nguy đúng lúc khiến cả nhà bật cười!",
+            "statModifiers": { "practicalSkills": 8, "charisma": 5, "happiness": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_13_school_bully_gate",
+    "category": "childhood",
+    "title": "Chạm Trán Đám Học Sinh Cá Biệt Cổng Trường",
+    "minAge": 11,
+    "maxAge": 15,
+    "priority": 70,
+    "isOneTime": true,
+    "description": "Tan học buổi chiều, hai anh lớp trên chặn bạn ở góc tường đòi 'mượn' tiền ăn sáng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_stand_firm_crowd",
+        "label": "Bình tĩnh bước vào tiệm tạp hóa đông người lớn gần cổng và báo bảo vệ trường",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Xử lý cực kỳ thông minh và an toàn! Nhóm kia lập tức lủi mất không dám bén mảng lại gần.",
+            "statModifiers": { "intelligence": 6, "discipline": 8, "socialStatus": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_martial_arts_stance",
+        "label": "Từng học võ cổ truyền, bạn thủ thế dứt khoát khiến đối phương chùn bước",
+        "outcomes": [
+          {
+            "probability": 0.7,
+            "conditionFormula": "health >= 65",
+            "message": "Khí thế vững vàng khiến chúng phải nể vài phần mà rút lui.",
+            "statModifiers": { "health": 4, "socialStatus": 10, "happiness": 8 }
+          },
+          {
+            "probability": 0.3,
+            "message": "Hai bên xô xát nhẹ trước khi thầy giám thị chạy tới can ngăn.",
+            "statModifiers": { "health": -5, "stress": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_14_found_wallet_street",
+    "category": "culture",
+    "title": "Nhặt Được Chiếc Ví Đánh Rơi Trên Đường",
+    "minAge": 10,
+    "maxAge": 17,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Trên đường đạp xe đi học về, bạn thấy một chiếc ví da rơi bên vệ đường bên trong có giấy tờ tùy thân và vài triệu đồng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_return_police",
+        "label": "Mang thẳng tới đồn công an phường hoặc liên hệ số điện thoại trong ví trả lại",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chủ nhân chiếc ví cảm kích trao bạn phần quà cảm ơn nhỏ và nhà trường tuyên dương dưới cờ!",
+            "statModifiers": { "cash": 300000, "karma": 22, "socialStatus": 14, "happiness": 15 }
+          }
+        ]
+      },
+      {
+        "id": "opt_leave_with_guard",
+        "label": "Gửi lại bác bảo vệ trường để làm thủ tục thông báo mất đồ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Người đánh rơi nhận lại đủ giấy tờ ngay trong buổi chiều hôm đó.",
+            "statModifiers": { "karma": 15, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_15_pink_eye_wave",
+    "category": "childhood",
+    "title": "Đợt Dịch Đau Mắt Đỏ Ở Lớp",
+    "minAge": 10,
+    "maxAge": 15,
+    "priority": 45,
+    "isOneTime": false,
+    "description": "Nửa lớp đeo kính râm đi học vì dịch đau mắt đỏ lây lan nhanh trong mùa nồm ẩm.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_hygiene_care",
+        "label": "Rửa tay xà phòng thường xuyên và nhỏ nước muối sinh lý phòng ngừa",
+        "outcomes": [
+          {
+            "probability": 0.85,
+            "message": "Bạn miễn nhiễm hoàn toàn trong suốt mùa dịch và giữ trọn điểm chuyên cần!",
+            "statModifiers": { "health": 5, "discipline": 6 }
+          },
+          {
+            "probability": 0.15,
+            "message": "Vẫn hơi đỏ mắt nhẹ nhưng khỏi rất nhanh chỉ sau 3 ngày.",
+            "statModifiers": { "health": -3 }
+          }
+        ]
+      },
+      {
+        "id": "opt_wear_cool_shades",
+        "label": "Đeo kính râm đen ngầu lòi lên lớp dù chưa bị lây để phòng bụi",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả lớp bật cười trước phong cách siêu ngầu nhưng rất hiệu quả!",
+            "statModifiers": { "appearance": 4, "happiness": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_16_english_debate",
+    "category": "education",
+    "title": "Cuộc Thi Hùng Biện Tiếng Anh Toàn Thành",
+    "minAge": 12,
+    "maxAge": 17,
+    "priority": 76,
+    "isOneTime": true,
+    "description": "CLB Tiếng Anh đề cử bạn đại diện trường dự thi Hùng biện về chủ đề 'Khởi nghiệp Xanh tương lai'.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_practice_speech",
+        "label": "Luyện phát âm trước gương mỗi ngày và chuẩn bị slide sắc bén",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "conditionFormula": "intelligence >= 60",
+            "message": "Phần phản biện tự tin chinh phục ban giám khảo! Bạn giành Huy chương Vàng và học bổng ngoại ngữ!",
+            "statModifiers": { "intelligence": 10, "charisma": 12, "socialStatus": 12, "cash": 500000 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Bạn lọt vào Top 10 toàn thành phố, trình độ giao tiếp ngoại ngữ tiến bộ vượt bậc.",
+            "statModifiers": { "intelligence": 7, "charisma": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_support_team",
+        "label": "Hỗ trợ nghiên cứu số liệu hậu trường giúp đội trường thi đấu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Kỹ năng tra cứu tài liệu và làm việc nhóm của bạn được trui rèn sắc bén.",
+            "statModifiers": { "intelligence": 6, "practicalSkills": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_17_learn_craft_summer",
+    "category": "culture",
+    "title": "Học Nghề Truyền Thống Từ Ông Bà Dịp Hè",
+    "minAge": 11,
+    "maxAge": 16,
+    "priority": 60,
+    "isOneTime": true,
+    "description": "Kỳ nghỉ hè dài, ông bà bảo bạn ra phụ tiệm mộc / làm bánh / sửa đồ truyền thống của gia đình để hiểu giá trị lao động.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_master_craft",
+        "label": "Xắn tay áo chăm chỉ học từng công đoạn tỉ mỉ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Ông bà thưởng cho bạn chút tiền công nhỏ cùng sự khéo léo hiếm có!",
+            "statModifiers": { "practicalSkills": 14, "discipline": 10, "cash": 400000, "karma": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_sell_online_help",
+        "label": "Chụp ảnh đẹp lập fanpage giới thiệu sản phẩm của ông bà cho khách gần xa",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đơn hàng tăng vọt gấp đôi nhờ tài marketing tuổi teen của bạn!",
+            "statModifiers": { "businessAcuity": 12, "financialLiteracy": 6, "cash": 450000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_18_class_sports_cup",
+    "category": "childhood",
+    "title": "Giải Bóng Đá / Cầu Lông Liên Lớp",
+    "minAge": 12,
+    "maxAge": 17,
+    "priority": 58,
+    "isOneTime": false,
+    "description": "Trận chung kết giải thể thao toàn trường diễn ra giữa tiếng hò reo cổ vũ vang trời của hai khối lớp.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_play_final",
+        "label": "Ra sân thi đấu hết mình đến phút bù giờ cuối cùng",
+        "outcomes": [
+          {
+            "probability": 0.65,
+            "conditionFormula": "health >= 65",
+            "message": "BÀN THẮNG VÀNG! Cả lớp ùa xuống sân công kênh bạn ăn mừng chức vô địch!",
+            "statModifiers": { "health": 8, "happiness": 16, "socialStatus": 10, "appearance": 4 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Dù thua sát nút trên chấm luân lưu nhưng tinh thần fair-play được cả trường vỗ tay.",
+            "statModifiers": { "health": 6, "discipline": 6, "happiness": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_organize_cheer",
+        "label": "Phát nước mát và làm nhạc trưởng khuấy động khán đài cổ vũ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đội bạn đá sung hẳn lên nhờ dàn cổ động viên nhiệt huyết nhất trường!",
+            "statModifiers": { "charisma": 10, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_19_youth_camp_2603",
+    "category": "culture",
+    "title": "Hội Trại Thanh Niên 26/3 Qua Đêm",
+    "minAge": 15,
+    "maxAge": 18,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Sân trường rực rỡ cổng trại tre nứa và ánh lửa trại bập bùng suốt đêm 26/3.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_build_camp_gate",
+        "label": "Thức trắng dựng cổng trại hoành tráng và biểu diễn đàn guitar bên lửa hồng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Tuổi thanh xuân rực cháy! Trại lớp bạn giành giải Nhất thiết kế ấn tượng nhất!",
+            "statModifiers": { "happiness": 15, "charisma": 10, "practicalSkills": 8, "socialStatus": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_run_food_booth",
+        "label": "Mở gian hàng trà tắc & bánh tráng trộn bán gây quỹ cho lớp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Gian hàng đắt khách cháy hàng chỉ sau 2 tiếng, thu lời ròng cho quỹ lớp và phần thưởng riêng!",
+            "statModifiers": { "businessAcuity": 12, "financialLiteracy": 8, "cash": 350000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_20_club_president",
+    "category": "education",
+    "title": "Tranh Cử Chủ Tịch CLB Kinh Doanh / Công Nghệ Trường",
+    "minAge": 16,
+    "maxAge": 17,
+    "priority": 75,
+    "isOneTime": true,
+    "description": "Nhiệm kỳ mới bắt đầu, bạn đứng trước cơ hội điều hành CLB lớn nhất trường THPT với hơn 120 thành viên.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_run_president",
+        "label": "Đưa ra bản kế hoạch hoạt động đột phá và thuyết trình tranh cử",
+        "outcomes": [
+          {
+            "probability": 0.7,
+            "conditionFormula": "charisma >= 50",
+            "message": "Áp đảo phiếu bầu! Bạn trở thành Chủ tịch CLB, xây dựng kỹ năng lãnh đạo từ tuổi 16.",
+            "statModifiers": { "charisma": 12, "businessAcuity": 10, "socialStatus": 14, "stress": 8 },
+            "unlockedFlags": ["school_club_leader"]
+          },
+          {
+            "probability": 0.3,
+            "message": "Bạn đắc cử Phó chủ nhiệm phụ trách chuyên môn, học hỏi được nhiều kinh nghiệm điều phối.",
+            "statModifiers": { "discipline": 8, "charisma": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_focus_solo_study",
+        "label": "Giữ vai trò cố vấn nhẹ nhàng để dành thời gian tập trung ôn thi",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thành tích học tập của bạn giữ vững phong độ ổn định.",
+            "statModifiers": { "intelligence": 8, "stress": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_21_yearbook_memories",
+    "category": "relationship",
+    "title": "Lưu Bút Áo Trắng & Ảnh Kỷ Yếu Cuối Cấp",
+    "minAge": 17,
+    "maxAge": 18,
+    "priority": 78,
+    "isOneTime": true,
+    "description": "Ve kêu râm ran trên tán phượng đỏ. Cả lớp chuyền tay nhau ký tên lên chiếc áo trắng đồng phục ngày chia tay.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_write_heartfelt",
+        "label": "Chụp thật nhiều ảnh kỷ niệm và hứa hẹn 10 năm sau gặp lại ở đỉnh cao",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Những dòng chữ nguệch ngoạc mà chân thành sẽ theo bạn suốt cả cuộc đời.",
+            "statModifiers": { "happiness": 15, "charisma": 8, "karma": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_edit_class_video",
+        "label": "Tự tay dựng một bộ phim ngắn lưu giữ thanh xuân tặng cả lớp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả lớp vỡ òa xúc động khi xem video! Nhiều người đặt hàng bạn dựng clip kỷ yếu thuê.",
+            "statModifiers": { "practicalSkills": 12, "happiness": 14, "cash": 500000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_22_banh_chung_eve",
+    "category": "culture",
+    "title": "Thức Canh Nồi Bánh Chưng Đêm 30 Tết",
+    "minAge": 12,
+    "maxAge": 18,
+    "priority": 60,
+    "isOneTime": false,
+    "description": "Khói bếp củi thơm lừng mùi lá dong nếp cái hoa vàng. Bố rủ bạn ngồi trông nồi bánh chưng và nướng khoai lang giữa đêm đông se lạnh.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_talk_with_dad",
+        "label": "Ngồi tâm sự với bố về ước mơ sự nghiệp và tương lai",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Những lời khuyên mộc mạc mà sâu sắc của bố tiếp thêm cho bạn sức mạnh lớn lao.",
+            "statModifiers": { "parentRelationship": 14, "discipline": 8, "happiness": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_wrap_perfect_cake",
+        "label": "Tự tay gói một chiếc bánh chưng vuông vức không cần khuôn",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mẹ tấm tắc khen tay nghề khéo léo, dẻo thơm chuẩn vị cổ truyền!",
+            "statModifiers": { "practicalSkills": 8, "karma": 6, "happiness": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_23_football_storm_victory",
+    "category": "culture",
+    "title": "Đội Tuyển Việt Nam Vô Địch — Cả Nước Đi Bão!",
+    "minAge": 14,
+    "maxAge": 35,
+    "priority": 66,
+    "isOneTime": false,
+    "description": "Tiếng còi mãn cuộc vang lên! Phố phường nhuộm đỏ màu cờ sao vàng trong tiếng hò reo vỡ òa niềm tự hào dân tộc.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_wave_flag_safely",
+        "label": "Cầm cờ Tổ quốc hòa vào dòng người ăn mừng văn minh, an toàn",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Một đêm không ngủ ngập tràn cảm xúc tự hào kết nối triệu trái tim!",
+            "statModifiers": { "happiness": 18, "stress": -15, "charisma": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_sell_flags_horns",
+        "label": "Nhanh nhạy nhập cờ áo và kèn cổ vũ bán dọc phố trung tâm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Vừa hòa nhịp chiến thắng vừa bỏ túi khoản lãi bất ngờ ngay trong đêm!",
+            "statModifiers": { "cash": 450000, "businessAcuity": 10, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_24_motorbike_license_a1",
+    "category": "education",
+    "title": "Thử Thách Vòng Số 8 Thi Bằng Lái A1",
+    "minAge": 18,
+    "maxAge": 19,
+    "priority": 76,
+    "isOneTime": true,
+    "description": "Đủ 18 tuổi hợp pháp cầm lái! Sau phần thi lý thuyết, bạn bước vào sa hình 'vòng số 8 huyền thoại' dưới ánh mắt giám khảo.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_practice_figure8",
+        "label": "Tập dượt kỹ giữ ga đều ở số 3 và vào cua mượt mà",
+        "outcomes": [
+          {
+            "probability": 0.85,
+            "message": "Đạt điểm tuyệt đối 100/100! Tấm bằng lái đầu tiên đánh dấu sự trưởng thành tự do!",
+            "statModifiers": { "practicalSkills": 10, "happiness": 12, "discipline": 5 }
+          },
+          {
+            "probability": 0.15,
+            "message": "Chạm vạch nhẹ ở khúc cua cuối, nhưng lần thi lại sau đó bạn vượt qua dễ dàng!",
+            "statModifiers": { "practicalSkills": 6, "stress": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_deep_breath_focus",
+        "label": "Hít sâu giữ bình tĩnh tuyệt đối, không nhìn xuống bánh xe",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn lướt qua vòng số 8 êm ru trong tiếng vỗ tay của thí sinh chờ thi!",
+            "statModifiers": { "practicalSkills": 8, "discipline": 8, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_25_north_south_train",
+    "category": "culture",
+    "title": "Chuyến Tàu Thống Nhất Xuyên Việt",
+    "minAge": 16,
+    "maxAge": 24,
+    "priority": 62,
+    "isOneTime": true,
+    "description": "Ngồi bên cửa sổ toa tàu lướt qua đèo Hải Vân hùng vĩ, một bên là núi xanh ngắt, một bên là biển cả bao la.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_meet_travelers",
+        "label": "Trò chuyện cùng các hành khách bốn phương trên toa tàu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mỗi câu chuyện từ những vùng đất khác nhau mở rộng tầm nhìn và vốn sống của bạn.",
+            "statModifiers": { "charisma": 10, "intelligence": 6, "happiness": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_journal_goals",
+        "label": "Viết danh sách mục tiêu chinh phục 1 Tỷ USD trong cuốn sổ tay hành trình",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Khát vọng lớn hình thành rõ nét giữa non sông gấm vóc tươi đẹp!",
+            "statModifiers": { "discipline": 10, "businessAcuity": 8, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p1_26_holiday_flower_stall",
+    "category": "finance",
+    "title": "Bán Hoa Tươi Dịp Lễ 8/3 & 20/10",
+    "minAge": 16,
+    "maxAge": 21,
+    "priority": 64,
+    "isOneTime": false,
+    "description": "Dịp lễ sắp tới, nhóm bạn rủ nhau dậy từ 4 giờ sáng ra chợ hoa đầu mối nhập hoa hồng về tự gói bán dọc vỉa hè.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_package_bouquets",
+        "label": "Gói hoa nghệ thuật kèm thiệp viết tay bán giá hợp lý",
+        "outcomes": [
+          {
+            "probability": 0.85,
+            "message": "Khách mua tặng mẹ tặng người yêu khen nức nở! Chia lãi ròng thu về đầy túi!",
+            "statModifiers": { "cash": 2500000, "businessAcuity": 10, "practicalSkills": 8, "charisma": 6 }
+          },
+          {
+            "probability": 0.15,
+            "message": "Cuối ngày phải giảm giá xả hàng để thu hồi vốn, lãi nhẹ một bữa liên hoan.",
+            "statModifiers": { "cash": 400000, "financialLiteracy": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_be_delivery_rider",
+        "label": "Nhận chân giao hoa hỏa tốc quanh nội thành hưởng hoa hồng từng đơn",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không lo rủi ro tồn hàng, bạn nhận tiền công xứng đáng với công sức chạy suốt cả ngày.",
+            "statModifiers": { "cash": 1500000, "discipline": 8, "health": 4 }
+          }
+        ]
+      }
+    ]
+  }
+]

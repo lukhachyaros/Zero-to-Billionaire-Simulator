@@ -589,10 +589,10 @@ body {
 /* Bottom Tab Bar */
 #bottom-tabs {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   background: #090e1c;
   border-top: 1px solid var(--border-subtle);
-  padding: 5px 4px 2px;
+  padding: 5px 3px 2px;
   flex-shrink: 0;
 }
 
@@ -604,12 +604,114 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 5px 2px;
+  padding: 5px 1px;
   border-radius: 10px;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 600;
   transition: color 0.15s, background 0.15s;
+}
+
+.hud-right-pills {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.hud-rank-pill {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.2));
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #fde68a;
+  border-radius: 10px;
+  padding: 4px 8px;
+  font-size: 11.5px;
+  font-weight: 800;
+  cursor: pointer;
+  font-variant-numeric: tabular-nums;
+}
+
+.money-chip.clickable {
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.money-chip.clickable:hover {
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.ledger-scroll {
+  max-height: 235px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-right: 2px;
+}
+
+.ledger-row {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-left: 3px solid var(--accent-green);
+  border-radius: 9px;
+  padding: 7px 9px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.ledger-row.out {
+  border-left-color: var(--accent-red);
+}
+
+.ledger-amt {
+  font-size: 12px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ledger-amt.in { color: #34d399; }
+.ledger-amt.out { color: #f87171; }
+
+.lb-row {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid var(--border-subtle);
+  border-radius: 11px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.lb-row.is-player {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(16, 185, 129, 0.14));
+  border-color: rgba(245, 158, 11, 0.65);
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.18);
+}
+
+.lb-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  flex: 1;
+}
+
+.lb-rank-badge {
+  min-width: 30px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: #cbd5e1;
+  font-variant-numeric: tabular-nums;
+}
+
+.lb-avatar {
+  font-size: 18px;
+  flex-shrink: 0;
 }
 
 .tab-btn .tab-ico {
