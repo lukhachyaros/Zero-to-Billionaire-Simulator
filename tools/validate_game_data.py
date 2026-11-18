@@ -47,6 +47,7 @@ def validate_events(errors: list[str], warnings: list[str]) -> dict[str, list]:
         return {}
 
     loaded_by_name = {}
+    global_runtime_ids = set()
     for path in event_files:
         try:
             data = load_json(path)
@@ -70,6 +71,10 @@ def validate_events(errors: list[str], warnings: list[str]) -> dict[str, list]:
             if eid in seen_ids:
                 errors.append(f"{loc}: Duplicate eventId '{eid}'")
             seen_ids.add(eid)
+            if path.stem != "sample_events":
+                if eid in global_runtime_ids:
+                    errors.append(f"{loc}: Cross-file duplicate runtime eventId '{eid}'")
+                global_runtime_ids.add(eid)
 
             for req in ("title", "description", "minAge", "maxAge", "options"):
                 if req not in evt:
@@ -130,8 +135,10 @@ def validate_events(errors: list[str], warnings: list[str]) -> dict[str, list]:
                     if max_age <= 5 and (mods.get("cash", 0) > 0 or mods.get("money", 0) > 0):
                         errors.append(f"{eid}/{opt.get('id')}: Early childhood event (age <= 5) should not grant cash")
 
-    # Lifespan coverage check (0..95) across core + random pool
-    combined = loaded_by_name.get("life_events_full", []) + loaded_by_name.get("random_yearly_events", [])
+    # Lifespan coverage check (0..95) across all runtime event pools
+    combined = [
+        e for stem, lst in loaded_by_name.items() if stem != "sample_events" for e in lst
+    ]
     if combined:
         uncovered_ages = []
         for age in range(0, 96):
@@ -209,6 +216,29 @@ def validate_backgrounds(errors: list[str]) -> list:
                 errors.append(f"{bid}: Unknown statBonus '{k}'")
 
     return bgs
+
+
+def validate_leaderboard(errors: list[str]) -> list:
+    path = ROOT / "data" / "economy" / "billionaire_leaderboard.json"
+    if not path.exists():
+        errors.append("Missing data/economy/billionaire_leaderboard.json")
+        return []
+
+    rivals = load_json(path)
+    if len(rivals) < 15:
+        errors.append("billionaire_leaderboard.json should have at least 15 rivals")
+    ids = {r.get("rivalId") for r in rivals}
+    if len(ids) != len(rivals):
+        errors.append("Duplicate rivalId in billionaire_leaderboard.json")
+
+    for r in rivals:
+        rid = r.get("rivalId", "<missing>")
+        if not r.get("name") or not r.get("title"):
+            errors.append(f"{rid}: Missing name or title")
+        if r.get("baseNetWorth", 0) <= 0:
+            errors.append(f"{rid}: baseNetWorth must be > 0")
+
+    return rivals
 
 
 def validate_csharp_sources(errors: list[str]) -> int:
@@ -417,7 +447,7 @@ def simulate_90_year_lifecycle(
     events_by_name: dict, careers: list, assets: list, backgrounds: list, errors: list[str]
 ) -> int:
     """Headless simulation from age 0 to 90 verifying event matching, modifiers, and chaining."""
-    pool = events_by_name.get("life_events_full", []) + events_by_name.get("random_yearly_events", [])
+    pool = [e for stem, lst in events_by_name.items() if stem != "sample_events" for e in lst]
     if not pool or not backgrounds or not careers or not assets:
         return 0
 
@@ -524,19 +554,28 @@ def simulate_90_year_lifecycle(
     return triggered_count
 
 
-def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds: list):
+def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds: list, rivals: list):
     unity_data_dir = ROOT / "unity" / "Assets" / "Resources" / "Data"
     unity_data_dir.mkdir(parents=True, exist_ok=True)
 
     sync_pairs = [
         (ROOT / "data" / "events" / "life_events_full.json", unity_data_dir / "life_events_full.json"),
         (ROOT / "data" / "events" / "random_yearly_events.json", unity_data_dir / "random_yearly_events.json"),
+        (ROOT / "data" / "events" / "pack_youth_school.json", unity_data_dir / "pack_youth_school.json"),
+        (ROOT / "data" / "events" / "pack_career_workplace.json", unity_data_dir / "pack_career_workplace.json"),
+        (ROOT / "data" / "events" / "pack_wealth_investments.json", unity_data_dir / "pack_wealth_investments.json"),
+        (ROOT / "data" / "events" / "pack_family_society_elder.json", unity_data_dir / "pack_family_society_elder.json"),
         (ROOT / "data" / "careers" / "careers.json", unity_data_dir / "careers.json"),
         (ROOT / "data" / "economy" / "assets.json", unity_data_dir / "assets.json"),
+        (ROOT / "data" / "economy" / "billionaire_leaderboard.json", unity_data_dir / "billionaire_leaderboard.json"),
         (ROOT / "data" / "backgrounds" / "starting_backgrounds.json", unity_data_dir / "starting_backgrounds.json"),
     ]
     for src, dst in sync_pairs:
         shutil.copyfile(src, dst)
+
+    runtime_events = [e for stem, lst in events_by_name.items() if stem != "sample_events" for e in lst]
+    milestone_events = [e for e in runtime_events if e.get("isOneTime", True)]
+    random_events = [e for e in runtime_events if not e.get("isOneTime", True)]
 
     web_dir = ROOT / "web"
     web_dir.mkdir(parents=True, exist_ok=True)
@@ -544,8 +583,9 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         "backgrounds": backgrounds,
         "careers": careers,
         "assets": assets,
-        "milestoneEvents": events_by_name.get("life_events_full", []),
-        "randomEvents": events_by_name.get("random_yearly_events", []),
+        "leaderboardRivals": rivals,
+        "milestoneEvents": milestone_events,
+        "randomEvents": random_events,
     }
     web_data_js = web_dir / "game_data.js"
     web_data_js.write_text(
@@ -566,7 +606,7 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         banner = "<!-- Auto-synced from web/index.html for main-branch GitHub Pages deployment — DO NOT EDIT MANUALLY -->\n"
         (ROOT / "index.html").write_text(banner + html, encoding="utf-8")
 
-    print("Synced 5 JSON files to unity/Assets/Resources/Data/, web/game_data.js, and root index.html")
+    print(f"Synced {len(sync_pairs)} JSON files to unity/Assets/Resources/Data/, web/game_data.js, and root index.html")
 
 
 def main():
@@ -582,18 +622,19 @@ def main():
     careers = validate_careers(errors)
     assets = validate_assets(errors)
     backgrounds = validate_backgrounds(errors)
+    rivals = validate_leaderboard(errors)
     cs_count = validate_csharp_sources(errors)
     sim_events = simulate_90_year_lifecycle(events_by_name, careers, assets, backgrounds, errors)
 
     if args.sync and not errors:
-        sync_outputs(events_by_name, careers, assets, backgrounds)
+        sync_outputs(events_by_name, careers, assets, backgrounds, rivals)
 
     web_count = validate_web_client(errors)
 
     total_events = sum(len(v) for v in events_by_name.values())
     print(
         f"Summary: {total_events} events | {len(careers)} careers | {len(assets)} assets | "
-        f"{len(backgrounds)} backgrounds | {cs_count} C# scripts | {web_count} web files | "
+        f"{len(rivals)} leaderboard rivals | {len(backgrounds)} backgrounds | {cs_count} C# scripts | {web_count} web files | "
         f"{sim_events} lifecycle events simulated (0-90y)."
     )
 

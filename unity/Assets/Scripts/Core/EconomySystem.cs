@@ -42,8 +42,18 @@ namespace ZeroToBillionaire.Core
         public long monthlyPassivePerUnit;
     }
 
+    [System.Serializable]
+    public class CashflowEntry
+    {
+        public int age;
+        public long delta;
+        public string category;
+        public string title;
+        public long balanceAfter;
+    }
+
     /// <summary>
-    /// Quản lý Bất động sản, Danh mục đầu tư, Doanh nghiệp, Chu kỳ kinh tế vĩ mô và Tín dụng Ngân hàng.
+    /// Quản lý Bất động sản, Danh mục đầu tư, Doanh nghiệp, Chu kỳ kinh tế vĩ mô, Tín dụng Ngân hàng và Sổ dòng tiền.
     /// </summary>
     public class EconomySystem : MonoBehaviour
     {
@@ -51,6 +61,7 @@ namespace ZeroToBillionaire.Core
 
         private readonly List<AssetDefinition> catalog = new List<AssetDefinition>();
         public List<OwnedAsset> portfolio = new List<OwnedAsset>();
+        public List<CashflowEntry> cashflowHistory = new List<CashflowEntry>();
         public MacroEconomicCycle currentCycle = MacroEconomicCycle.Expansion;
         public float annualLoanInterestRate = 0.085f;
 
@@ -109,7 +120,25 @@ namespace ZeroToBillionaire.Core
         public void ResetPortfolio()
         {
             portfolio.Clear();
+            cashflowHistory.Clear();
             currentCycle = MacroEconomicCycle.Expansion;
+        }
+
+        public void RecordCashflow(int age, long delta, string category, string title, long balanceAfter)
+        {
+            if (delta == 0) return;
+            cashflowHistory.Add(new CashflowEntry
+            {
+                age = age,
+                delta = delta,
+                category = category,
+                title = title,
+                balanceAfter = balanceAfter
+            });
+            if (cashflowHistory.Count > 120)
+            {
+                cashflowHistory.RemoveAt(0);
+            }
         }
 
         public long GetTotalPortfolioValue()
@@ -196,6 +225,7 @@ namespace ZeroToBillionaire.Core
             stats.socialStatus += def.socialStatusBonus;
             stats.financialLiteracy += 3;
             stats.ClampStats();
+            RecordCashflow(stats.age, -def.cost, "asset", $"Mua: {def.name}", stats.cash);
 
             message = $"🏛️ Giao dịch thành công: Sở hữu {def.name} ({CharacterStats.FormatVND(def.cost)})!";
             return true;
@@ -224,6 +254,7 @@ namespace ZeroToBillionaire.Core
 
             stats.financialLiteracy += 2;
             stats.ClampStats();
+            RecordCashflow(stats.age, saleProceeds, "asset", $"Bán: {existing.name}", stats.cash);
 
             string profitLabel = profit >= 0
                 ? $"Lãi +{CharacterStats.FormatVND(profit)}"
@@ -255,6 +286,7 @@ namespace ZeroToBillionaire.Core
             stats.cash += amount;
             stats.debt += amount;
             stats.ClampStats();
+            RecordCashflow(stats.age, amount, "bank", "Vay vốn ngân hàng", stats.cash);
             message = $"🏦 Giải ngân thành công khoản vay {CharacterStats.FormatVND(amount)} (Lãi suất {annualLoanInterestRate * 100:0.#}%/năm).";
             return true;
         }
@@ -277,6 +309,7 @@ namespace ZeroToBillionaire.Core
             stats.debt -= payAmount;
             stats.stress -= 5;
             stats.ClampStats();
+            RecordCashflow(stats.age, -payAmount, "bank", "Tất toán nợ ngân hàng", stats.cash);
             message = $"✅ Đã trả nợ ngân hàng {CharacterStats.FormatVND(payAmount)}. Dư nợ còn lại: {CharacterStats.FormatVND(stats.debt)}.";
             return true;
         }
@@ -306,11 +339,13 @@ namespace ZeroToBillionaire.Core
             if (stats.age >= 6 && stats.age <= 11 && stats.pocketMoneyChild > 0)
             {
                 stats.cash += stats.pocketMoneyChild;
+                RecordCashflow(stats.age, stats.pocketMoneyChild, "family", "Tiền tiêu vặt tuổi tiểu học", stats.cash);
                 logs.Add($"🪙 Tiền tiêu vặt & quà ngoan ngoãn tuổi tiểu học: +{CharacterStats.FormatVND(stats.pocketMoneyChild)}.");
             }
             else if (stats.age >= 12 && stats.age <= 17 && stats.pocketMoneyTeen > 0)
             {
                 stats.cash += stats.pocketMoneyTeen;
+                RecordCashflow(stats.age, stats.pocketMoneyTeen, "family", "Tiền tiêu vặt học sinh", stats.cash);
                 logs.Add($"🎒 Tiền tiêu vặt học sinh năm {stats.age} tuổi: +{CharacterStats.FormatVND(stats.pocketMoneyTeen)}.");
             }
             else if (stats.age == 18)
@@ -318,40 +353,75 @@ namespace ZeroToBillionaire.Core
                 if (stats.comingOfAgeGrant > 0)
                 {
                     stats.cash += stats.comingOfAgeGrant;
+                    RecordCashflow(stats.age, stats.comingOfAgeGrant, "family", "Quỹ hành trang tuổi 18", stats.cash);
                     logs.Add($"🎁 Tròn 18 tuổi! Gia đình trao cho bạn khoản hành trang vào đời: +{CharacterStats.FormatVND(stats.comingOfAgeGrant)}.");
                 }
                 if (stats.trustFund > 0)
                 {
-                    stats.cash += stats.trustFund;
-                    logs.Add($"🔓 Quỹ Ủy Thác Thừa Kế đã mở khóa khi bạn đủ 18 tuổi: +{CharacterStats.FormatVND(stats.trustFund)}!");
+                    long unlocked = stats.trustFund;
+                    stats.cash += unlocked;
                     stats.trustFund = 0;
+                    RecordCashflow(stats.age, unlocked, "family", "Mở khóa Quỹ Ủy Thác Thừa Kế", stats.cash);
+                    logs.Add($"🔓 Quỹ Ủy Thác Thừa Kế đã mở khóa khi bạn đủ 18 tuổi: +{CharacterStats.FormatVND(unlocked)}!");
                 }
             }
 
             if (stats.age >= 18 && stats.age <= 21 && string.IsNullOrEmpty(stats.currentCareerId) && stats.familyAllowancePerYear > 0)
             {
                 stats.cash += stats.familyAllowancePerYear;
+                RecordCashflow(stats.age, stats.familyAllowancePerYear, "family", "Trợ cấp học tập từ gia đình", stats.cash);
             }
 
-            // Chi phí sinh hoạt cơ bản tự động từ năm 18 tuổi
-            if (stats.age >= 18)
+            // Tách dòng tiền thụ động dương & chi phí bảo dưỡng tài sản (xe/du thuyền)
+            long posPassiveMonthly = 0;
+            long negUpkeepMonthly = 0;
+            foreach (var owned in portfolio)
             {
-                long baseLivingMonthly = 4_500_000L + stats.childrenCount * 3_500_000L;
-                if (stats.monthlyIncome > 30_000_000L)
-                {
-                    baseLivingMonthly += (long)(stats.monthlyIncome * 0.18f);
-                }
-                stats.monthlyExpense = baseLivingMonthly;
+                long line = owned.monthlyPassivePerUnit * owned.quantity;
+                if (line >= 0) posPassiveMonthly += line;
+                else negUpkeepMonthly += -line;
+            }
+
+            // Chỉ tính sinh hoạt phí tỉ lệ thuận khi thực sự có thu nhập; thất nghiệp/đang đi học = 0 đ tránh tụt tiền vô lý
+            long grossMonthlyInflow = stats.monthlyIncome + posPassiveMonthly;
+            if (stats.age >= 18 && grossMonthlyInflow > 0)
+            {
+                long rawLiving = (long)(stats.monthlyIncome * 0.28f + posPassiveMonthly * 0.12f) + stats.childrenCount * 1_500_000L;
+                long maxLiving = (long)(grossMonthlyInflow * 0.65f);
+                stats.monthlyExpense = Math.Min(rawLiving, maxLiving);
             }
             else
             {
                 stats.monthlyExpense = 0;
             }
 
-            // Dòng tiền lương + thu nhập thụ động tài sản
-            long annualJobNet = (stats.monthlyIncome - stats.monthlyExpense) * 12L;
-            long annualPassiveNet = GetMonthlyPassiveIncome() * 12L;
-            stats.cash += annualJobNet + annualPassiveNet;
+            if (stats.monthlyIncome > 0)
+            {
+                long annualSalary = stats.monthlyIncome * 12L;
+                stats.cash += annualSalary;
+                RecordCashflow(stats.age, annualSalary, "salary", $"Lương cả năm ({stats.currentJob})", stats.cash);
+            }
+
+            if (posPassiveMonthly > 0)
+            {
+                long annualPassiveIn = posPassiveMonthly * 12L;
+                stats.cash += annualPassiveIn;
+                RecordCashflow(stats.age, annualPassiveIn, "passive", "Thu nhập thụ động BĐS, Cổ tức & KD", stats.cash);
+            }
+
+            if (stats.monthlyExpense > 0)
+            {
+                long annualLiving = stats.monthlyExpense * 12L;
+                stats.cash -= annualLiving;
+                RecordCashflow(stats.age, -annualLiving, "living", "Chi phí sinh hoạt cả năm", stats.cash);
+            }
+
+            if (negUpkeepMonthly > 0)
+            {
+                long annualUpkeep = negUpkeepMonthly * 12L;
+                stats.cash -= annualUpkeep;
+                RecordCashflow(stats.age, -annualUpkeep, "upkeep", "Bảo dưỡng Xe & Du thuyền", stats.cash);
+            }
 
             // Biến động giá trị danh mục tài sản
             foreach (var owned in portfolio)
@@ -376,11 +446,17 @@ namespace ZeroToBillionaire.Core
                 if (stats.cash >= interest)
                 {
                     stats.cash -= interest;
+                    RecordCashflow(stats.age, -interest, "bank", "Trả lãi vay ngân hàng (8.5%)", stats.cash);
                 }
                 else
                 {
-                    stats.debt += (interest - stats.cash);
+                    long paidFromCash = stats.cash;
+                    stats.debt += (interest - paidFromCash);
                     stats.cash = 0;
+                    if (paidFromCash > 0)
+                    {
+                        RecordCashflow(stats.age, -paidFromCash, "bank", "Trả một phần lãi vay ngân hàng", 0);
+                    }
                     stats.stress += 10;
                     logs.Add($"⚠️ Không đủ tiền mặt trả lãi vay, dư nợ cộng dồn lên {CharacterStats.FormatVND(stats.debt)}!");
                 }

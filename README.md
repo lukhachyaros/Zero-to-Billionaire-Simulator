@@ -124,11 +124,12 @@ flowchart TD
 ```
 
 * **Chỉ số cá nhân:** Sức khỏe, Trí tuệ, Ngoại hình, Hạnh phúc, Kỷ luật, Áp lực (Stress), Giao tiếp (Charisma), Hiểu biết Tài chính, Kỹ năng Thực chiến, Nhạy bén Kinh doanh, May mắn, Địa vị Xã hội, Phúc đức (Karma), Quan hệ gia đình.
-* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế** khi trưởng thành, tiếp đến vay ngân hàng (8.5%/năm), thu nhập thụ động, 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản (Bất động sản, Vàng SJC, Cổ phiếu VN30, Quỹ AI, Doanh nghiệp, Siêu xe/Du thuyền).
+* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế** khi trưởng thành. Chi phí sinh hoạt tự động tính theo tỉ lệ khi có thu nhập dương (không trừ tiền vô lý khi đang học/thất nghiệp) kèm **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, vay ngân hàng (8.5%/năm), 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản.
+* **Bảng Xếp hạng Phú hào & Điện Danh vọng (`LeaderboardSystem.cs`):** Tranh tài với 20 Đại gia & Tỷ phú thế giới có tài sản biến động theo kinh tế vĩ mô, theo dõi khoảng cách vượt hạng trực tiếp và lưu giữ Top 10 đời kỷ lục vào **Điện Danh Vọng**.
 * **Sự nghiệp & Học vấn:** 4 Hoàn cảnh xuất thân (Mái ấm Tình thương, Bình dân, Công chức Trí thức, Trâm anh Thế phiệt) và 22 Ngành nghề có lộ trình thăng chức, tăng lương, nghỉ hưu.
 * **Cỗ Máy Thời Gian & Lưu an toàn:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), hỗ trợ quay ngược tối đa 5 năm trước để sửa quyết định sai lầm.
-* **Hệ thống sự kiện Data-driven:** 38 kịch bản rẽ nhánh & lặp lại (0–95+ tuổi) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
-* **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** đổ bóng mềm với 5 cấp độ phòng siêu chi tiết, nhân vật Chibi cử động có phụ kiện theo tuổi, chế độ Ngày/Đêm, âm thanh Web Audio & tự động lưu LocalStorage.
+* **Hệ thống sự kiện Data-driven:** **142 kịch bản** rẽ nhánh & lặp lại (0–96 tuổi) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
+* **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** đổ bóng mềm với 5 cấp độ phòng siêu chi tiết, 6 tab tính năng di động, nhân vật Chibi cử động có phụ kiện theo tuổi, chế độ Ngày/Đêm, âm thanh Web Audio & tự động lưu LocalStorage.
 
 ---
 
@@ -156,10 +157,14 @@ Zero-to-Billionaire-Simulator/
 ├── data/
 │   ├── backgrounds/               # 4 Hoàn cảnh xuất thân (starting_backgrounds.json)
 │   ├── careers/                   # 22 Ngành nghề & lộ trình thăng chức (careers.json)
-│   ├── economy/                   # 18 Tài sản Bất động sản, Đầu tư, Doanh nghiệp (assets.json)
-│   └── events/                    # Kho kịch bản sự kiện JSON (0 - 95+ tuổi)
+│   ├── economy/                   # 18 Tài sản (assets.json) & 20 Tỷ phú đối thủ (billionaire_leaderboard.json)
+│   └── events/                    # 142 kịch bản sự kiện JSON (0 - 96 tuổi)
 │       ├── life_events_full.json  # Sự kiện cột mốc cuộc đời
 │       ├── random_yearly_events.json # Sự kiện ngẫu nhiên hàng năm
+│       ├── pack_youth_school.json # 26 kịch bản Tuổi thơ & Học đường
+│       ├── pack_career_workplace.json # 26 kịch bản Công sở & Khởi nghiệp
+│       ├── pack_wealth_investments.json # 26 kịch bản Tài chính & Đầu tư
+│       ├── pack_family_society_elder.json # 26 kịch bản Gia đình, Xã hội & Tuổi già
 │       └── sample_events.json     # File sự kiện mẫu minh họa cho cộng đồng
 ├── docs/                          # Tài liệu GDD, iOS Plan & 3D Art Pipeline
 ├── tools/

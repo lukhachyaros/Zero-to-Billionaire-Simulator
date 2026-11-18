@@ -1,6 +1,7 @@
 // Zero to Billionaire Simulator — Interactive Web Client Controller
 (function () {
   const SAVE_KEY = "ztb_web_save_v2";
+  const HALL_OF_FAME_KEY = "ztb_hall_of_fame_v1";
   const USD_BILLION_VND = 25_000_000_000_000; // 25.000 Tỷ VNĐ (~ $1B)
   const MAX_ACTIVITIES_PER_YEAR = 2;
   const MAX_TIME_MACHINE = 5;
@@ -45,7 +46,8 @@
     careers: [],
     assets: [],
     milestoneEvents: [],
-    randomEvents: []
+    randomEvents: [],
+    leaderboardRivals: []
   };
 
   const ALL_EVENTS = [...(DATA.milestoneEvents || []), ...(DATA.randomEvents || [])];
@@ -96,6 +98,9 @@
       this.stats = this.createBlankStats();
       this.portfolio = [];
       this.relationships = [];
+      this.cashflowHistory = [];
+      this.rivals = this.createInitialRivals();
+      this.bestRank = 21;
       this.lifeLog = [];
       this.triggeredEvents = {};
       this.flags = {};
@@ -108,6 +113,7 @@
       this.timeMachine = [];
       this.activeTab = "life";
       this.assetFilter = "all";
+      this.ledgerFilter = "all";
       this.toastTimer = null;
 
       // Modal states
@@ -115,8 +121,20 @@
       this.selectedBackgroundId = (DATA.backgrounds[1] && DATA.backgrounds[1].backgroundId) || "bg_working_class";
     }
 
+    createInitialRivals() {
+      return (DATA.leaderboardRivals || []).map((r) => ({
+        rivalId: r.rivalId,
+        name: r.name,
+        title: r.title,
+        avatar: r.avatar,
+        netWorth: r.baseNetWorth,
+        lastGrowthPct: 0
+      }));
+    }
+
     createBlankStats() {
       return {
+        lifeId: `life_${Date.now()}_${randInt(100, 999)}`,
         generation: 1,
         backgroundId: "bg_working_class",
         backgroundName: "Gia Đình Lao Động Bình Dân",
@@ -193,6 +211,14 @@
       }
 
       el("btn-age-up").addEventListener("click", () => this.ageUp());
+      el("hud-rank").addEventListener("click", () => {
+        if (window.ZTBAudio) window.ZTBAudio.tap();
+        this.switchTab("leaderboard");
+      });
+      el("money-chip-cash").addEventListener("click", () => {
+        if (window.ZTBAudio) window.ZTBAudio.tap();
+        this.switchTab("assets");
+      });
 
       el("btn-day-night").addEventListener("click", () => {
         if (window.ZTBAudio) window.ZTBAudio.tap();
@@ -437,6 +463,9 @@
       }
 
       this.portfolio = [];
+      this.cashflowHistory = [];
+      this.rivals = this.createInitialRivals();
+      this.bestRank = this.rivals.length + 1;
       this.lifeLog = [];
       this.triggeredEvents = {};
       this.flags = {};
@@ -468,6 +497,9 @@
         stats: this.stats,
         portfolio: this.portfolio,
         relationships: this.relationships,
+        cashflowHistory: this.cashflowHistory,
+        rivals: this.rivals,
+        bestRank: this.bestRank,
         lifeLog: this.lifeLog,
         triggeredEvents: this.triggeredEvents,
         flags: this.flags,
@@ -482,8 +514,12 @@
     restoreSnapshot(jsonStr) {
       const snap = JSON.parse(jsonStr);
       this.stats = snap.stats;
+      if (!this.stats.lifeId) this.stats.lifeId = `life_${Date.now()}_${randInt(100, 999)}`;
       this.portfolio = snap.portfolio || [];
       this.relationships = snap.relationships || [];
+      this.cashflowHistory = snap.cashflowHistory || [];
+      this.rivals = (snap.rivals && snap.rivals.length > 0) ? snap.rivals : this.createInitialRivals();
+      this.bestRank = typeof snap.bestRank === "number" ? snap.bestRank : (this.rivals.length + 1);
       this.lifeLog = snap.lifeLog || [];
       this.triggeredEvents = snap.triggeredEvents || {};
       this.flags = snap.flags || {};
@@ -599,6 +635,60 @@
       this.clampStats();
     }
 
+    recordCashflow(delta, category, title) {
+      const rounded = Math.round(delta || 0);
+      if (rounded === 0) return;
+      this.cashflowHistory.push({
+        age: this.stats.age,
+        delta: rounded,
+        category,
+        title,
+        balanceAfter: Math.round(this.stats.cash || 0)
+      });
+      if (this.cashflowHistory.length > 120) {
+        this.cashflowHistory.shift();
+      }
+    }
+
+    getPlayerRank(netWorth = this.getNetWorth()) {
+      let higher = 0;
+      for (const r of this.rivals) {
+        if (r.netWorth > netWorth) higher += 1;
+      }
+      return higher + 1;
+    }
+
+    loadHallOfFame() {
+      try {
+        const raw = localStorage.getItem(HALL_OF_FAME_KEY);
+        return raw ? JSON.parse(raw) : [];
+      } catch (_) {
+        return [];
+      }
+    }
+
+    updateHallOfFame() {
+      try {
+        const list = this.loadHallOfFame();
+        const net = Math.max(this.getNetWorth(), this.stats.peakNetWorth || 0);
+        const entry = {
+          lifeId: this.stats.lifeId,
+          name: this.stats.characterName,
+          generation: this.stats.generation,
+          age: this.stats.age,
+          isAlive: this.stats.isAlive,
+          peakNetWorth: net,
+          job: this.stats.currentJob
+        };
+        const idx = list.findIndex((x) => x.lifeId === entry.lifeId);
+        if (idx >= 0) list[idx] = entry;
+        else list.push(entry);
+
+        list.sort((a, b) => b.peakNetWorth - a.peakNetWorth);
+        localStorage.setItem(HALL_OF_FAME_KEY, JSON.stringify(list.slice(0, 10)));
+      } catch (_) {}
+    }
+
     processAnnualEconomy() {
       // Chọn pha kinh tế vĩ mô
       const roll = Math.random();
@@ -614,13 +704,16 @@
       // Tiền tiêu vặt & Quỹ trưởng thành theo từng độ tuổi thực tế
       if (this.stats.age >= 6 && this.stats.age <= 11 && (this.stats.pocketMoneyChild || 0) > 0) {
         this.stats.cash += this.stats.pocketMoneyChild;
+        this.recordCashflow(this.stats.pocketMoneyChild, "family", "Tiền tiêu vặt tuổi tiểu học");
         this.addLog(`🪙 Tiền tiêu vặt & quà ngoan ngoãn tuổi tiểu học: +${formatVND(this.stats.pocketMoneyChild)}.`);
       } else if (this.stats.age >= 12 && this.stats.age <= 17 && (this.stats.pocketMoneyTeen || 0) > 0) {
         this.stats.cash += this.stats.pocketMoneyTeen;
+        this.recordCashflow(this.stats.pocketMoneyTeen, "family", "Tiền tiêu vặt học sinh");
         this.addLog(`🎒 Tiền tiêu vặt học sinh năm ${this.stats.age} tuổi: +${formatVND(this.stats.pocketMoneyTeen)}.`);
       } else if (this.stats.age === 18) {
         if ((this.stats.comingOfAgeGrant || 0) > 0) {
           this.stats.cash += this.stats.comingOfAgeGrant;
+          this.recordCashflow(this.stats.comingOfAgeGrant, "family", "Quỹ hành trang tuổi 18");
           this.addLog(`🎁 Tròn 18 tuổi! Gia đình trao cho bạn khoản hành trang vào đời: +${formatVND(this.stats.comingOfAgeGrant)}.`, "milestone");
           this.showToast(`🎁 Quà tuổi 18 từ gia đình: +${formatVND(this.stats.comingOfAgeGrant)}!`);
         }
@@ -628,27 +721,57 @@
           const unlocked = this.stats.trustFund;
           this.stats.cash += unlocked;
           this.stats.trustFund = 0;
+          this.recordCashflow(unlocked, "family", "Mở khóa Quỹ Ủy Thác Thừa Kế");
           this.addLog(`🔓 Quỹ Ủy Thác Thừa Kế mở khóa khi bạn đủ 18 tuổi: +${formatVND(unlocked)}!`, "milestone");
         }
       }
 
       if (this.stats.age >= 18 && this.stats.age <= 21 && !this.stats.currentCareerId && (this.stats.familyAllowancePerYear || 0) > 0) {
         this.stats.cash += this.stats.familyAllowancePerYear;
+        this.recordCashflow(this.stats.familyAllowancePerYear, "family", "Trợ cấp học tập từ gia đình");
       }
 
-      if (this.stats.age >= 18) {
-        let living = 4_500_000 + this.stats.childrenCount * 3_500_000;
-        if (this.stats.monthlyIncome > 30_000_000) {
-          living += Math.round(this.stats.monthlyIncome * 0.18);
-        }
-        this.stats.monthlyExpense = living;
+      // Tách dòng tiền thụ động dương & chi phí bảo dưỡng (xe/du thuyền)
+      let posPassiveMonthly = 0;
+      let negUpkeepMonthly = 0;
+      for (const item of this.portfolio) {
+        const line = item.monthlyPassivePerUnit * item.quantity;
+        if (line >= 0) posPassiveMonthly += line;
+        else negUpkeepMonthly += -line;
+      }
+
+      // Chỉ tính sinh hoạt phí tỉ lệ thuận khi thực sự có thu nhập; chưa đi làm/đang học = 0 đ để không tụt tiền vô lý
+      const grossMonthlyInflow = this.stats.monthlyIncome + posPassiveMonthly;
+      if (this.stats.age >= 18 && grossMonthlyInflow > 0) {
+        const rawLiving = Math.round(this.stats.monthlyIncome * 0.28 + posPassiveMonthly * 0.12) + this.stats.childrenCount * 1_500_000;
+        this.stats.monthlyExpense = Math.min(rawLiving, Math.round(grossMonthlyInflow * 0.65));
       } else {
         this.stats.monthlyExpense = 0;
       }
 
-      const annualJobNet = (this.stats.monthlyIncome - this.stats.monthlyExpense) * 12;
-      const annualPassive = this.getMonthlyPassiveIncome() * 12;
-      this.stats.cash += annualJobNet + annualPassive;
+      if (this.stats.monthlyIncome > 0) {
+        const annualSalary = this.stats.monthlyIncome * 12;
+        this.stats.cash += annualSalary;
+        this.recordCashflow(annualSalary, "salary", `Lương cả năm (${this.stats.currentJob})`);
+      }
+
+      if (posPassiveMonthly > 0) {
+        const annualPassiveIn = posPassiveMonthly * 12;
+        this.stats.cash += annualPassiveIn;
+        this.recordCashflow(annualPassiveIn, "passive", "Thu nhập thụ động BĐS, Cổ tức & KD");
+      }
+
+      if (this.stats.monthlyExpense > 0) {
+        const annualLiving = this.stats.monthlyExpense * 12;
+        this.stats.cash -= annualLiving;
+        this.recordCashflow(-annualLiving, "living", "Chi phí sinh hoạt cả năm");
+      }
+
+      if (negUpkeepMonthly > 0) {
+        const annualUpkeep = negUpkeepMonthly * 12;
+        this.stats.cash -= annualUpkeep;
+        this.recordCashflow(-annualUpkeep, "upkeep", "Bảo dưỡng Xe & Du thuyền");
+      }
 
       for (const item of this.portfolio) {
         const def = (DATA.assets || []).find((a) => a.assetId === item.assetId);
@@ -667,9 +790,14 @@
         const interest = Math.round(this.stats.debt * ANNUAL_LOAN_RATE);
         if (this.stats.cash >= interest) {
           this.stats.cash -= interest;
+          this.recordCashflow(-interest, "bank", "Trả lãi vay ngân hàng (8.5%)");
         } else {
-          this.stats.debt += (interest - this.stats.cash);
+          const paidCash = this.stats.cash;
+          this.stats.debt += (interest - paidCash);
           this.stats.cash = 0;
+          if (paidCash > 0) {
+            this.recordCashflow(-paidCash, "bank", "Trả một phần lãi vay ngân hàng");
+          }
           this.stats.stress += 10;
           this.addLog(`⚠️ Lãi vay dồn vào nợ gốc! Tổng nợ: ${formatVND(this.stats.debt)}.`, "danger");
         }
@@ -679,6 +807,21 @@
       const net = this.getNetWorth();
       if (net > this.stats.peakNetWorth) {
         this.stats.peakNetWorth = net;
+      }
+
+      // Cập nhật tài sản các Đại gia trên Bảng Phú Hào
+      if (this.rivals.length === 0) this.rivals = this.createInitialRivals();
+      for (const rival of this.rivals) {
+        const growth = 0.04 * this.macroCycle.mult + (Math.random() * 0.08 - 0.03);
+        rival.lastGrowthPct = Number((growth * 100).toFixed(1));
+        rival.netWorth = Math.max(10_000_000, Math.round(rival.netWorth * (1 + growth)));
+      }
+
+      const rankNow = this.getPlayerRank(net);
+      if (rankNow < this.bestRank && rankNow <= 18) {
+        this.bestRank = rankNow;
+        this.addLog(`🏆 Bứt phá Bảng Phú Hào: Vươn lên Hạng #${rankNow}!`, "milestone");
+        this.showToast(`🏆 Vượt bậc trên Bảng Phú Hào: Hạng #${rankNow}!`);
       }
     }
 
@@ -872,7 +1015,14 @@
         }
       }
 
+      const eventTitle = this.pendingEvent ? this.pendingEvent.title : "Sự kiện cuộc đời";
       this.applyStatModifiers(chosen.statModifiers);
+
+      const mods = chosen.statModifiers || {};
+      const cashDelta = (mods.cash || 0) + (mods.money || 0);
+      if (cashDelta !== 0) {
+        this.recordCashflow(cashDelta, "event", `Sự kiện: ${eventTitle}`);
+      }
 
       if (chosen.educationSet && (EDU_RANKS[chosen.educationSet] || 0) >= (EDU_RANKS[this.stats.educationLevel] || 0)) {
         this.stats.educationLevel = chosen.educationSet;
@@ -896,8 +1046,6 @@
       this.pendingEvent = null;
       el("event-sheet-backdrop").classList.remove("open");
 
-      const mods = chosen.statModifiers || {};
-      const cashDelta = (mods.cash || 0) + (mods.money || 0);
       const isPositive = cashDelta >= 0 && (mods.happiness || 0) >= 0;
 
       if (window.ZTBAudio) {
@@ -942,6 +1090,7 @@
         }
         const earned = 2_000_000 + (this.stats.practicalSkills + this.stats.intelligence) * 120_000;
         this.stats.cash += earned;
+        this.recordCashflow(earned, "salary", "Làm dự án tự do ngoài giờ");
         this.stats.practicalSkills += 4;
         this.stats.stress += 7;
         msg = `💻 Làm dự án tự do ngoài giờ (+${formatVND(earned)}).`;
@@ -977,6 +1126,7 @@
       }
 
       this.stats.cash -= course.cost;
+      this.recordCashflow(-course.cost, "education", `Học phí: ${course.title}`);
       this.courseTakenThisYear = true;
       if (course.setEdu && (EDU_RANKS[course.setEdu] || 0) > (EDU_RANKS[this.stats.educationLevel] || 0)) {
         this.stats.educationLevel = course.setEdu;
@@ -1055,6 +1205,7 @@
       }
 
       this.stats.cash -= def.cost;
+      this.recordCashflow(-def.cost, "asset", `Mua: ${def.name}`);
       const existing = this.portfolio.find((p) => p.assetId === def.assetId);
       if (existing) {
         existing.quantity += 1;
@@ -1095,6 +1246,7 @@
       const profit = proceeds - avgCost;
 
       this.stats.cash += proceeds;
+      this.recordCashflow(proceeds, "asset", `Bán: ${item.name}`);
       item.totalInvestedCost -= avgCost;
       item.quantity -= 1;
       if (item.quantity <= 0) {
@@ -1131,6 +1283,7 @@
       this.stats.cash += amount;
       this.stats.debt += amount;
       this.clampStats();
+      this.recordCashflow(amount, "bank", "Vay vốn ngân hàng");
       this.addLog(`🏦 Vay vốn ngân hàng +${formatVND(amount)}.`);
       this.showToast(`🏦 Giải ngân thành công ${formatVND(amount)}!`);
       if (window.ZTBAudio) window.ZTBAudio.coin();
@@ -1149,6 +1302,7 @@
       this.stats.debt -= pay;
       this.stats.stress -= 6;
       this.clampStats();
+      this.recordCashflow(-pay, "bank", "Tất toán nợ ngân hàng");
       this.addLog(`✅ Tất toán nợ ngân hàng ${formatVND(pay)}.`);
       this.showToast(`✅ Đã trả nợ ${formatVND(pay)}!`);
       if (window.ZTBAudio) window.ZTBAudio.success();
@@ -1178,6 +1332,7 @@
             return;
           }
           this.stats.cash -= cost;
+          this.recordCashflow(-cost, "social", `Quà tặng ${npc.fullName}`);
           npc.closeness = clamp(npc.closeness + 14, 0, 100);
           this.stats.happiness += 6;
           this.stats.karma += 3;
@@ -1232,6 +1387,7 @@
         return;
       }
       this.stats.cash -= 25_000_000;
+      this.recordCashflow(-25_000_000, "social", `Tổ chức lễ cưới với ${partner.fullName}`);
       partner.role = "Vợ/Chồng";
       partner.closeness = 95;
       this.stats.maritalStatus = "Đã kết hôn";
@@ -1314,6 +1470,11 @@
       this.achievements.ms_dynasty = true;
 
       this.initFamilyForNewLife();
+      this.cashflowHistory = [];
+      if (this.stats.cash > 0) {
+        this.recordCashflow(this.stats.cash, "family", `Thừa kế tiền mặt đời thứ ${this.stats.generation}`);
+      }
+      this.bestRank = this.getPlayerRank();
       this.lifeLog = [];
       this.addLog(`👑 Đời thứ ${this.stats.generation}: ${this.stats.characterName} kế thừa gia tộc (${formatVND(this.getNetWorth())})!`, "milestone");
 
@@ -1325,6 +1486,7 @@
     }
 
     openGameOverModal() {
+      this.updateHallOfFame();
       const net = this.getNetWorth();
       el("gameover-summary").innerHTML = `
         <strong>${escapeHtml(this.stats.characterName)}</strong> (Đời thứ ${this.stats.generation})<br/>
@@ -1381,6 +1543,7 @@
           this.showToast(toastMsg);
         }
       }
+      this.updateHallOfFame();
     }
 
     renderAll() {
@@ -1413,6 +1576,7 @@
       el("hud-name").textContent = `${s.characterName} (${s.gender})`;
       el("hud-job").textContent = s.currentJob;
       el("hud-macro").textContent = this.macroCycle.label;
+      el("hud-rank").textContent = `🏆 #${this.getPlayerRank()}`;
       el("hud-age").textContent = `${s.age} Tuổi`;
       el("hud-cash").textContent = formatVND(s.cash);
       el("hud-networth").textContent = formatVND(this.getNetWorth());
@@ -1433,6 +1597,7 @@
       if (this.activeTab === "life") this.renderLifeTab();
       else if (this.activeTab === "career") this.renderCareerTab();
       else if (this.activeTab === "assets") this.renderAssetsTab();
+      else if (this.activeTab === "leaderboard") this.renderLeaderboardTab();
       else if (this.activeTab === "social") this.renderSocialTab();
       else if (this.activeTab === "profile") this.renderProfileTab();
     }
@@ -1589,6 +1754,8 @@
         </div>
       `;
 
+      this.renderCashflowLedger();
+
       // Quầy tín dụng ngân hàng
       const maxLoan = this.getMaxLoanLimit();
       const availLoan = Math.max(0, maxLoan - this.stats.debt);
@@ -1704,6 +1871,175 @@
           row.appendChild(btn);
           catList.appendChild(row);
         });
+    }
+
+    renderCashflowLedger() {
+      const card = el("cashflow-ledger-card");
+      if (!card) return;
+
+      let yearIn = 0;
+      let yearOut = 0;
+      for (const item of this.cashflowHistory) {
+        if (item.age === this.stats.age) {
+          if (item.delta > 0) yearIn += item.delta;
+          else yearOut += -item.delta;
+        }
+      }
+
+      card.innerHTML = `
+        <div class="section-title">
+          <span>📒 Lịch Sử Dòng Tiền (Ra / Vào)</span>
+          <span style="font-size:11px; color:#94a3b8;">${this.cashflowHistory.length} giao dịch</span>
+        </div>
+        <div class="stats-grid" style="margin-bottom:8px;">
+          <div class="stat-tile"><span>Thu năm ${this.stats.age}t</span><strong style="color:#34d399;">+${formatVND(yearIn)}</strong></div>
+          <div class="stat-tile"><span>Chi năm ${this.stats.age}t</span><strong style="color:#f87171;">-${formatVND(yearOut)}</strong></div>
+        </div>
+      `;
+
+      const filters = document.createElement("div");
+      filters.className = "filter-pills";
+      [
+        { id: "all", label: "Tất cả" },
+        { id: "in", label: "🟢 Tiền vào" },
+        { id: "out", label: "🔴 Tiền ra" }
+      ].forEach((f) => {
+        const p = document.createElement("button");
+        p.type = "button";
+        p.className = "filter-pill" + (this.ledgerFilter === f.id ? " active" : "");
+        p.textContent = f.label;
+        p.addEventListener("click", () => {
+          this.ledgerFilter = f.id;
+          this.renderCashflowLedger();
+        });
+        filters.appendChild(p);
+      });
+      card.appendChild(filters);
+
+      const list = document.createElement("div");
+      list.className = "ledger-scroll";
+
+      const visible = this.cashflowHistory.filter((it) => {
+        if (this.ledgerFilter === "in") return it.delta > 0;
+        if (this.ledgerFilter === "out") return it.delta < 0;
+        return true;
+      });
+
+      if (visible.length === 0) {
+        list.innerHTML = `<div class="item-meta">Chưa có phát sinh thu/chi nào ở mục này.</div>`;
+      } else {
+        for (let i = visible.length - 1; i >= 0; i--) {
+          const tx = visible[i];
+          const isIn = tx.delta >= 0;
+          const row = document.createElement("div");
+          row.className = `ledger-row ${isIn ? "in" : "out"}`;
+          row.innerHTML = `
+            <div class="item-info">
+              <div class="item-title" style="font-size:12px;">[Tuổi ${tx.age}] ${escapeHtml(tx.title)}</div>
+              <div class="item-meta">Số dư ví sau GD: <strong>${formatVND(tx.balanceAfter)}</strong></div>
+            </div>
+            <div class="ledger-amt ${isIn ? "in" : "out"}">${isIn ? "+" : "-"}${formatVND(Math.abs(tx.delta))}</div>
+          `;
+          list.appendChild(row);
+        }
+      }
+      card.appendChild(list);
+    }
+
+    renderLeaderboardTab() {
+      const playerNet = this.getNetWorth();
+      if (this.rivals.length === 0) this.rivals = this.createInitialRivals();
+
+      const combined = this.rivals.map((r) => ({
+        isPlayer: false,
+        name: r.name,
+        title: r.title,
+        avatar: r.avatar || "💼",
+        netWorth: r.netWorth,
+        lastGrowthPct: r.lastGrowthPct || 0
+      }));
+
+      combined.push({
+        isPlayer: true,
+        name: `${this.stats.characterName} (BẠN)`,
+        title: `${this.stats.currentJob} • Đời ${this.stats.generation}`,
+        avatar: "💎",
+        netWorth: playerNet,
+        lastGrowthPct: null
+      });
+
+      combined.sort((a, b) => b.netWorth - a.netWorth);
+      const rankIdx = combined.findIndex((x) => x.isPlayer);
+      const rank = rankIdx + 1;
+
+      const hero = el("leaderboard-hero-card");
+      if (rank === 1) {
+        hero.innerHTML = `
+          <div class="section-title"><span>👑 VỊ TRÍ HIỆN TẠI</span><span style="color:#fbbf24;">Hạng #1 / ${combined.length}</span></div>
+          <div class="item-title" style="font-size:14px; color:#fde68a;">NGƯỜI GIÀU NHẤT HÀNH TINH!</div>
+          <div class="item-meta">Tổng tài sản ròng của bạn đạt <strong>${formatVND(playerNet)}</strong>, đứng trên toàn bộ ${this.rivals.length} đại gia thế giới!</div>
+        `;
+      } else {
+        const nextRival = combined[rankIdx - 1];
+        const gap = Math.max(0, nextRival.netWorth - playerNet);
+        const pct = nextRival.netWorth > 0 ? clamp((playerNet / nextRival.netWorth) * 100, 0, 100) : 100;
+        hero.innerHTML = `
+          <div class="section-title"><span>🏆 Thứ hạng Phú Hào</span><span style="color:#fbbf24;">Hạng #${rank} / ${combined.length}</span></div>
+          <div class="item-meta" style="margin-bottom:6px;">
+            Mục tiêu kế tiếp (#${rank - 1}): <strong>${escapeHtml(nextRival.name)}</strong> (${formatVND(nextRival.netWorth)})<br/>
+            Cần thêm: <strong style="color:#34d399;">${formatVND(gap)}</strong> để vượt mặt!
+          </div>
+          <div class="progress-track" style="height:8px;">
+            <div class="progress-fill fill-happy" style="width:${pct.toFixed(1)}%"></div>
+          </div>
+        `;
+      }
+
+      const listEl = el("leaderboard-list");
+      listEl.innerHTML = "";
+      combined.forEach((entry, idx) => {
+        const pos = idx + 1;
+        const medal = pos === 1 ? "🥇" : (pos === 2 ? "🥈" : (pos === 3 ? "🥉" : `#${pos}`));
+        const row = document.createElement("div");
+        row.className = "lb-row" + (entry.isPlayer ? " is-player" : "");
+
+        const growthHtml = entry.lastGrowthPct === null
+          ? `<span style="color:#34d399;">Đời ${this.stats.generation}</span>`
+          : `<span style="color:${entry.lastGrowthPct >= 0 ? "#34d399" : "#f87171"};">${entry.lastGrowthPct >= 0 ? "+" : ""}${entry.lastGrowthPct}%/năm</span>`;
+
+        row.innerHTML = `
+          <div class="lb-left">
+            <div class="lb-rank-badge">${medal}</div>
+            <div class="lb-avatar">${entry.avatar}</div>
+            <div class="item-info">
+              <div class="item-title" style="font-size:12px;">${escapeHtml(entry.name)}</div>
+              <div class="item-meta">${escapeHtml(entry.title)} • ${growthHtml}</div>
+            </div>
+          </div>
+          <strong style="font-size:12px; color:#fbbf24; white-space:nowrap;">${formatVND(entry.netWorth)}</strong>
+        `;
+        listEl.appendChild(row);
+      });
+
+      const hofEl = el("hall-of-fame-list");
+      const hof = this.loadHallOfFame();
+      hofEl.innerHTML = "";
+      if (hof.length === 0) {
+        hofEl.innerHTML = `<div class="item-meta">Chưa có dữ liệu kỷ lục. Hãy tiếp tục phát triển sự nghiệp!</div>`;
+      } else {
+        hof.forEach((h, idx) => {
+          const row = document.createElement("div");
+          row.className = "item-row";
+          row.innerHTML = `
+            <div class="item-info">
+              <div class="item-title">#${idx + 1} ${escapeHtml(h.name)} (Đời ${h.generation}, ${h.age}t ${h.isAlive ? "🟢" : "🕯️"})</div>
+              <div class="item-meta">${escapeHtml(h.job || "")}</div>
+            </div>
+            <strong style="font-size:12px; color:#34d399; white-space:nowrap;">${formatVND(h.peakNetWorth)}</strong>
+          `;
+          hofEl.appendChild(row);
+        });
+      }
     }
 
     renderSocialTab() {

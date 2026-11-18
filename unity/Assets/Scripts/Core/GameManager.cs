@@ -85,6 +85,7 @@ namespace ZeroToBillionaire.Core
             if (CareerSystem.Instance == null) gameObject.AddComponent<CareerSystem>();
             if (EconomySystem.Instance == null) gameObject.AddComponent<EconomySystem>();
             if (RelationshipSystem.Instance == null) gameObject.AddComponent<RelationshipSystem>();
+            if (LeaderboardSystem.Instance == null) gameObject.AddComponent<LeaderboardSystem>();
             if (AdaptiveFrameRateManager.Instance == null) gameObject.AddComponent<AdaptiveFrameRateManager>();
         }
 
@@ -153,6 +154,7 @@ namespace ZeroToBillionaire.Core
 
             EconomySystem.Instance?.ResetPortfolio();
             RelationshipSystem.Instance?.InitializeFamilyForNewLife(currentStats);
+            LeaderboardSystem.Instance?.ResetRivals();
             EventEngine.Instance?.ResetSessionState(bg?.startingFlags);
 
             lifeLog.Clear();
@@ -207,12 +209,19 @@ namespace ZeroToBillionaire.Core
                 }
             }
 
-            // 2. Kinh tế vĩ mô, Bất động sản, Cổ phiếu & Lãi vay
+            // 2. Kinh tế vĩ mô, Bất động sản, Cổ phiếu, Lãi vay & Bảng xếp hạng Phú hào
             if (EconomySystem.Instance != null)
             {
                 foreach (var msg in EconomySystem.Instance.ProcessAnnualMacroAndPortfolio(currentStats))
                 {
                     AddLog(msg);
+                }
+
+                if (LeaderboardSystem.Instance != null)
+                {
+                    long netWorthNow = EconomySystem.Instance.CalculateNetWorth(currentStats);
+                    string rankMsg = LeaderboardSystem.Instance.ProcessAnnualRivalGrowth(EconomySystem.Instance.currentCycle, netWorthNow);
+                    if (!string.IsNullOrEmpty(rankMsg)) AddLog(rankMsg);
                 }
             }
             else
