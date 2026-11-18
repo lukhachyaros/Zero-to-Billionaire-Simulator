@@ -132,7 +132,7 @@
           try { onProgress(pct, msg, stage); } catch (_) {}
         }
       };
-      const waitFrame = (ms = 75) => new Promise((resolve) => {
+      const waitFrame = (ms = 210) => new Promise((resolve) => {
         requestAnimationFrame(() => setTimeout(resolve, ms));
       });
 
@@ -150,7 +150,7 @@
       this.height = Math.max(160, rect.height || 260);
 
       report(14, "Đang khởi tạo Engine 3D WebGL & Ánh sáng PBR...", 0);
-      await waitFrame(65);
+      await waitFrame(200);
 
       if (window.THREE) {
         try {
@@ -164,7 +164,7 @@
 
       if (this.webglReady) {
         report(30, "Đang dệt vân gỗ, đá cẩm thạch & bầu trời thành phố...", 1);
-        await waitFrame(70);
+        await waitFrame(220);
         this.prepareProceduralTextures();
         this.buildSkylineBackdrop();
         this.prepareEmojiTextures();
@@ -183,7 +183,7 @@
         for (let i = 0; i < prewarmConfigs.length; i++) {
           const cfg = prewarmConfigs[i];
           report(cfg.pct, cfg.label, cfg.stage);
-          await waitFrame(75);
+          await waitFrame(215);
           this.roomTier = cfg.tier;
           this.state = Object.assign({}, savedState, {
             age: cfg.age,

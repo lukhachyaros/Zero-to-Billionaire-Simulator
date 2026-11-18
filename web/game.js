@@ -303,7 +303,15 @@
       }
       this.updateLoadingUI(8, "Đang nạp cấu trúc dữ liệu & sự kiện...", 0);
 
-      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 5000);
+      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 7000);
+
+      if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
+        try {
+          navigator.serviceWorker.getRegistrations().then((regs) => {
+            regs.forEach((r) => r.unregister());
+          }).catch(() => {});
+        } catch (_) {}
+      }
 
       this.bindStaticUI();
 
@@ -349,7 +357,7 @@
       this.renderAll();
       this.updateLoadingUI(100, "Hoàn tất! Chào mừng đến với thế giới Tỷ Phú!", 4);
 
-      await new Promise((r) => setTimeout(r, 180));
+      await new Promise((r) => setTimeout(r, 340));
       clearTimeout(safetyTimer);
       this.dismissLoadingScreen();
 
