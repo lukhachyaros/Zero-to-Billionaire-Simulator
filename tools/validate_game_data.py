@@ -402,6 +402,14 @@ def validate_web_client(errors: list[str]) -> int:
         for mid in missing_ids:
             errors.append(f"web/{js_name}: References DOM id '{mid}' missing from web/index.html")
 
+    root_index = ROOT / "index.html"
+    if not root_index.exists():
+        errors.append("Missing root index.html for main-branch GitHub Pages deployment")
+    else:
+        root_html = root_index.read_text(encoding="utf-8")
+        if "web/styles.css" not in root_html or "web/game.js" not in root_html:
+            errors.append("Root index.html must load web/styles.css and web/game.js directly (run --sync)")
+
     return len(required)
 
 
@@ -545,7 +553,20 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         "window.ZTB_DATA = " + json.dumps(bundle, ensure_ascii=False, indent=2) + ";\n",
         encoding="utf-8",
     )
-    print(f"Synced 5 JSON files to unity/Assets/Resources/Data/ and generated web/game_data.js")
+
+    web_index = web_dir / "index.html"
+    if web_index.exists():
+        html = web_index.read_text(encoding="utf-8")
+        html = html.replace('href="styles.css"', 'href="web/styles.css"')
+        html = re.sub(
+            r'src="(game_data\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)"',
+            r'src="web/\1"',
+            html,
+        )
+        banner = "<!-- Auto-synced from web/index.html for main-branch GitHub Pages deployment — DO NOT EDIT MANUALLY -->\n"
+        (ROOT / "index.html").write_text(banner + html, encoding="utf-8")
+
+    print("Synced 5 JSON files to unity/Assets/Resources/Data/, web/game_data.js, and root index.html")
 
 
 def main():
