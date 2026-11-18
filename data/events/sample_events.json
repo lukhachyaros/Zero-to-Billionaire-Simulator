@@ -6,6 +6,7 @@
     "minAge": 0,
     "maxAge": 0,
     "priority": 100,
+    "isOneTime": true,
     "description": "Bạn vừa cất tiếng khóc chào đời tại một bệnh viện phụ sản ở Việt Nam. Bố mẹ nhìn bạn với ánh mắt đầy hy vọng.",
     "conditions": [],
     "options": [
@@ -41,11 +42,12 @@
   },
   {
     "eventId": "evt_tet_li_xi_005",
-    "category": "family_culture",
+    "category": "culture",
     "title": "Mùng 1 Tết Nguyên Đán",
-    "minAge": 5,
+    "minAge": 6,
     "maxAge": 12,
     "priority": 70,
+    "isOneTime": false,
     "description": "Hôm nay là mùng 1 Tết. Bố mẹ dắt bạn đi chúc Tết họ hàng. Chú Bác mừng tuổi bạn một phong bao lì xì đỏ chót.",
     "conditions": [],
     "options": [
@@ -60,6 +62,15 @@
               "parentRelationship": 15,
               "discipline": 5
             }
+          },
+          {
+            "probability": 0.1,
+            "message": "Bất ngờ chưa! Mẹ thực sự bỏ ống heo riêng và cộng thêm tiền thưởng cho bạn!",
+            "statModifiers": {
+              "cash": 300000,
+              "happiness": 12,
+              "parentRelationship": 15
+            }
           }
         ]
       },
@@ -71,7 +82,7 @@
             "probability": 1.0,
             "message": "Bạn đã có khoản quỹ đen đầu tiên trong đời!",
             "statModifiers": {
-              "cash": 500000,
+              "cash": 200000,
               "financialLiteracy": 5
             }
           }
@@ -86,7 +97,15 @@
             "message": "Bạn có một ngày vui vẻ bên bạn bè, tiền tiêu vèo hết sạch.",
             "statModifiers": {
               "happiness": 15,
-              "health": -3
+              "charisma": 5
+            }
+          },
+          {
+            "probability": 0.2,
+            "message": "Ăn quá nhiều bánh mứt và nước ngọt khiến bạn đau bụng nhẹ chiều mùng 1.",
+            "statModifiers": {
+              "happiness": 5,
+              "health": -4
             }
           }
         ]
@@ -100,12 +119,13 @@
     "minAge": 18,
     "maxAge": 18,
     "priority": 95,
+    "isOneTime": true,
     "description": "Thời khắc quyết định 12 năm đèn sách đã tới. Nguyện vọng 1 của bạn là trường Đại học Bách Khoa / Ngoại Thương danh tiếng.",
     "conditions": [
       {
         "field": "age",
-        "operator": "==",
-        "value": 18
+        "operatorType": "==",
+        "numberValue": 18
       }
     ],
     "options": [
@@ -115,23 +135,25 @@
         "outcomes": [
           {
             "probability": 0.75,
-            "condition": "intelligence >= 60",
-            "message": "Chúc mừng! Bạn đạt điểm số ấn tượng và chính thức trở thành Thủ khoa / Sinh viên Top đầu!",
+            "conditionFormula": "intelligence >= 60",
+            "message": "Chúc mừng! Bạn đạt điểm số ấn tượng và chính thức trở thành Tân Sinh viên trường Top đầu!",
             "statModifiers": {
               "intelligence": 10,
-              "stress": 20,
+              "stress": 15,
               "socialStatus": 20
             },
-            "unlockedFlags": ["education_university_tier1"]
+            "unlockedFlags": ["education_university_tier1"],
+            "educationSet": "Đại học"
           },
           {
             "probability": 0.25,
-            "message": "Áp lực quá lớn khiến bạn bị đau bụng khi vào phòng thi. Điểm số chỉ vừa đủ vào trường tư thục.",
+            "message": "Áp lực quá lớn khiến bạn mất bình tĩnh khi làm bài. Điểm số chỉ vừa đủ vào trường dân lập.",
             "statModifiers": {
-              "happiness": -15,
-              "stress": 30
+              "happiness": -12,
+              "stress": 22
             },
-            "unlockedFlags": ["education_university_tier2"]
+            "unlockedFlags": ["education_university_tier2"],
+            "educationSet": "Đại học"
           }
         ]
       },
@@ -146,7 +168,8 @@
               "practicalSkills": 20,
               "stress": -10
             },
-            "unlockedFlags": ["education_vocational"]
+            "unlockedFlags": ["education_vocational"],
+            "educationSet": "Học nghề"
           }
         ]
       },
@@ -156,8 +179,8 @@
         "outcomes": [
           {
             "probability": 0.5,
-            "condition": "charisma >= 50",
-            "message": "Bạn mở một tiệm trà sữa hoặc bán hàng online đắt khách bất ngờ!",
+            "conditionFormula": "charisma >= 50",
+            "message": "Bạn mở một tiệm trà sữa và bán hàng online đắt khách bất ngờ!",
             "statModifiers": {
               "cash": 20000000,
               "businessAcuity": 15

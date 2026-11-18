@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Zero to Billionaire Simulator — Life Sim 3D</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-stage">
+    <aside class="desktop-side-info">
+      <h1>💎 Zero to Billionaire</h1>
+      <p>
+        Bản mô phỏng tương tác trực tiếp trên trình duyệt kết hợp <strong>Event Engine</strong> phân nhánh kiểu BitLife,
+        không gian <strong>Three.js WebGL 3D Isometric</strong> đổ bóng PBR nâng cấp theo tài sản và bối cảnh đời sống Việt Nam.
+      </p>
+      <ul class="desktop-feature-list">
+        <li>🏠 <strong>5 Cấp độ Phòng 3D</strong>: Phòng tuổi thơ ➔ Phòng trọ 12m² ➔ Chung cư ➔ Biệt thự ➔ Penthouse Hồ bơi vô cực.</li>
+        <li>🪙 <strong>Kinh tế Thực tế theo Tuổi</strong>: Sơ sinh 0 đ ➔ Tiêu vặt học sinh ➔ Quỹ hành trang tuổi 18 &amp; Quỹ ủy thác thừa kế.</li>
+        <li>🎓 <strong>4 Hoàn cảnh xuất thân</strong> &amp; <strong>22 Ngành nghề</strong> từ Công nghệ AI, Bác sĩ đến CEO Tập đoàn.</li>
+        <li>👑 <strong>Gia phả Truyền đời</strong> &amp; <strong>Cỗ Máy Thời Gian</strong> sửa chữa quyết định sai lầm.</li>
+      </ul>
+      <p><em>Mẹo: Kéo ngang trên phòng 3D để xoay góc nhìn và cuộn chuột để phóng to/thu nhỏ!</em></p>
+    </aside>
+
+    <main class="phone-shell">
+      <div class="dynamic-island"></div>
+
+      <!-- Khung 3D Isometric Diorama -->
+      <section id="diorama-section">
+        <canvas id="diorama-canvas"></canvas>
+
+        <div class="diorama-top-bar">
+          <div class="diorama-badges">
+            <div class="pill-badge" id="room-tier-badge">🏠 Phòng Tuổi Thơ Ấm Áp</div>
+            <div class="pill-badge gold" id="generation-badge">👑 Đời thứ 1 • Bình dân</div>
+          </div>
+
+          <div class="diorama-controls">
+            <button class="icon-btn" id="btn-day-night" title="Đổi Ngày / Đêm">☀️</button>
+            <button class="icon-btn" id="btn-sound" title="Bật / Tắt Âm thanh">🔊</button>
+            <button class="icon-btn" id="btn-time-machine" title="Cỗ Máy Thời Gian (Quay lại 1 năm)" disabled>
+              ⏪<span class="mini-counter" id="time-machine-count">0</span>
+            </button>
+            <button class="icon-btn" id="btn-new-life-top" title="Tạo Cuộc Đời Mới">✨</button>
+          </div>
+        </div>
+
+        <div class="diorama-hint">👆 Vuốt xoay phòng 3D • Cuộn phóng to/nhỏ • 5 cấp tài sản</div>
+        <div id="toast-notification"></div>
+      </section>
+
+      <!-- Bảng chỉ số gọn nhẹ -->
+      <section id="hud-strip">
+        <div class="hud-row-top">
+          <div class="hud-identity">
+            <div id="hud-name">Nguyễn Gia Huy</div>
+            <div class="hud-sub">
+              <span id="hud-job">Trẻ nhỏ</span>
+              <span>•</span>
+              <span id="hud-macro">🌤️ Tăng trưởng</span>
+            </div>
+          </div>
+          <div class="hud-age-box">
+            <div id="hud-age">0 Tuổi</div>
+          </div>
+        </div>
+
+        <div class="hud-money-row">
+          <div class="money-chip">
+            <span>Tiền mặt</span>
+            <strong id="hud-cash">0 đ</strong>
+          </div>
+          <div class="money-chip gold">
+            <span>Tài sản ròng</span>
+            <strong id="hud-networth">0 đ</strong>
+          </div>
+        </div>
+
+        <div class="hud-bars-grid">
+          <div class="stat-mini">
+            <div class="stat-mini-label"><span>❤️ Khỏe</span><strong id="val-health">90</strong></div>
+            <div class="progress-track"><div class="progress-fill fill-health" id="bar-health" style="width:90%"></div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label"><span>😄 Vui</span><strong id="val-happiness">80</strong></div>
+            <div class="progress-track"><div class="progress-fill fill-happy" id="bar-happiness" style="width:80%"></div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label"><span>🧠 Trí</span><strong id="val-intelligence">55</strong></div>
+            <div class="progress-track"><div class="progress-fill fill-intel" id="bar-intelligence" style="width:55%"></div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="stat-mini-label"><span>⚡ Lo âu</span><strong id="val-stress">10</strong></div>
+            <div class="progress-track"><div class="progress-fill fill-stress" id="bar-stress" style="width:10%"></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Khu vực nội dung các Tab -->
+      <section id="tab-content-area">
+        <!-- TAB 1: CUỘC ĐỜI -->
+        <div class="tab-panel active" id="tab-life">
+          <div class="section-card">
+            <div class="section-title">
+              <span>⚡ Hoạt động trong năm</span>
+              <span id="activities-remaining">Còn 2/2 lượt</span>
+            </div>
+            <div id="activities-grid"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title">
+              <span>📜 Dòng Thời Gian Cuộc Đời</span>
+            </div>
+            <div id="life-timeline-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB 2: HỌC VẤN & SỰ NGHIỆP -->
+        <div class="tab-panel" id="tab-career">
+          <div class="section-card" id="current-career-card"></div>
+
+          <div class="section-card">
+            <div class="section-title"><span>🎓 Học vấn &amp; Chứng chỉ Nâng cấp</span></div>
+            <div class="list-stack" id="courses-list"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>💼 Thị trường Việc làm (22 Ngành nghề)</span></div>
+            <div class="list-stack" id="careers-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB 3: TÀI SẢN & ĐẦU TƯ -->
+        <div class="tab-panel" id="tab-assets">
+          <div class="section-card" id="finance-summary-card"></div>
+
+          <div class="section-card" id="bank-desk-card"></div>
+
+          <div class="section-card">
+            <div class="section-title"><span>📦 Danh mục Đang sở hữu</span></div>
+            <div class="list-stack" id="portfolio-list"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>🏛️ Sàn Giao dịch Tài sản &amp; Doanh nghiệp</span></div>
+            <div class="filter-pills" id="asset-filter-bar"></div>
+            <div class="list-stack" id="asset-catalog-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB 4: QUAN HỆ & GIA TỘC -->
+        <div class="tab-panel" id="tab-social">
+          <div class="section-card" id="dynasty-banner"></div>
+          <div class="section-card" id="social-actions-bar"></div>
+          <div class="section-card">
+            <div class="section-title"><span>👨‍👩‍👧‍👦 Gia đình &amp; Mạng lưới Quan hệ</span></div>
+            <div class="list-stack" id="relationships-list"></div>
+          </div>
+        </div>
+
+        <!-- TAB 5: HỒ SƠ & THÀNH TỰU -->
+        <div class="tab-panel" id="tab-profile">
+          <div class="section-card" id="wealth-rank-card">
+            <div class="section-title">
+              <span>💎 Hành trình Chạm Mốc 1 Tỷ USD (25.000 Tỷ VNĐ)</span>
+              <span id="billion-progress-text">0%</span>
+            </div>
+            <div id="wealth-rank-label" style="font-size:12px; color:#fde68a; font-weight:700; margin-bottom:6px;">🌱 Tay Trắng Khởi Nghiệp</div>
+            <div class="progress-track" style="height: 9px; margin-bottom: 6px;">
+              <div class="progress-fill fill-happy" id="billion-progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>📊 Toàn bộ Chỉ số Nhân vật</span></div>
+            <div class="stats-grid" id="all-stats-grid"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>🏆 Thành tựu &amp; Huy hiệu</span></div>
+            <div class="list-stack" id="achievements-list"></div>
+          </div>
+
+          <div class="section-card">
+            <div class="section-title"><span>💾 Quản lý Dữ liệu Lưu</span></div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap;">
+              <button class="btn-sm btn-primary" id="btn-manual-save">Lưu ngay</button>
+              <button class="btn-sm btn-gold" id="btn-new-life-profile">Cuộc đời mới</button>
+              <button class="btn-sm btn-danger" id="btn-wipe-save">Xóa Save</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Nút +1 Tuổi chuẩn thao tác 1 ngón cái -->
+      <div class="age-up-dock">
+        <button id="btn-age-up">+1 TUỔI NÀO! 🎂</button>
+      </div>
+
+      <!-- Thanh Tab Bar dưới -->
+      <nav id="bottom-tabs">
+        <button class="tab-btn active" data-tab="life"><span class="tab-ico">🌱</span>Cuộc Đời</button>
+        <button class="tab-btn" data-tab="career"><span class="tab-ico">💼</span>Nghề</button>
+        <button class="tab-btn" data-tab="assets"><span class="tab-ico">🏦</span>Tài Sản</button>
+        <button class="tab-btn" data-tab="social"><span class="tab-ico">❤️</span>Gia Tộc</button>
+        <button class="tab-btn" data-tab="profile"><span class="tab-ico">🏆</span>Hồ Sơ</button>
+      </nav>
+
+      <div class="home-indicator"></div>
+
+      <!-- Bottom-Sheet Sự kiện rẽ nhánh -->
+      <div class="sheet-backdrop" id="event-sheet-backdrop">
+        <div class="bottom-sheet" id="event-bottom-sheet">
+          <span class="event-badge" id="event-category-badge">CUỘC ĐỜI</span>
+          <h2 id="event-title">Tiêu đề sự kiện</h2>
+          <p id="event-description">Mô tả sự kiện...</p>
+          <div class="event-options-stack" id="event-options-list"></div>
+        </div>
+      </div>
+
+      <!-- Modal Khởi tạo Cuộc đời mới -->
+      <div class="sheet-backdrop modal-center" id="new-life-modal">
+        <div class="modal-card">
+          <h2 style="margin:0 0 10px; font-size:17px;">✨ Khởi Đầu Cuộc Đời Mới</h2>
+          <div class="form-row">
+            <input type="text" class="input-field" id="input-char-name" placeholder="Nhập họ tên nhân vật..." />
+            <button class="btn-sm btn-ghost" id="btn-random-name" title="Tên ngẫu nhiên">🎲</button>
+          </div>
+          <div class="form-row">
+            <button class="gender-btn active" id="btn-gender-male">👨 Nam</button>
+            <button class="gender-btn" id="btn-gender-female">👩 Nữ</button>
+          </div>
+          <div class="section-title" style="margin-top:6px;"><span>Chọn Hoàn cảnh Xuất thân</span></div>
+          <div id="backgrounds-list"></div>
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn-sm btn-green" style="flex:1; padding:10px; font-size:13px;" id="btn-start-new-life">🚀 Bắt đầu Cuộc đời</button>
+            <button class="btn-sm btn-ghost" id="btn-close-new-life">Đóng</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Tổng kết Cuộc đời & Thừa kế Gia tộc -->
+      <div class="sheet-backdrop modal-center" id="gameover-modal">
+        <div class="modal-card">
+          <h2 style="margin:0 0 8px; font-size:17px;">🕯️ Tổng Kết Một Kiếp Người</h2>
+          <div id="gameover-summary" style="font-size:12.5px; line-height:1.5; color:#cbd5e1; margin-bottom:12px;"></div>
+          <div class="section-title"><span>👑 Thừa kế Gia tộc (Chơi tiếp đời con)</span></div>
+          <div class="list-stack" id="heir-selection-list" style="margin-bottom:12px;"></div>
+          <button class="btn-sm btn-primary" style="width:100%; padding:10px; font-size:13px;" id="btn-gameover-new-life">✨ Bắt đầu Gia tộc Hoàn toàn Mới</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="game_data.js"></script>
+  <script src="audio.js"></script>
+  <script src="vendor/three.min.js"></script>
+  <script src="diorama3d.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
