@@ -48,12 +48,12 @@ Trải nghiệm trực tiếp trên trình duyệt tại **[Zero to Billionaire 
 | 🏡 Không gian 3D & Hoạt động trong năm | 🎭 Sự kiện rẽ nhánh Đậm chất Việt Nam |
 | :---: | :---: |
 | ![Giao diện chính 3D Diorama](docs/screenshots/demo-overview.png) | ![Modal sự kiện Ngã rẽ tuổi 18](docs/screenshots/demo-events.png) |
-| **Phòng Trọ 3D Isometric & 6 Tab chức năng:** Xoay/phóng to phòng 3D theo cấp tài sản, theo dõi 4 chỉ số cốt lõi, hoạt động thường niên và dòng thời gian cuộc đời. | **140+ Kịch bản rẽ nhánh (0–96 tuổi):** Những quyết định bước ngoặt như kỳ thi THPT, khởi nghiệp, công sở, đầu tư tài chính và đời sống gia đình. |
+| **Phòng 3D Isometric & 5 Tab chức năng:** Xoay/phóng to phòng 3D theo cấp tài sản, theo dõi 4 chỉ số cốt lõi, cảnh báo rủi ro nợ/phá sản, hoạt động thường niên và nhật ký cuộc đời. | **170 Kịch bản rẽ nhánh (0–96 tuổi):** Những quyết định bước ngoặt từ trường học, khởi nghiệp, công sở, đầu tư mạo hiểm đến biến cố kinh tế gia đình. |
 
-| 📒 Sổ Lịch Sử Dòng Tiền (Ra / Vào) | 👑 Bảng Xếp Hạng Phú Hào (Top 21) |
+| 📒 Sổ Lịch Sử Dòng Tiền (Ra / Vào) | 👑 Bảng Xếp Hạng Người Chơi Thực & Phú Hào |
 | :---: | :---: |
 | ![Sổ lịch sử dòng tiền ra vào](docs/screenshots/demo-cashflow.png) | ![Bảng xếp hạng Phú hào](docs/screenshots/demo-leaderboard.png) |
-| **Minh bạch từng khoản thu/chi:** Bộ lọc *Tất cả / Tiền vào / Tiền ra*, hiển thị số dư sau giao dịch và chỉ tính sinh hoạt phí khi có thu nhập dương. | **Đua Top 20 Tỷ phú & Đại gia AI:** Theo dõi khoảng cách vượt hạng trực tiếp trên HUD, biến động tài sản hằng năm và lưu kỷ lục vào **Điện Danh Vọng**. |
+| **Minh bạch từng khoản thu/chi:** Bộ lọc *Tất cả / Tiền vào / Tiền ra*, theo dõi sát sao sinh hoạt phí, thuế lũy tiến, khấu trừ nợ quá hạn và bảo dưỡng tài sản. | **Đua Top Người Chơi Thực (Live) & 20 Tỷ phú AI:** Đồng bộ tài sản ròng trực tuyến thời gian thực, theo dõi số người đang hoạt động và lưu kỷ lục vào **Điện Danh Vọng**. |
 
 ---
 
@@ -146,11 +146,11 @@ flowchart TD
 ```
 
 * **Chỉ số cá nhân:** Sức khỏe, Trí tuệ, Ngoại hình, Hạnh phúc, Kỷ luật, Áp lực (Stress), Giao tiếp (Charisma), Hiểu biết Tài chính, Kỹ năng Thực chiến, Nhạy bén Kinh doanh, May mắn, Địa vị Xã hội, Phúc đức (Karma), Quan hệ gia đình.
-* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế**. Chi phí thuê nhà/sinh hoạt chỉ tính tỉ lệ khi có thu nhập dương (không trừ tiền vô lý khi đang học/thất nghiệp), áp dụng thuế TNCN lũy tiến & phí quản lý cơ ngơi thực tế kèm **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, vay ngân hàng (8.5%/năm), 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản.
+* **Kinh tế Hardcore, Chống lạm phát & Rủi ro Phá sản:** Trẻ nhỏ (0–5 tuổi) bắt đầu với `0 đ`, nhận tiền tiêu vặt vừa phải (6–17 tuổi) và **Quỹ Hành trang Tuổi 18** đã cân bằng chống lạm phát (`1.5M – 25M`). Tích hợp cơ chế **Sa thải (Layoff)** thời suy thoái, **Thu hồi nợ cưỡng chế (khấu trừ 30% lương & phát mãi tài sản 80%)**, **Phá sản cá nhân & Đóng băng tín dụng 5 năm**, lãi vay `14.5%/năm`, thuế TNCN lũy tiến, **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, 4 pha Chu kỳ Vĩ mô và 18 loại Tài sản.
 * **Đua Top Người Chơi Thực (Live) & Tỷ Phú AI (`live_leaderboard.js`, `LeaderboardSystem.cs`):** Tự đặt/đổi tên nhân vật, đồng bộ tài sản ròng & trạng thái online theo thời gian thực với cộng đồng người chơi, cạnh tranh 20 Tỷ phú AI và lưu kỷ lục vào **Điện Danh Vọng**.
 * **Cơ chế Chơi Lại & Gói Hỗ Trợ (`MonetizationSystem.cs`):** Lượt đời đầu miễn phí; từ đời thứ 2 có thể xem quảng cáo ngắn 5s nhận vé + buff may mắn hoặc mở Gói Khởi Đầu / VIP Vĩnh Viễn (chơi lại vô hạn + huy hiệu VIP).
 * **Sự nghiệp & Học vấn:** 4 Hoàn cảnh xuất thân (Mái ấm Tình thương, Bình dân, Công chức Trí thức, Trâm anh Thế phiệt) và 22 Ngành nghề có bộ lọc trực quan theo điều kiện hiện tại.
-* **Cỗ Máy Thời Gian & Lưu Sao Lưu Đa Thiết Bị:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), mã sao lưu `ZTB2:` & file tải về để khôi phục tiến trình, hỗ trợ quay ngược 5–8 năm trước để sửa quyết định sai lầm.
+* **Cỗ Máy Thời Gian & Lưu Sao Lưu Đa Thiết Bị:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), mã sao lưu `ZTB2:` & file tải về để khôi phục tiến trình, hỗ trợ tối đa 5 lượt lùi tuổi miễn phí/đời (từ lần thứ 6 phải đánh đổi % tài sản).
 * **Hệ thống sự kiện Data-driven:** **170 kịch bản** rẽ nhánh & lặp lại (0–96 tuổi, gồm 28 biến cố chi tiêu & thử thách thực tế) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
 * **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** nâng cấp sàn gỗ/cẩm thạch, cao ốc sáng đèn, thú cưng Corgi, mô hình siêu xe, 5 tab điều hướng gọn nhẹ dễ tiếp cận & âm thanh Web Audio.
 
