@@ -12,29 +12,29 @@
     "options": [
       {
         "id": "opt_chop_pro_style",
-        "label": "Bình tĩnh chặt từng miếng vuông vức đều tăm tắp xếp đĩa đẹp như nhà hàng",
+        "label": "Tự tin chặt gà thành từng miếng vuông vức xếp đĩa ra mắt",
         "outcomes": [
           {
-            "probability": 0.8,
-            "conditionFormula": "practicalSkills >= 35",
-            "message": "Cả họ nhà người yêu trầm trồ khen nức nở 'chỉ có 10 điểm không có nhưng'!",
-            "statModifiers": { "happiness": 18, "charisma": 10, "socialStatus": 10 }
+            "probability": 0.50,
+            "conditionFormula": "practicalSkills >= 48",
+            "message": "Tay nghề khéo léo giúp bạn ghi điểm tốt với họ hàng hai bên.",
+            "statModifiers": { "happiness": 8, "charisma": 4, "socialStatus": 4 }
           },
           {
-            "probability": 0.2,
-            "message": "Hơi nát nhẹ miếng cổ nhưng nhờ nhanh nhẹn dọn dẹp rửa bát nên vẫn ghi điểm tuyệt đối!",
-            "statModifiers": { "happiness": 10, "practicalSkills": 6 }
+            "probability": 0.50,
+            "message": "Chặt gà nát bét khiến bạn ngượng chín mặt, phải chi 2 triệu mua thêm giỏ quà biếu lấy lòng bố mẹ vợ/chồng tương lai!",
+            "statModifiers": { "cash": -2000000, "stress": 8, "happiness": -4 }
           }
         ]
       },
       {
         "id": "opt_humble_ask_help",
-        "label": "Cười duyên xin bác trai chỉ bảo bí quyết chặt gà truyền thống gia đình",
+        "label": "Mua giỏ quà 1.5 triệu biếu gia đình rồi khiêm tốn nhờ bác trai chỉ giúp",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Bác trai khoái chí chỉ từng đường dao và rót chén trà mời bạn ngồi trò chuyện thân mật!",
-            "statModifiers": { "charisma": 12, "happiness": 14, "karma": 5 }
+            "message": "Tốn 1.5 triệu quà cáp ra mắt nhưng sự lễ phép giúp không khí gia đình thêm thân mật.",
+            "statModifiers": { "cash": -1500000, "charisma": 4, "happiness": 6, "karma": 3 }
           }
         ]
       }
@@ -53,23 +53,28 @@
     "options": [
       {
         "id": "opt_podcast_relax",
-        "label": "Tạt vào quán cà phê đọc sách nghe podcast tài chính chờ đường thông thoáng",
+        "label": "Tạt vào quán cà phê đọc sách chờ nước rút (tốn 500 nghìn tiền ăn uống & gửi xe)",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không bực dọc kẹt xe mà còn học thêm được nhiều kiến thức đầu tư mới!",
-            "statModifiers": { "financialLiteracy": 6, "intelligence": 4, "stress": -6 }
+            "message": "Tốn 500 nghìn đồng ngồi quán tránh ngập và tranh thủ đọc thêm vài trang sách.",
+            "statModifiers": { "cash": -500000, "financialLiteracy": 2, "intelligence": 2, "stress": -2 }
           }
         ]
       },
       {
         "id": "opt_help_stalled_bike",
-        "label": "Phụ đẩy giúp chiếc xe chết máy của người đi đường lên vỉa hè khô ráo",
+        "label": "Lội nước phụ đẩy giúp chiếc xe chết máy của người đi đường",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Hành động đẹp giữa cơn mưa khiến người xa lạ cảm ơn rối rít.",
-            "statModifiers": { "karma": 12, "happiness": 10, "health": 2 }
+            "probability": 0.65,
+            "message": "Hành động đẹp giữa cơn mưa khiến người đi đường cảm ơn rối rít.",
+            "statModifiers": { "karma": 5, "happiness": 4 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Dầm nước bẩn quá lâu làm xe bạn cũng chết máy và bị cảm lạnh, tốn 2 triệu sửa xe mua thuốc!",
+            "statModifiers": { "cash": -2000000, "health": -4, "stress": 6 }
           }
         ]
       }
@@ -83,28 +88,33 @@
     "maxAge": 34,
     "priority": 60,
     "isOneTime": true,
-    "description": "Cuối tuần nhóm bạn thân rủ nhau chạy cung đèo hùng vĩ săn biển mây bình minh giữa núi rừng Tây Bắc.",
+    "description": "Cuối tuần nhóm bạn thân rủ nhau chạy cung đèo Tây Bắc săn biển mây bình minh — chi phí xăng xe ăn ở cũng không nhỏ.",
     "conditions": [],
     "options": [
       {
         "id": "opt_sunrise_peaks",
-        "label": "Dậy từ 4 giờ sáng leo đỉnh đón biển mây bồng bềnh trước ánh nắng đầu ngày",
+        "label": "Chi 6 triệu đi tour săn mây đón bình minh trên đỉnh núi",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Khung cảnh kỳ vĩ xua tan mọi áp lực công việc suốt cả năm qua!",
-            "statModifiers": { "happiness": 20, "stress": -20, "health": 8 }
+            "probability": 0.65,
+            "message": "Khung cảnh kỳ vĩ giúp bạn giải tỏa căng thẳng sau những ngày làm việc mệt nhọc.",
+            "statModifiers": { "cash": -6000000, "happiness": 10, "stress": -10, "health": 3 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Tốn 6 triệu lên tới nơi thì gặp mưa mù trắng xóa chẳng thấy mây, lại dính cảm lạnh!",
+            "statModifiers": { "cash": -6000000, "health": -4, "stress": 6 }
           }
         ]
       },
       {
         "id": "opt_local_homestay",
-        "label": "Giao lưu đốt lửa trại cùng bà con bản địa và tìm hiểu đặc sản vùng cao",
+        "label": "Chi 5 triệu nghỉ homestay giao lưu đốt lửa trại cùng bà con bản địa",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Những bức ảnh và tình bạn sâu đậm trở thành động lực lớn cho bạn!",
-            "statModifiers": { "charisma": 10, "karma": 6, "happiness": 14 }
+            "message": "Tốn 5 triệu chi phí nhưng trải nghiệm văn hóa bản địa mang lại kỷ niệm vui vẻ.",
+            "statModifiers": { "cash": -5000000, "charisma": 4, "karma": 3, "happiness": 7 }
           }
         ]
       }
@@ -125,23 +135,28 @@
     "options": [
       {
         "id": "opt_three_jars_budget",
-        "label": "Lập 3 quỹ minh bạch: Chi tiêu chung, Đầu tư sinh lời và Quỹ cá nhân riêng",
+        "label": "Lập 3 quỹ minh bạch: Chi tiêu chung, Đầu tư và Quỹ cá nhân",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cả hai đều thoải mái tự do mà tài sản chung vẫn tích lũy cực nhanh!",
-            "statModifiers": { "financialLiteracy": 12, "happiness": 16, "stress": -10 }
+            "message": "Phân chia rạch ròi giúp hai vợ chồng giảm bớt tranh cãi về tiền bạc.",
+            "statModifiers": { "financialLiteracy": 4, "happiness": 8, "stress": -4 }
           }
         ]
       },
       {
         "id": "opt_give_all_spouse",
-        "label": "Tin tưởng giao 'nóc nhà' làm Giám đốc Tài chính gia đình giữ thẻ lương",
+        "label": "Giao 'nóc nhà' giữ thẻ lương quản lý chi tiêu gia đình",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bạn đời chăm lo chu toàn từng bữa cơm giấc ngủ, tiết kiệm giỏi đến bất ngờ!",
-            "statModifiers": { "happiness": 18, "discipline": 8, "karma": 6 }
+            "probability": 0.65,
+            "message": "Bạn đời chăm lo thu chi gọn gàng giúp gia đình duy trì nề nếp tiết kiệm.",
+            "statModifiers": { "happiness": 8, "discipline": 4, "karma": 3 }
+          },
+          {
+            "probability": 0.35,
+            "message": "Khác biệt quan điểm mua sắm khiến hai vợ chồng thường xuyên căng thẳng khi hỏi tiền tiêu!",
+            "statModifiers": { "stress": 8, "happiness": -4 }
           }
         ]
       }
@@ -155,30 +170,36 @@
     "maxAge": 40,
     "priority": 68,
     "isOneTime": true,
-    "description": "Hai vợ chồng bàn tính xem nên ở chung nhà phụng dưỡng bố mẹ hay ra ở riêng để có không gian tự do.",
+    "description": "Hai vợ chồng bàn tính xem nên ở chung nhà phụng dưỡng bố mẹ hay dọn ra thuê căn hộ riêng để có không gian tự do.",
     "conditions": [
       { "field": "hasFlag", "operatorType": "==", "stringValue": "is_married" }
     ],
     "options": [
       {
         "id": "opt_near_but_separate",
-        "label": "Ra ở riêng ngay gần nhà bố mẹ để vừa tự do vừa tiện sang thăm hỏi mỗi ngày",
+        "label": "Chi 24 triệu đặt cọc thuê nhà riêng gần bố mẹ để giữ không gian tự do",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Khoảng cách vàng giúp tình cảm hai bên gia đình lúc nào cũng hòa thuận đầm ấm!",
-            "statModifiers": { "happiness": 18, "parentRelationship": 12, "stress": -8 }
+            "message": "Chi 24 triệu tiền cọc và sắm sửa đồ đạc ra ở riêng, đổi lại hai bên gia đình luôn hòa thuận đầm ấm.",
+            "statModifiers": { "cash": -24000000, "happiness": 10, "parentRelationship": 6, "stress": -4 }
           }
         ]
       },
       {
         "id": "opt_stay_multigen",
-        "label": "Ở chung đại gia đình ba thế hệ, tiết kiệm được trọn vẹn chi phí thuê nhà",
+        "label": "Ở chung đại gia đình ba thế hệ để tiết kiệm chi phí",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Bữa cơm gia đình rộn rã tiếng cười và bạn tích lũy vốn nhanh hơn hẳn!",
-            "statModifiers": { "cash": 35000000, "parentRelationship": 15, "karma": 10 }
+            "probability": 0.45,
+            "conditionFormula": "karma >= 55",
+            "message": "Gia đình hòa thuận sẻ chia việc nhà, giúp bạn tiết kiệm được khoảng 8 triệu tiền sinh hoạt.",
+            "statModifiers": { "cash": 8000000, "parentRelationship": 8, "karma": 5 }
+          },
+          {
+            "probability": 0.55,
+            "message": "Khác biệt lối sống giữa hai thế hệ nổ ra mâu thuẫn triền miên khiến gia đình căng thẳng!",
+            "statModifiers": { "stress": 14, "happiness": -8, "parentRelationship": -6 }
           }
         ]
       }
@@ -192,30 +213,30 @@
     "maxAge": 48,
     "priority": 72,
     "isOneTime": true,
-    "description": "Con bạn sắp vào tiểu học. Phụ huynh khắp nơi bàn tán sôi nổi chuyện chọn trường công chuẩn quốc gia hay trường song ngữ.",
+    "description": "Con bạn sắp vào tiểu học với đủ khoản phí nhập học, đồng phục và lớp học thêm khiến ngân sách gia đình căng thẳng.",
     "conditions": [
       { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
     ],
     "options": [
       {
         "id": "opt_balanced_public",
-        "label": "Chọn trường chất lượng gần nhà để con không phải thức khuya dậy sớm chạy xe xa",
+        "label": "Chọn trường công gần nhà (chi 4 triệu đồng phục, sách vở & bán trú đầu năm)",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Con vui vẻ khỏe mạnh, mỗi chiều còn được bố mẹ dẫn đi chơi thể thao!",
-            "statModifiers": { "happiness": 16, "stress": -10, "karma": 6 }
+            "message": "Chi 4 triệu lo thủ tục đầu năm học, con được học gần nhà và đỡ áp lực di chuyển.",
+            "statModifiers": { "cash": -4000000, "happiness": 8, "stress": -4, "karma": 3 }
           }
         ]
       },
       {
         "id": "opt_bilingual_prep",
-        "label": "Đầu tư lớp ngoại ngữ và kỹ năng mềm buổi tối đồng hành cùng con",
+        "label": "Chi 25 triệu đầu tư lớp ngoại ngữ và kỹ năng mềm buổi tối cho con",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Con tiếp thu cực nhanh và tự tin giao tiếp song ngữ từ nhỏ!",
-            "statModifiers": { "happiness": 14, "socialStatus": 8, "intelligence": 4 }
+            "message": "Tốn 25 triệu học phí đầu tư bài bản giúp con tự tin tiếp cận môi trường song ngữ.",
+            "statModifiers": { "cash": -25000000, "happiness": 8, "socialStatus": 4, "intelligence": 2 }
           }
         ]
       }
@@ -229,30 +250,30 @@
     "maxAge": 52,
     "priority": 68,
     "isOneTime": true,
-    "description": "Một thập kỷ bên nhau qua bao nắng mưa cuộc đời! Bạn muốn tạo bất ngờ gì cho người bạn đời?",
+    "description": "Một thập kỷ bên nhau qua bao nắng mưa cuộc đời! Bạn muốn tổ chức kỷ niệm như thế nào?",
     "conditions": [
       { "field": "hasFlag", "operatorType": "==", "stringValue": "is_married" }
     ],
     "options": [
       {
         "id": "opt_romantic_dinner_letter",
-        "label": "Tự tay nấu bữa tối dưới ánh nến kèm bức thư viết tay và bó hoa tươi",
+        "label": "Chi 5 triệu chuẩn bị bữa tối lãng mạn, quà kỷ niệm và bó hoa tươi",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Người bạn đời rưng rưng hạnh phúc như ngày đầu mới yêu!",
-            "statModifiers": { "happiness": 24, "stress": -15, "karma": 8 }
+            "message": "Chi 5 triệu cho buổi tối kỷ niệm ấm áp khiến người bạn đời vô cùng trân trọng.",
+            "statModifiers": { "cash": -5000000, "happiness": 12, "stress": -6, "karma": 4 }
           }
         ]
       },
       {
         "id": "opt_family_photoshoot",
-        "label": "Đưa cả gia đình đi chụp bộ ảnh kỷ niệm 10 năm bên nhau",
+        "label": "Chi 8 triệu đưa cả gia đình đi chụp bộ ảnh kỷ niệm 10 năm",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Khung ảnh đại gia đình rạng rỡ treo trang trọng ngay phòng khách!",
-            "statModifiers": { "happiness": 20, "socialStatus": 6 }
+            "message": "Chi 8 triệu lưu giữ khung hình đại gia đình rạng rỡ sau một thập kỷ gắn bó.",
+            "statModifiers": { "cash": -8000000, "happiness": 10, "socialStatus": 3 }
           }
         ]
       }
@@ -266,28 +287,28 @@
     "maxAge": 62,
     "priority": 74,
     "isOneTime": true,
-    "description": "Bố mẹ tuổi cao sức yếu phải nhập viện theo dõi một tuần, đòi hỏi con cái sắp xếp công việc thay phiên chăm sóc.",
+    "description": "Bố mẹ tuổi cao sức yếu phải nhập viện theo dõi một tuần, đòi hỏi con cái vừa tốn kém viện phí vừa sắp xếp thời gian chăm sóc.",
     "conditions": [],
     "options": [
       {
         "id": "opt_personal_care",
-        "label": "Sắp xếp công việc từ xa để trực tiếp túc trực động viên bố mẹ mỗi ngày",
+        "label": "Chi 8 triệu thuốc men tẩm bổ và xin nghỉ làm trực tiếp túc trực chăm bố mẹ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Nhờ tình thương của con cháu, bố mẹ hồi phục nhanh chóng và xuất viện khỏe mạnh!",
-            "statModifiers": { "parentRelationship": 25, "karma": 20, "happiness": 15, "stress": 8 }
+            "message": "Chi 8 triệu thuốc men và thức đêm chăm sóc khiến bạn kiệt sức, nhưng bố mẹ hồi phục tốt.",
+            "statModifiers": { "cash": -8000000, "parentRelationship": 14, "karma": 10, "happiness": 6, "stress": 16, "health": -4 }
           }
         ]
       },
       {
         "id": "opt_vip_care_package",
-        "label": "Bố trí phòng chăm sóc tốt nhất kết hợp y tá riêng hỗ trợ gia đình",
+        "label": "Chi 30 triệu bố trí phòng dịch vụ và thuê y tá riêng chăm sóc bố mẹ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Bố mẹ được điều trị tận tình chu đáo và hoàn toàn bình phục!",
-            "statModifiers": { "parentRelationship": 20, "karma": 14, "happiness": 12 }
+            "message": "Chi 30 triệu viện phí và dịch vụ y tế giúp bố mẹ được chăm sóc chu đáo và bình phục.",
+            "statModifiers": { "cash": -30000000, "parentRelationship": 12, "karma": 8, "happiness": 6 }
           }
         ]
       }
@@ -301,28 +322,28 @@
     "maxAge": 36,
     "priority": 64,
     "isOneTime": true,
-    "description": "Sau 15 năm bôn ba, đám bạn cũ tụ họp lại nhà hàng năm xưa. Ai nấy đều thay đổi nhiều so với thời áo trắng.",
+    "description": "Sau 15 năm bôn ba, đám bạn cũ tụ họp lại nhà hàng năm xưa. Mỗi người đóng góp phần tiệc và quà tri ân thầy cô.",
     "conditions": [],
     "options": [
       {
         "id": "opt_humble_reunion",
-        "label": "Vui vẻ ôn kỷ niệm ngây ngô thuở học trò và kết nối hỗ trợ công việc cho bạn bè",
+        "label": "Đóng 2.5 triệu chi phí tiệc họp lớp và ôn kỷ niệm thuở học trò",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Sự khiêm nhường và chân thành của bạn giúp buổi họp lớp ấm áp, kết nối được nhiều đối tác tin cậy!",
-            "statModifiers": { "charisma": 10, "happiness": 16, "socialStatus": 10, "karma": 8 }
+            "message": "Chi 2.5 triệu tham dự buổi họp lớp ấm áp và kết nối lại với bạn bè cũ.",
+            "statModifiers": { "cash": -2500000, "charisma": 4, "happiness": 7, "socialStatus": 4 }
           }
         ]
       },
       {
         "id": "opt_class_fund_sponsor",
-        "label": "Đứng ra góp quỹ tri ân thầy cô giáo cũ khó khăn của trường",
+        "label": "Đóng 6 triệu góp tiệc và ủng hộ quỹ tri ân thầy cô giáo cũ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Thầy cô rưng rưng xúc động trước nghĩa cử cao đẹp của cả lớp!",
-            "statModifiers": { "karma": 18, "socialStatus": 14, "happiness": 15 }
+            "message": "Chi 6 triệu đóng góp quỹ tri ân khiến thầy cô và bạn bè rất cảm kích.",
+            "statModifiers": { "cash": -6000000, "karma": 9, "socialStatus": 6, "happiness": 7 }
           }
         ]
       }
@@ -336,30 +357,36 @@
     "maxAge": 58,
     "priority": 68,
     "isOneTime": true,
-    "description": "Đứa con đang học cấp 3 bất ngờ nói muốn bảo lưu kết quả học tập để theo đuổi giấc mơ tuyển thủ Esports.",
+    "description": "Đứa con đang học cấp 3 bất ngờ đòi bảo lưu kết quả học tập để theo đuổi giấc mơ tuyển thủ Esports.",
     "conditions": [
       { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
     ],
     "options": [
       {
         "id": "opt_propose_milestone_deal",
-        "label": "Lắng nghe tôn trọng và giao kèo: giữ học lực Khá trở lên mới được tham gia giải bán chuyên",
+        "label": "Giao kèo kỷ luật: phải giữ học lực Khá trở lên mới cho tham gia giải bán chuyên",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Con bạn mừng rỡ nỗ lực gấp đôi cả học tập lẫn luyện thi, học được trách nhiệm với lựa chọn!",
-            "statModifiers": { "happiness": 16, "discipline": 8, "charisma": 8, "karma": 8 }
+            "probability": 0.55,
+            "conditionFormula": "discipline >= 60",
+            "message": "Con bạn nỗ lực giữ cân bằng giữa học tập và giải đấu để chứng minh trách nhiệm.",
+            "statModifiers": { "happiness": 8, "discipline": 4, "charisma": 3 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Con mải cày game làm điểm số tụt dốc thảm hại, bạn phải chi 5 triệu thuê gia sư kèm gấp!",
+            "statModifiers": { "cash": -5000000, "stress": 12, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_guide_game_dev",
-        "label": "Định hướng con tìm hiểu sâu hơn về lập trình game và kinh doanh công nghệ số",
+        "label": "Chi 8 triệu mua khóa học & thiết bị định hướng con sang lập trình game",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Con chuyển hướng đam mê thành kỹ năng lập trình xuất sắc đầy triển vọng!",
-            "statModifiers": { "happiness": 14, "intelligence": 6, "businessAcuity": 6 }
+            "message": "Chi 8 triệu đầu tư công cụ học tập giúp con chuyển đam mê sang lập trình bài bản.",
+            "statModifiers": { "cash": -8000000, "happiness": 6, "intelligence": 3, "businessAcuity": 2 }
           }
         ]
       }
@@ -373,28 +400,28 @@
     "maxAge": 78,
     "priority": 52,
     "isOneTime": true,
-    "description": "Góc sân thượng đầy nắng đang bỏ trống, bạn nghĩ tới việc biến nơi đây thành khu vườn xanh mướt giữa lòng phố thị.",
+    "description": "Góc sân thượng đầy nắng đang bỏ trống, bạn tính mua vật tư cải tạo thành khu vườn nhỏ thư giãn.",
     "conditions": [],
     "options": [
       {
         "id": "opt_grow_organic_veggies",
-        "label": "Tự đóng giàn trồng cà chua, rau muống, mướp hương hữu cơ cho cả nhà",
+        "label": "Chi 6 triệu mua chậu, đất sạch và giàn trồng rau hữu cơ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Mỗi sáng lên vườn tưới cây hít thở không khí trong lành giúp tinh thần thư thái lạ kỳ!",
-            "statModifiers": { "health": 10, "happiness": 14, "stress": -15, "practicalSkills": 6 }
+            "message": "Chi 6 triệu làm vườn rau sân thượng giúp bạn có thêm không gian xanh giải trí mỗi sáng.",
+            "statModifiers": { "cash": -6000000, "health": 4, "happiness": 7, "stress": -6, "practicalSkills": 3 }
           }
         ]
       },
       {
         "id": "opt_koi_tea_corner",
-        "label": "Bố trí thêm bộ bàn trà gỗ và hồ cá nhỏ tiếp bạn hiền cuối tuần",
+        "label": "Chi 12 triệu làm bàn trà gỗ và hồ cá nhỏ tiếp bạn hiền cuối tuần",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không gian chill tuyệt vời ngay tại nhà giúp cân bằng cuộc sống đỉnh cao!",
-            "statModifiers": { "happiness": 16, "stress": -16, "charisma": 5 }
+            "message": "Tốn 12 triệu thiết kế góc trà đạo thư giãn ngay tại nhà sau giờ làm căng thẳng.",
+            "statModifiers": { "cash": -12000000, "happiness": 8, "stress": -8, "charisma": 2 }
           }
         ]
       }
@@ -419,19 +446,19 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Nụ cười rạng rỡ của các em nhỏ vùng cao lan tỏa nguồn năng lượng thiện lành sâu sắc!",
-            "statModifiers": { "cash": -25000000, "karma": 26, "happiness": 22, "socialStatus": 14, "stress": -10 }
+            "message": "Nụ cười rạng rỡ của các em nhỏ vùng cao lan tỏa nguồn năng lượng thiện lành sâu sắc.",
+            "statModifiers": { "cash": -25000000, "karma": 12, "happiness": 10, "socialStatus": 6, "stress": -4 }
           }
         ]
       },
       {
         "id": "opt_donate_books_5m",
-        "label": "Gửi tặng 5 triệu đồng cùng hàng trăm cuốn sách truyện thiếu nhi",
+        "label": "Gửi tặng 5 triệu đồng cùng sách truyện thiếu nhi",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Thư viện nhỏ nơi bản xa sáng đèn tri thức cho bao em thơ!",
-            "statModifiers": { "cash": -5000000, "karma": 14, "happiness": 12 }
+            "message": "Thư viện nhỏ nơi bản xa có thêm sách mới cho các em nhỏ.",
+            "statModifiers": { "cash": -5000000, "karma": 6, "happiness": 5 }
           }
         ]
       }
@@ -450,23 +477,28 @@
     "options": [
       {
         "id": "opt_coworking_escape",
-        "label": "Chuyển sang làm việc tại quán cà phê yên tĩnh / co-working space đầy cảm hứng",
+        "label": "Chi 2.5 triệu thuê gói co-working space để chạy deadline cho yên tĩnh",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không gian mới mẻ giúp bạn tập trung cao độ và tình cờ gặp gỡ đối tác hay!",
-            "statModifiers": { "charisma": 6, "businessAcuity": 5, "stress": -5 }
+            "message": "Tốn 2.5 triệu thuê chỗ làm việc ngoài nhưng bạn tránh được tiếng ồn khoan cắt khó chịu.",
+            "statModifiers": { "cash": -2500000, "charisma": 3, "businessAcuity": 2, "stress": 4 }
           }
         ]
       },
       {
         "id": "opt_agree_quiet_noon",
-        "label": "Trao đổi thiện chí với chủ nhà thống nhất nghỉ trưa 12h–13h30 không khoan đục",
+        "label": "Trao đổi thiện chí với chủ nhà xin nghỉ trưa 12h–13h30 không khoan đục",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Chủ nhà vui vẻ tiếp thu và biếu gia đình bạn giỏ trái cây cảm ơn sự thông cảm!",
-            "statModifiers": { "charisma": 8, "karma": 5, "stress": -8 }
+            "probability": 0.55,
+            "message": "Chủ nhà tiếp thu thiện chí và giữ yên tĩnh vào giờ nghỉ trưa.",
+            "statModifiers": { "charisma": 3, "karma": 2, "stress": -3 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Chủ nhà phớt lờ lời đề nghị và cho thợ khoan đục ầm ĩ suốt trưa khiến bạn phát điên!",
+            "statModifiers": { "stress": 10, "happiness": -5 }
           }
         ]
       }
@@ -487,23 +519,23 @@
     "options": [
       {
         "id": "opt_full_family_tour",
-        "label": "Chi 60 triệu đồng trải nghiệm chuyến đi trọn vẹn ngắm núi Phú Sĩ và suối nước nóng",
+        "label": "Chi 60 triệu đồng trải nghiệm chuyến đi trọn vẹn cùng gia đình",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cả gia đình ngập tràn hạnh phúc, năng lượng và cảm hứng sáng tạo dồi dào trở lại!",
-            "statModifiers": { "cash": -60000000, "happiness": 26, "stress": -28, "health": 8, "parentRelationship": 12 }
+            "message": "Chi 60 triệu cho chuyến du lịch nghỉ dưỡng giúp cả gia đình gắn kết và tái tạo năng lượng.",
+            "statModifiers": { "cash": -60000000, "happiness": 14, "stress": -12, "health": 4, "parentRelationship": 6 }
           }
         ]
       },
       {
         "id": "opt_smart_budget_trip",
-        "label": "Săn vé sớm tự túc hành trình tối ưu chi phí chỉ 30 triệu mà vẫn đi đủ điểm đẹp",
+        "label": "Chi 30 triệu tự túc hành trình tối ưu chi phí",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Chuyến đi tự túc đầy trải nghiệm văn hóa tuyệt vời với chi phí cực kỳ hợp lý!",
-            "statModifiers": { "cash": -30000000, "happiness": 20, "stress": -20, "practicalSkills": 6 }
+            "message": "Chuyến đi tự túc tiết kiệm hơn nhưng vẫn mang lại nhiều trải nghiệm văn hóa đáng nhớ.",
+            "statModifiers": { "cash": -30000000, "happiness": 10, "stress": -8, "practicalSkills": 3 }
           }
         ]
       }
@@ -517,28 +549,28 @@
     "maxAge": 80,
     "priority": 66,
     "isOneTime": false,
-    "description": "Bác sĩ xem kết quả xét nghiệm máu và siêu âm định kỳ của bạn trong buổi kiểm tra sức khỏe hàng năm.",
+    "description": "Đến hẹn đi kiểm tra sức khỏe tổng quát, xét nghiệm máu và siêu âm định kỳ tại bệnh viện.",
     "conditions": [],
     "options": [
       {
         "id": "opt_strict_diet_sleep",
-        "label": "Tuân thủ thực đơn ít dầu mỡ, tập cardio đều đặn và ngủ trước 23h",
+        "label": "Chi 3 triệu khám tổng quát và điều chỉnh ăn uống, ngủ nghỉ điều độ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Các chỉ số sinh học đẹp như tuổi đôi mươi! Sức khỏe dẻo dai bền bỉ!",
-            "statModifiers": { "health": 12, "discipline": 8, "stress": -8, "appearance": 5 }
+            "message": "Tốn 3 triệu phí khám định kỳ nhưng bạn kiểm soát được các chỉ số sinh học ổn định.",
+            "statModifiers": { "cash": -3000000, "health": 4, "discipline": 3, "stress": -4, "appearance": 2 }
           }
         ]
       },
       {
         "id": "opt_yoga_swimming",
-        "label": "Duy trì bơi lội và yoga mỗi tuần 3 buổi giải tỏa căng thẳng",
+        "label": "Chi 4 triệu khám định kỳ kèm thẻ tập bơi và yoga trị liệu",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Xương khớp linh hoạt, tinh thần minh mẫn sảng khoái!",
-            "statModifiers": { "health": 10, "happiness": 10, "stress": -12 }
+            "message": "Tốn 4 triệu nhưng giúp khớp linh hoạt và giảm bớt căng thẳng tích tụ.",
+            "statModifiers": { "cash": -4000000, "health": 4, "happiness": 4, "stress": -5 }
           }
         ]
       }
@@ -552,30 +584,30 @@
     "maxAge": 68,
     "priority": 78,
     "isOneTime": true,
-    "description": "Đứa con trưởng thành của bạn rạng rỡ đưa người yêu về nhà ăn cơm và thưa chuyện trăm năm với bố mẹ.",
+    "description": "Đứa con trưởng thành của bạn đưa người yêu về nhà thưa chuyện trăm năm, kéo theo nhiều khoản chi cho lễ hỏi và cưới xin.",
     "conditions": [
       { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
     ],
     "options": [
       {
         "id": "opt_bless_couple",
-        "label": "Vui vẻ chúc phúc và dạy con bí quyết giữ gìn hạnh phúc hôn nhân",
+        "label": "Chi 10 triệu phụ lo lễ dạm ngõ, chúc phúc cho hai con",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Đám cưới con diễn ra tưng bừng ấm áp, hai bên thông gia quý mến nhau hết mực!",
-            "statModifiers": { "happiness": 24, "karma": 12, "socialStatus": 10 }
+            "message": "Tốn 10 triệu lo lễ nghi gọn gàng, đám cưới con diễn ra ấm áp giữa hai bên thông gia.",
+            "statModifiers": { "cash": -10000000, "happiness": 12, "karma": 6, "socialStatus": 4 }
           }
         ]
       },
       {
         "id": "opt_gift_wedding_gold",
-        "label": "Trao tặng đôi trẻ chút vốn làm ăn khởi nghiệp đầu đời",
+        "label": "Chi 40 triệu mua vàng cưới và trao vốn làm ăn cho đôi trẻ",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Các con vô cùng cảm động và biết ơn tình yêu thương sâu nặng của bạn!",
-            "statModifiers": { "happiness": 22, "karma": 15, "socialStatus": 12 }
+            "message": "Chi 40 triệu làm quà hồi môn giúp các con có điểm tựa vững vàng khi lập gia đình.",
+            "statModifiers": { "cash": -40000000, "happiness": 12, "karma": 8, "socialStatus": 6 }
           }
         ]
       }
@@ -596,23 +628,23 @@
     "options": [
       {
         "id": "opt_spoil_grandchild",
-        "label": "Bế ẵm cháu cưng trong lòng và kể chuyện cổ tích năm xưa",
+        "label": "Chi 3 triệu sắm đồ sơ sinh và phụ chăm cháu những ngày đầu",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Có cháu bồng cháu bế, bạn thấy mình trẻ ra cả chục tuổi!",
-            "statModifiers": { "happiness": 30, "health": 8, "stress": -20, "karma": 10 }
+            "message": "Tốn 3 triệu sắm đồ cho cháu, có cháu bồng bế khiến tinh thần bạn phấn chấn hơn hẳn.",
+            "statModifiers": { "cash": -3000000, "happiness": 14, "health": 3, "stress": -8, "karma": 5 }
           }
         ]
       },
       {
         "id": "opt_teach_grandchild",
-        "label": "Lập sẵn quỹ sách và tiết kiệm giáo dục nho nhỏ mừng đầy tháng cháu",
+        "label": "Chi 15 triệu lập sổ tiết kiệm giáo dục mừng đầy tháng cháu",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Truyền thống hiếu học gia phong tiếp tục được truyền qua ba thế hệ!",
-            "statModifiers": { "happiness": 25, "karma": 14, "socialStatus": 10 }
+            "message": "Chi 15 triệu lập quỹ giáo dục nhỏ làm món quà ý nghĩa cho ngày đầy tháng cháu.",
+            "statModifiers": { "cash": -15000000, "happiness": 12, "karma": 7, "socialStatus": 5 }
           }
         ]
       }
@@ -631,23 +663,23 @@
     "options": [
       {
         "id": "opt_contribute_ancestral",
-        "label": "Đóng góp công sức và tài chính trong khả năng cùng bà con dòng tộc",
+        "label": "Công đức 18 triệu đồng tu sửa Nhà thờ Tổ cùng bà con dòng tộc",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Nhà thờ họ khang trang uy nghiêm, tên tuổi và lòng hiếu nghĩa của bạn được con cháu ghi nhớ!",
-            "statModifiers": { "karma": 22, "socialStatus": 16, "happiness": 16 }
+            "message": "Chi 18 triệu đóng góp trùng tu giúp nhà thờ họ khang trang và gắn kết tình dòng tộc.",
+            "statModifiers": { "cash": -18000000, "karma": 12, "socialStatus": 8, "happiness": 8 }
           }
         ]
       },
       {
         "id": "opt_compile_genealogy",
-        "label": "Phụ trách biên soạn số hóa cuốn Gia phả dòng họ lưu truyền hậu thế",
+        "label": "Chi 4 triệu in ấn và số hóa cuốn Gia phả dòng họ lưu truyền hậu thế",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cuốn gia phả lưu giữ đầy đủ cội nguồn giúp thế hệ trẻ luôn hướng về quê hương!",
-            "statModifiers": { "karma": 18, "intelligence": 6, "socialStatus": 14 }
+            "message": "Tốn 4 triệu biên soạn gia phả để thế hệ trẻ ghi nhớ cội nguồn.",
+            "statModifiers": { "cash": -4000000, "karma": 9, "intelligence": 3, "socialStatus": 6 }
           }
         ]
       }
@@ -661,28 +693,28 @@
     "maxAge": 72,
     "priority": 74,
     "isOneTime": true,
-    "description": "Sau nhiều năm tất bật phố thị, bạn cùng người thân chọn nhịp sống lý tưởng để tận hưởng tuổi vàng.",
+    "description": "Sau nhiều năm tất bật phố thị, bạn tính chuyển dọn về nơi yên bình dưỡng già — chi phí chuyển chỗ ở và ổn định cuộc sống khá tốn kém.",
     "conditions": [],
     "options": [
       {
         "id": "opt_retire_da_nang",
-        "label": "Chọn thành phố biển Đà Nẵng nắng ấm trong lành, sáng đi dạo bờ biển",
+        "label": "Chi 35 triệu chuyển dọn về thành phố biển Đà Nẵng an dưỡng",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không khí biển mặn mòi và nhịp sống hiền hòa giúp sức khỏe bạn cải thiện tuyệt vời!",
-            "statModifiers": { "health": 14, "happiness": 20, "stress": -22 }
+            "message": "Chi 35 triệu dọn nhà và ổn định chỗ ở ven biển giúp không khí sống trong lành hơn.",
+            "statModifiers": { "cash": -35000000, "health": 6, "happiness": 10, "stress": -10 }
           }
         ]
       },
       {
         "id": "opt_retire_da_lat",
-        "label": "Chọn cao nguyên Đà Lạt sương mù thông reo trồng hoa và thưởng trà nóng",
+        "label": "Chi 25 triệu chuyển lên cao nguyên Đà Lạt trồng hoa dưỡng già",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Cuộc sống thi vị giữa đồi thông mang lại sự bình yên tuyệt đối trong tâm hồn.",
-            "statModifiers": { "happiness": 24, "stress": -25, "health": 10 }
+            "message": "Chi 25 triệu chuyển dọn và sửa sang nhà vườn giữa đồi thông yên tĩnh.",
+            "statModifiers": { "cash": -25000000, "happiness": 12, "stress": -12, "health": 4 }
           }
         ]
       }
@@ -696,28 +728,28 @@
     "maxAge": 88,
     "priority": 62,
     "isOneTime": false,
-    "description": "Người bạn nối khố từ thuở cởi truồng tắm mưa bỗng ghé thăm nhà cùng gói trà sen và bao chuyện ngày xưa.",
+    "description": "Người bạn nối khố từ thuở cởi truồng tắm mưa bỗng ghé thăm nhà cùng bao chuyện ngày xưa.",
     "conditions": [],
     "options": [
       {
         "id": "opt_tea_reminisce",
-        "label": "Pha ấm trà ngon ngồi ôn lại cả trời ký ức thanh xuân tươi đẹp",
+        "label": "Chi 1 triệu mua trà ngon bánh trái tiếp đãi bạn hiền ôn chuyện xưa",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Tiếng cười giòn tan ở tuổi xế chiều sưởi ấm cả gian phòng!",
-            "statModifiers": { "happiness": 18, "stress": -15, "health": 5 }
+            "message": "Tốn 1 triệu tiếp đón bạn cũ, đổi lại buổi trò chuyện ấm áp tuổi xế chiều.",
+            "statModifiers": { "cash": -1000000, "happiness": 8, "stress": -6, "health": 2 }
           }
         ]
       },
       {
         "id": "opt_chess_match",
-        "label": "Bày bàn cờ tướng đấu 3 ván phân tài cao thấp",
+        "label": "Bày bàn cờ tướng đấu vài ván phân tài cao thấp",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Những nước cờ hóc búa giúp trí óc luôn sắc sảo tinh anh!",
-            "statModifiers": { "intelligence": 6, "happiness": 14 }
+            "message": "Những nước cờ hóc búa giúp trí óc giữ được sự minh mẫn.",
+            "statModifiers": { "intelligence": 2, "happiness": 6 }
           }
         ]
       }
@@ -742,8 +774,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Năm trái tim nhỏ đập khỏe mạnh trở lại! Phúc đức dòng tộc tỏa sáng rạng ngời!",
-            "statModifiers": { "cash": -150000000, "karma": 35, "happiness": 28, "socialStatus": 22 }
+            "message": "Năm trái tim nhỏ được phẫu thuật thành công mang lại niềm vui thiện lành sâu sắc.",
+            "statModifiers": { "cash": -150000000, "karma": 18, "happiness": 14, "socialStatus": 10 }
           }
         ]
       },
@@ -753,8 +785,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Món quà vô giá mang lại phép màu sự sống cho gia đình em nhỏ!",
-            "statModifiers": { "cash": -30000000, "karma": 20, "happiness": 18 }
+            "message": "Khoản đóng góp 30 triệu giúp gia đình em nhỏ có thêm cơ hội điều trị.",
+            "statModifiers": { "cash": -30000000, "karma": 10, "happiness": 8 }
           }
         ]
       }
@@ -768,31 +800,31 @@
     "maxAge": 85,
     "priority": 78,
     "isOneTime": true,
-    "description": "Các con cháu đã vững vàng sự nghiệp, bạn tổ chức cuộc họp gia đình định hướng tầm nhìn phát triển gia sản bền vững qua nhiều thế hệ.",
+    "description": "Các con cháu đã trưởng thành, bạn tổ chức họp gia đình và thuê luật sư tư vấn lập di chúc, định hướng chuyển giao gia sản.",
     "conditions": [
       { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
     ],
     "options": [
       {
         "id": "opt_family_charter",
-        "label": "Ban hành Hiến chương Gia tộc đề cao đoàn kết, liêm chính và hiếu học",
+        "label": "Chi 10 triệu thuê luật sư lập Hiến chương & Quỹ bảo vệ gia tộc",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Các thế hệ con cháu đồng lòng nhất trí bảo vệ và nhân rộng cơ nghiệp!",
-            "statModifiers": { "karma": 18, "socialStatus": 16, "happiness": 20, "stress": -15 },
+            "message": "Chi 10 triệu phí pháp lý công chứng để các thế hệ con cháu đồng lòng bảo vệ gia sản.",
+            "statModifiers": { "cash": -10000000, "karma": 10, "socialStatus": 8, "happiness": 10, "stress": -6 },
             "unlockedFlags": ["family_trust_protected"]
           }
         ]
       },
       {
         "id": "opt_mentor_heirs",
-        "label": "Truyền đạt toàn bộ bí quyết đầu tư và quan hệ đối tác cốt lõi cho người kế thừa",
+        "label": "Chi 10 triệu tổ chức khóa bồi dưỡng & chuyển giao bí quyết cho người kế thừa",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Thế hệ kế cận sẵn sàng đưa gia tộc vươn tới đỉnh cao mới!",
-            "statModifiers": { "happiness": 18, "businessAcuity": 10 },
+            "message": "Tốn 10 triệu chi phí tổ chức nhưng thế hệ kế cận sẵn sàng tiếp quản cơ nghiệp.",
+            "statModifiers": { "cash": -10000000, "happiness": 10, "businessAcuity": 4 },
             "unlockedFlags": ["heir_elite_trained"]
           }
         ]
@@ -812,23 +844,23 @@
     "options": [
       {
         "id": "opt_bless_descendants",
-        "label": "Phát bao lì xì đỏ cầu chúc bình an và truyền lời răn dạy cho cháu chắt",
+        "label": "Chi 10 triệu đãi tiệc mừng thọ và phát bao lì xì đỏ cho cháu chắt",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Không khí đầm ấm kính trên nhường dưới khiến lòng bạn tràn ngập tự hào!",
-            "statModifiers": { "happiness": 26, "health": 8, "karma": 15 }
+            "message": "Chi 10 triệu mừng thọ con cháu sum vầy khiến lòng bạn tràn ngập niềm vui.",
+            "statModifiers": { "cash": -10000000, "happiness": 14, "health": 4, "karma": 8 }
           }
         ]
       },
       {
         "id": "opt_share_life_wisdom",
-        "label": "Kể lại hành trình từ hai bàn tay trắng thời trẻ để tiếp lửa cho con cháu",
+        "label": "Chi 3 triệu làm mâm cơm nhỏ và kể chuyện đời tiếp lửa cho con cháu",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Câu chuyện nghị lực sống của bạn trở thành huyền thoại truyền đời trong gia tộc!",
-            "statModifiers": { "socialStatus": 16, "happiness": 22 }
+            "message": "Chi 3 triệu tổ chức gọn nhẹ, câu chuyện nghị lực sống của bạn truyền cảm hứng cho gia đình.",
+            "statModifiers": { "cash": -3000000, "socialStatus": 8, "happiness": 12 }
           }
         ]
       }
@@ -851,8 +883,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Trí nhớ minh mẫn sắc bén khiến bác sĩ cũng phải ngạc nhiên khâm phục!",
-            "statModifiers": { "intelligence": 6, "health": 5, "happiness": 10 }
+            "message": "Thói quen đọc sách và giải ô chữ giúp trí nhớ giữ được sự minh mẫn.",
+            "statModifiers": { "intelligence": 2, "health": 2, "happiness": 5 }
           }
         ]
       },
@@ -862,8 +894,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Xương khớp dẻo dai, giấc ngủ sâu và tinh thần luôn lạc quan yêu đời!",
-            "statModifiers": { "health": 8, "stress": -10, "happiness": 12 }
+            "message": "Vận động nhẹ nhàng buổi sáng giúp cơ thể thư thái và dễ ngủ hơn.",
+            "statModifiers": { "health": 3, "stress": -5, "happiness": 5 }
           }
         ]
       }
@@ -886,19 +918,19 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Kho báu tinh thần vô giá được thế hệ trẻ nâng niu trân trọng!",
-            "statModifiers": { "karma": 20, "happiness": 22, "socialStatus": 12 }
+            "message": "Kho báu tinh thần được thế hệ trẻ nâng niu trân trọng.",
+            "statModifiers": { "karma": 10, "happiness": 10, "socialStatus": 6 }
           }
         ]
       },
       {
         "id": "opt_host_family_feast",
-        "label": "Tổ chức bữa cơm đoàn viên ấm cúng tụ họp đầy đủ mọi thành viên",
+        "label": "Chi 6 triệu tổ chức bữa cơm đoàn viên ấm cúng tụ họp mọi thành viên",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Gia đình thuận hòa là di sản rực rỡ nhất của cả một đời người!",
-            "statModifiers": { "happiness": 25, "karma": 15, "health": 5 }
+            "message": "Chi 6 triệu đãi bữa cơm đại gia đình sum họp đầy ý nghĩa.",
+            "statModifiers": { "cash": -6000000, "happiness": 12, "karma": 8, "health": 2 }
           }
         ]
       }
@@ -921,19 +953,19 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Một cuộc đời trọn vẹn, rực rỡ và đáng tự hào lưu danh mãi trong sử gia tộc!",
-            "statModifiers": { "happiness": 35, "karma": 25, "health": 10, "socialStatus": 20 }
+            "message": "Một cuộc đời trọn vẹn và đáng tự hào lưu danh trong sử gia tộc.",
+            "statModifiers": { "happiness": 18, "karma": 12, "health": 4, "socialStatus": 10 }
           }
         ]
       },
       {
         "id": "opt_wish_peace_all",
-        "label": "Chúc phúc cho thế hệ tương lai tiếp tục viết tiếp huyền thoại Tỷ phú Việt!",
+        "label": "Chúc phúc cho thế hệ tương lai tiếp tục viết tiếp truyền thống gia đình",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Ngọn lửa khát vọng vươn lên rực sáng truyền qua nhiều thế hệ nối tiếp!",
-            "statModifiers": { "happiness": 30, "karma": 30, "stress": -20 }
+            "message": "Ngọn lửa khát vọng vươn lên truyền qua các thế hệ nối tiếp.",
+            "statModifiers": { "happiness": 16, "karma": 14, "stress": -10 }
           }
         ]
       }

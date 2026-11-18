@@ -18,6 +18,9 @@ namespace ZeroToBillionaire.Core
         public List<string> triggeredEvents = new List<string>();
         public List<string> unlockedFlags = new List<string>();
         public List<string> lifeLog = new List<string>();
+        public string macroCycle = "Expansion";
+        public int jobAppsThisYear = 0;
+        public int activitiesDoneThisYear = 0;
         public string checksum;
     }
 
@@ -106,6 +109,9 @@ namespace ZeroToBillionaire.Core
                 }
 
                 snapshot.checksum = savedChecksum;
+                if (string.IsNullOrEmpty(snapshot.macroCycle)) snapshot.macroCycle = "Expansion";
+                snapshot.jobAppsThisYear = Mathf.Max(0, snapshot.jobAppsThisYear);
+                snapshot.activitiesDoneThisYear = Mathf.Max(0, snapshot.activitiesDoneThisYear);
                 return snapshot;
             }
             catch (Exception ex)
@@ -135,7 +141,12 @@ namespace ZeroToBillionaire.Core
             {
                 byte[] bytes = Convert.FromBase64String(code.Substring(5).Trim());
                 string raw = Encoding.UTF8.GetString(bytes);
-                return JsonUtility.FromJson<GameSnapshot>(raw);
+                var snap = JsonUtility.FromJson<GameSnapshot>(raw);
+                if (snap == null || snap.stats == null) return null;
+                if (string.IsNullOrEmpty(snap.macroCycle)) snap.macroCycle = "Expansion";
+                snap.jobAppsThisYear = Mathf.Max(0, snap.jobAppsThisYear);
+                snap.activitiesDoneThisYear = Mathf.Max(0, snap.activitiesDoneThisYear);
+                return snap;
             }
             catch (Exception ex)
             {

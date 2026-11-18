@@ -83,6 +83,13 @@ namespace ZeroToBillionaire.Core
         public string companyName = "";
         public bool isRetired = false;
 
+        // Rủi ro nghề nghiệp, nợ xấu & phá sản (R2)
+        public int layoffCount = 0;
+        public int debtOverdueYears = 0;
+        public int bankruptcyCount = 0;
+        public int creditFrozenYears = 0;
+        public int careerCooldownYears = 0;
+
         // Gia đình
         public string maritalStatus = "Độc thân";
         public string spouseName = "";
@@ -136,6 +143,12 @@ namespace ZeroToBillionaire.Core
             }
 
             if (debt < 0) debt = 0;
+
+            layoffCount = Math.Max(0, layoffCount);
+            debtOverdueYears = Math.Max(0, debtOverdueYears);
+            bankruptcyCount = Math.Max(0, bankruptcyCount);
+            creditFrozenYears = Math.Max(0, creditFrozenYears);
+            careerCooldownYears = Math.Max(0, careerCooldownYears);
 
             if (health <= 0 && isAlive)
             {

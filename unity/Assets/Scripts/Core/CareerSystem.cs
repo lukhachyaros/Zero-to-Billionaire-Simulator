@@ -32,6 +32,14 @@ namespace ZeroToBillionaire.Core
     {
         public static CareerSystem Instance { get; private set; }
 
+        public const int MAX_JOB_APPS_PER_YEAR = 2;
+        public int jobAppsThisYear = 0;
+
+        public int JobAppsThisYear => jobAppsThisYear;
+        public int RemainingJobApps => Math.Max(0, MAX_JOB_APPS_PER_YEAR - jobAppsThisYear);
+        public void ResetAnnualJobApps() => jobAppsThisYear = 0;
+        public void RestoreJobApps(int count) => jobAppsThisYear = Math.Max(0, count);
+
         private readonly List<CareerDefinition> careers = new List<CareerDefinition>();
 
         [System.Serializable]
@@ -45,7 +53,7 @@ namespace ZeroToBillionaire.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 LoadCareersFromResources();
             }
             else
@@ -127,6 +135,17 @@ namespace ZeroToBillionaire.Core
 
         public bool TryApplyForCareer(string careerId, CharacterStats stats, out string message)
         {
+            if (stats == null || !stats.isAlive)
+            {
+                message = "Nhân vật đã qua đời.";
+                return false;
+            }
+            if (jobAppsThisYear >= MAX_JOB_APPS_PER_YEAR)
+            {
+                message = $"Bạn đã nộp tối đa {MAX_JOB_APPS_PER_YEAR} hồ sơ trong năm nay. Hãy bấm +1 Tuổi để thử lại!";
+                return false;
+            }
+
             var career = GetCareerById(careerId);
             if (!MeetsRequirements(career, stats, out string failReason))
             {
@@ -134,10 +153,16 @@ namespace ZeroToBillionaire.Core
                 return false;
             }
 
+            jobAppsThisYear++;
+
             float interviewChance = Mathf.Clamp(
-                0.60f + (stats.charisma - career.minCharisma) * 0.005f + (stats.intelligence - career.minIntelligence) * 0.004f + (stats.luck - 50) * 0.002f,
-                0.35f,
-                0.98f
+                0.55f
+                + (stats.charisma - career.minCharisma) * 0.005f
+                + (stats.intelligence - career.minIntelligence) * 0.004f
+                + (stats.luck - 50) * 0.002f
+                - (stats.careerCooldownYears > 0 ? 0.18f : 0f),
+                0.25f,
+                0.94f
             );
 
             if (UnityEngine.Random.value <= interviewChance)
@@ -162,17 +187,36 @@ namespace ZeroToBillionaire.Core
             return false;
         }
 
-        public List<string> ProcessAnnualCareerProgress(CharacterStats stats)
+        public static float CalculateLayoffProbability(CharacterStats stats, MacroEconomicCycle cycle)
+        {
+            if (stats == null) return 0f;
+            float baseLayoff = cycle switch
+            {
+                MacroEconomicCycle.Boom => 0.02f,
+                MacroEconomicCycle.Expansion => 0.05f,
+                MacroEconomicCycle.Inflation => 0.11f,
+                MacroEconomicCycle.Recession => 0.24f,
+                _ => 0.05f
+            };
+            float layoffProb = baseLayoff
+                + (stats.stress >= 80 ? 0.10f : 0f)
+                + (stats.discipline < 45 ? 0.12f : 0f)
+                + (stats.health < 35 ? 0.08f : 0f)
+                - (stats.intelligence >= 75 && stats.discipline >= 70 ? 0.04f : 0f);
+            return Mathf.Clamp(layoffProb, 0.01f, 0.55f);
+        }
+
+        public List<string> ProcessAnnualCareerProgress(CharacterStats stats, MacroEconomicCycle cycle = MacroEconomicCycle.Expansion)
         {
             var logs = new List<string>();
-            if (!stats.isAlive) return logs;
+            if (stats == null || !stats.isAlive) return logs;
 
             // Tự động cập nhật nhãn học sinh khi còn nhỏ và chưa đi làm
             if (string.IsNullOrEmpty(stats.currentCareerId))
             {
                 if (stats.age < 6) stats.currentJob = "Trẻ nhỏ";
                 else if (stats.age <= 18) stats.currentJob = $"Học sinh ({stats.educationLevel})";
-                else if (!stats.isRetired) stats.currentJob = "Tự do / Chưa có việc";
+                else if (!stats.isRetired && stats.careerCooldownYears <= 0) stats.currentJob = "Tự do / Chưa có việc";
                 return logs;
             }
 
@@ -180,12 +224,47 @@ namespace ZeroToBillionaire.Core
             if (current == null) return logs;
 
             stats.yearsInCurrentJob++;
-            stats.stress += Mathf.Max(0, current.annualStressDelta - stats.discipline / 20);
+
+            // Kiểm tra điều kiện nghỉ hưu trước khi xét sa thải (người chuẩn bị nghỉ hưu không bị sa thải cùng lượt)
+            bool willRetireThisTurn = stats.age >= 62 && !stats.isRetired && stats.age > current.maxAge;
+            if (!willRetireThisTurn)
+            {
+                float layoffProb = CalculateLayoffProbability(stats, cycle);
+                if (UnityEngine.Random.value < layoffProb)
+                {
+                    long severance = (stats.discipline >= 40 && stats.yearsInCurrentJob >= 2) ? stats.monthlyIncome : 0L;
+                    if (severance > 0)
+                    {
+                        stats.cash += severance;
+                        EconomySystem.Instance?.RecordCashflow(stats.age, severance, "salary", "Trợ cấp thôi việc (Sa thải)", stats.cash);
+                    }
+
+                    string oldJobTitle = stats.currentJob;
+                    stats.currentCareerId = "";
+                    stats.currentJob = "Thất nghiệp (Bị sa thải)";
+                    stats.monthlyIncome = 0;
+                    stats.yearsInCurrentJob = 0;
+                    stats.layoffCount++;
+                    stats.careerCooldownYears = Math.Max(stats.careerCooldownYears, 1);
+                    stats.stress += 15;
+                    stats.happiness -= 18;
+                    stats.socialStatus -= 4;
+                    stats.ClampStats();
+
+                    string sevMsg = severance > 0
+                        ? $" Nhận trợ cấp thôi việc {CharacterStats.FormatVND(severance)}."
+                        : " Không đủ điều kiện nhận trợ cấp thôi việc.";
+                    logs.Add($"📉 BỊ SA THẢI! Do biến động kinh tế & hiệu suất, bạn mất việc [{oldJobTitle}].{sevMsg}");
+                    return logs;
+                }
+            }
+
+            stats.stress += Mathf.Max(1, current.annualStressDelta - stats.discipline / 22);
             stats.practicalSkills += 2;
 
             // Tăng lương định kỳ
-            float performanceFactor = 0.7f + (stats.discipline + stats.intelligence) / 200f;
-            long raise = (long)(stats.monthlyIncome * current.annualRaiseRate * performanceFactor);
+            float performanceFactor = 0.68f + (stats.discipline + stats.intelligence) / 210f;
+            long raise = (long)Math.Round(stats.monthlyIncome * current.annualRaiseRate * performanceFactor);
             if (raise > 0)
             {
                 stats.monthlyIncome += raise;
@@ -197,11 +276,11 @@ namespace ZeroToBillionaire.Core
                 && stats.yearsInCurrentJob >= current.yearsForPromotion)
             {
                 var nextCareer = GetCareerById(current.promotionCareerId);
-                if (nextCareer != null && stats.intelligence >= nextCareer.minIntelligence - 8 && stats.discipline >= nextCareer.minDiscipline - 8)
+                if (nextCareer != null && stats.intelligence >= nextCareer.minIntelligence - 5 && stats.discipline >= nextCareer.minDiscipline - 5)
                 {
                     stats.currentCareerId = nextCareer.careerId;
                     stats.currentJob = nextCareer.title;
-                    stats.monthlyIncome = Math.Max((long)(stats.monthlyIncome * 1.25f), nextCareer.monthlySalary);
+                    stats.monthlyIncome = Math.Max((long)Math.Round(stats.monthlyIncome * 1.22f), nextCareer.monthlySalary);
                     stats.yearsInCurrentJob = 0;
                     stats.happiness += 12;
                     stats.socialStatus += 10;
@@ -210,7 +289,7 @@ namespace ZeroToBillionaire.Core
             }
 
             // Chế độ hưu trí khi từ 62 tuổi
-            if (stats.age >= 62 && !stats.isRetired && stats.age > current.maxAge)
+            if (willRetireThisTurn)
             {
                 long pension = (long)(stats.monthlyIncome * 0.45f);
                 stats.currentCareerId = "";

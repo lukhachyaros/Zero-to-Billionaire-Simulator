@@ -36,7 +36,7 @@ namespace ZeroToBillionaire.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
             }
             else
             {
@@ -275,12 +275,24 @@ namespace ZeroToBillionaire.Core
         /// <summary>
         /// Tạo nhân vật đời kế tiếp thừa kế tài sản, bất động sản và phúc đức dòng tộc.
         /// </summary>
-        public CharacterStats CreateHeirStats(CharacterStats deceasedParent, NpcRelationship chosenChild, bool hasFamilyTrustFlag, bool hasEliteHeirFlag)
+        public CharacterStats CreateHeirStats(
+            CharacterStats deceasedParent,
+            NpcRelationship chosenChild,
+            bool hasFamilyTrustFlag,
+            bool hasEliteHeirFlag,
+            long parentNetWorth = long.MinValue)
         {
             double inheritanceRatio = hasFamilyTrustFlag ? 1.0 : 0.85;
             long totalLegacyCash = deceasedParent.cash + deceasedParent.trustFund;
             long inheritedCash = (long)(totalLegacyCash * inheritanceRatio);
             long inheritedDebt = deceasedParent.debt;
+
+            long effectiveNetWorth = parentNetWorth != long.MinValue
+                ? parentNetWorth
+                : (EconomySystem.Instance != null
+                    ? EconomySystem.Instance.CalculateNetWorth(deceasedParent)
+                    : (deceasedParent.cash + deceasedParent.trustFund - deceasedParent.debt));
+            bool isWealthyDynasty = effectiveNetWorth >= 5_000_000_000L;
 
             string childGender = chosenChild.fullName.Contains("Ngọc") || chosenChild.fullName.Contains("Phương") || chosenChild.fullName.Contains("Linh")
                 ? "Nữ"
@@ -289,11 +301,12 @@ namespace ZeroToBillionaire.Core
             int startAge = Mathf.Clamp(chosenChild.age, 0, 35);
             string startEdu = startAge >= 22 ? "Đại học" : (startAge >= 18 ? "THPT" : (startAge >= 15 ? "THCS" : (startAge >= 6 ? "Tiểu học" : "Chưa đi học")));
             bool isUnderAge = startAge < 18;
+            string initialJob = startAge < 6 ? "Trẻ nhỏ" : (startAge <= 18 ? $"Học sinh ({startEdu})" : "Tự do / Chưa có việc");
 
             var heir = new CharacterStats
             {
                 generation = deceasedParent.generation + 1,
-                backgroundId = inheritedCash >= 500_000_000L ? "bg_wealthy_dynasty" : "bg_working_class",
+                backgroundId = isWealthyDynasty ? "bg_wealthy_dynasty" : "bg_working_class",
                 backgroundName = $"Truyền nhân Đời thứ {deceasedParent.generation + 1}",
                 characterName = chosenChild.fullName,
                 gender = childGender,
@@ -315,11 +328,19 @@ namespace ZeroToBillionaire.Core
                 karma = deceasedParent.karma,
                 cash = isUnderAge ? 0 : inheritedCash,
                 trustFund = isUnderAge ? inheritedCash : 0,
-                pocketMoneyChild = inheritedCash >= 500_000_000L ? 1_500_000L : 400_000L,
-                pocketMoneyTeen = inheritedCash >= 500_000_000L ? 8_000_000L : 2_000_000L,
-                comingOfAgeGrant = 0,
+                pocketMoneyChild = isWealthyDynasty ? 400_000L : 100_000L,
+                pocketMoneyTeen = isWealthyDynasty ? 1_500_000L : 500_000L,
+                comingOfAgeGrant = isWealthyDynasty ? 15_000_000L : 3_500_000L,
+                familyAllowancePerYear = isWealthyDynasty ? 3_000_000L : 1_500_000L,
                 debt = inheritedDebt,
-                educationLevel = startEdu
+                educationLevel = startEdu,
+                currentCareerId = "",
+                currentJob = initialJob,
+                layoffCount = 0,
+                debtOverdueYears = 0,
+                bankruptcyCount = 0,
+                creditFrozenYears = 0,
+                careerCooldownYears = 0
             };
 
             heir.ClampStats();

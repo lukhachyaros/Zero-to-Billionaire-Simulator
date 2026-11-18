@@ -52,7 +52,7 @@ namespace ZeroToBillionaire.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 EnsureSubsystems();
                 LoadStartingBackgrounds();
             }
@@ -119,6 +119,7 @@ namespace ZeroToBillionaire.Core
             SaveSystem.ClearTimeMachine();
             unlockedMilestones.Clear();
             activitiesDoneThisYear = 0;
+            CareerSystem.Instance?.ResetAnnualJobApps();
 
             var bg = backgrounds.FirstOrDefault(b => b.backgroundId == backgroundId);
 
@@ -141,10 +142,10 @@ namespace ZeroToBillionaire.Core
                 charisma = UnityEngine.Random.Range(38, 70),
                 cash = 0,
                 trustFund = 0,
-                pocketMoneyChild = bg != null ? bg.pocketMoneyChild : 200_000L,
-                pocketMoneyTeen = bg != null ? bg.pocketMoneyTeen : 1_200_000L,
-                comingOfAgeGrant = bg != null ? bg.comingOfAgeGrant : 8_000_000L,
-                familyAllowancePerYear = bg != null ? bg.familyAllowancePerYear : 4_000_000L
+                pocketMoneyChild = bg != null ? bg.pocketMoneyChild : 80_000L,
+                pocketMoneyTeen = bg != null ? bg.pocketMoneyTeen : 400_000L,
+                comingOfAgeGrant = bg != null ? bg.comingOfAgeGrant : 3_500_000L,
+                familyAllowancePerYear = bg != null ? bg.familyAllowancePerYear : 1_500_000L
             };
 
             if (bg != null)
@@ -204,6 +205,7 @@ namespace ZeroToBillionaire.Core
 
             currentStats.age++;
             activitiesDoneThisYear = 0;
+            CareerSystem.Instance?.ResetAnnualJobApps();
             currentStats.energy = 100;
 
             AddLog($"📅 Năm {currentStats.age} tuổi:");
@@ -224,19 +226,30 @@ namespace ZeroToBillionaire.Core
 
         private void ProcessAnnualSimulation()
         {
-            // 1. Sự nghiệp & Lương thưởng
+            MacroEconomicCycle cycle = EconomySystem.Instance != null
+                ? EconomySystem.Instance.RollMacroCycle()
+                : MacroEconomicCycle.Expansion;
+
+            int prevLayoffs = currentStats.layoffCount;
+
+            // 1. Sự nghiệp & Lương thưởng (nhận pha kinh tế vĩ mô đã roll cho năm nay)
             if (CareerSystem.Instance != null)
             {
-                foreach (var msg in CareerSystem.Instance.ProcessAnnualCareerProgress(currentStats))
+                foreach (var msg in CareerSystem.Instance.ProcessAnnualCareerProgress(currentStats, cycle))
                 {
                     AddLog(msg);
                 }
             }
 
-            // 2. Kinh tế vĩ mô, Bất động sản, Cổ phiếu, Lãi vay & Bảng xếp hạng Phú hào
+            bool laidOffThisTurn = currentStats.layoffCount > prevLayoffs;
+
+            // 2. Kinh tế vĩ mô, Bất động sản, Cổ phiếu, Thu hồi nợ, Phá sản & Bảng xếp hạng Phú hào
             if (EconomySystem.Instance != null)
             {
-                foreach (var msg in EconomySystem.Instance.ProcessAnnualMacroAndPortfolio(currentStats))
+                foreach (var msg in EconomySystem.Instance.ProcessAnnualMacroAndPortfolio(
+                    currentStats,
+                    rollNewCycle: false,
+                    skipCareerCooldownDecrement: laidOffThisTurn))
                 {
                     AddLog(msg);
                 }
@@ -337,16 +350,18 @@ namespace ZeroToBillionaire.Core
                     break;
 
                 case YearlyActivityType.SideHustle:
-                    if (currentStats.age < 15)
+                    if (currentStats.age < 16)
                     {
                         activitiesDoneThisYear--;
-                        resultMessage = "Cần đủ 15 tuổi để nhận việc làm thêm ngoài giờ.";
+                        resultMessage = "Cần đủ 16 tuổi để nhận việc làm thêm ngoài giờ.";
                         return false;
                     }
-                    long earned = 2_000_000L + (currentStats.practicalSkills + currentStats.intelligence) * 120_000L;
+                    long earned = Math.Min(3_500_000L, 550_000L + (currentStats.practicalSkills + currentStats.intelligence) * 18_000L);
                     currentStats.cash += earned;
+                    EconomySystem.Instance?.RecordCashflow(currentStats.age, earned, "salary", "Làm dự án tự do ngoài giờ", currentStats.cash);
                     currentStats.practicalSkills += 4;
-                    currentStats.stress += 7;
+                    currentStats.stress += 14;
+                    currentStats.health -= 4;
                     resultMessage = $"💻 Nhận dự án làm thêm ngoài giờ kiếm được +{CharacterStats.FormatVND(earned)}!";
                     break;
 
@@ -395,14 +410,33 @@ namespace ZeroToBillionaire.Core
 
             bool hasTrust = EventEngine.Instance != null && EventEngine.Instance.HasFlag("family_trust_protected");
             bool hasElite = EventEngine.Instance != null && EventEngine.Instance.HasFlag("heir_elite_trained");
+            long parentNetWorth = EconomySystem.Instance != null
+                ? EconomySystem.Instance.CalculateNetWorth(currentStats)
+                : (currentStats.cash + currentStats.trustFund - currentStats.debt);
 
-            var heirStats = RelationshipSystem.Instance.CreateHeirStats(currentStats, chosen, hasTrust, hasElite);
+            var heirStats = RelationshipSystem.Instance.CreateHeirStats(currentStats, chosen, hasTrust, hasElite, parentNetWorth);
             currentStats = heirStats;
+
+            if (EconomySystem.Instance != null)
+            {
+                EconomySystem.Instance.cashflowHistory.Clear();
+                if (currentStats.cash > 0)
+                {
+                    EconomySystem.Instance.RecordCashflow(
+                        currentStats.age,
+                        currentStats.cash,
+                        "family",
+                        $"Thừa kế tiền mặt đời thứ {currentStats.generation}",
+                        currentStats.cash
+                    );
+                }
+            }
 
             RelationshipSystem.Instance.InitializeFamilyForNewLife(currentStats);
             EventEngine.Instance?.ResetSessionState(new[] { "dynasty_heir" });
             SaveSystem.ClearTimeMachine();
             activitiesDoneThisYear = 0;
+            CareerSystem.Instance?.ResetAnnualJobApps();
 
             AddLog($"👑 GIA PHẢ TRUYỀN ĐỜI: {currentStats.characterName} (Đời thứ {currentStats.generation}, {currentStats.age} tuổi) chính thức kế thừa cơ nghiệp gia tộc!");
             IOSHapticFeedback.TriggerNotification(IOSHapticFeedback.HapticNotificationType.Success);
@@ -458,7 +492,10 @@ namespace ZeroToBillionaire.Core
                     : new List<NpcRelationship>(),
                 triggeredEvents = EventEngine.Instance != null ? EventEngine.Instance.GetTriggeredEventIds() : new List<string>(),
                 unlockedFlags = EventEngine.Instance != null ? EventEngine.Instance.GetUnlockedFlags() : new List<string>(),
-                lifeLog = new List<string>(lifeLog)
+                lifeLog = new List<string>(lifeLog),
+                macroCycle = EconomySystem.Instance != null ? EconomySystem.Instance.currentCycle.ToString() : "Expansion",
+                jobAppsThisYear = CareerSystem.Instance != null ? CareerSystem.Instance.JobAppsThisYear : 0,
+                activitiesDoneThisYear = activitiesDoneThisYear
             };
         }
 
@@ -466,14 +503,28 @@ namespace ZeroToBillionaire.Core
         {
             if (snapshot == null || snapshot.stats == null) return;
             currentStats = snapshot.stats.DeepCopy();
+            currentStats.layoffCount = Math.Max(0, currentStats.layoffCount);
+            currentStats.debtOverdueYears = Math.Max(0, currentStats.debtOverdueYears);
+            currentStats.bankruptcyCount = Math.Max(0, currentStats.bankruptcyCount);
+            currentStats.creditFrozenYears = Math.Max(0, currentStats.creditFrozenYears);
+            currentStats.careerCooldownYears = Math.Max(0, currentStats.careerCooldownYears);
+            currentStats.currentCareerId ??= "";
+            currentStats.currentJob ??= "Tự do / Chưa có việc";
+            currentStats.ClampStats();
+
             if (EconomySystem.Instance != null)
             {
                 EconomySystem.Instance.portfolio = snapshot.portfolio ?? new List<OwnedAsset>();
+                EconomySystem.Instance.currentCycle = Enum.TryParse(snapshot.macroCycle, out MacroEconomicCycle parsedCycle)
+                    ? parsedCycle
+                    : MacroEconomicCycle.Expansion;
             }
             if (RelationshipSystem.Instance != null)
             {
                 RelationshipSystem.Instance.relationships = snapshot.relationships ?? new List<NpcRelationship>();
             }
+            CareerSystem.Instance?.RestoreJobApps(snapshot.jobAppsThisYear);
+            activitiesDoneThisYear = Math.Max(0, snapshot.activitiesDoneThisYear);
             EventEngine.Instance?.RestoreSessionState(snapshot.triggeredEvents, snapshot.unlockedFlags);
             lifeLog = snapshot.lifeLog != null ? new List<string>(snapshot.lifeLog) : new List<string>();
         }

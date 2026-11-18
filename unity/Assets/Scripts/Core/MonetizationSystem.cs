@@ -28,7 +28,7 @@ namespace ZeroToBillionaire.Core
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 LoadState();
             }
             else
@@ -95,20 +95,20 @@ namespace ZeroToBillionaire.Core
                 {
                     stats.intelligence += 15;
                     stats.luck += 15;
-                    stats.comingOfAgeGrant += 50_000_000L;
+                    stats.comingOfAgeGrant += 8_000_000L;
                 }
                 else if (StarterLivesLeft > 0)
                 {
                     stats.luck += 12;
                     stats.health += 10;
-                    stats.comingOfAgeGrant += 25_000_000L;
+                    stats.comingOfAgeGrant += 4_000_000L;
                     StarterLivesLeft -= 1;
                 }
 
                 if (AdBonusPending)
                 {
                     stats.luck += 5;
-                    stats.comingOfAgeGrant += 3_000_000L;
+                    stats.comingOfAgeGrant += 1_000_000L;
                     AdBonusPending = false;
                 }
                 stats.ClampStats();

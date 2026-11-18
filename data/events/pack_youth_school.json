@@ -161,8 +161,8 @@
           },
           {
             "probability": 0.25,
-            "message": "Dù không tìm lại được bút cũ nhưng bạn học cách sắp xếp cặp gọn gàng hơn.",
-            "statModifiers": { "discipline": 4, "stress": 4 }
+            "message": "Tìm mãi không thấy bút cũ nên bạn phải xin tiền mua cây bút mực mới hết 30 nghìn đồng.",
+            "statModifiers": { "cash": -30000, "discipline": 4, "stress": 4 }
           }
         ]
       },
@@ -488,8 +488,8 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Chủ nhân chiếc ví cảm kích trao bạn phần quà cảm ơn nhỏ và nhà trường tuyên dương dưới cờ!",
-            "statModifiers": { "cash": 300000, "karma": 22, "socialStatus": 14, "happiness": 15 }
+            "message": "Chủ nhân chiếc ví cảm kích gửi tặng 100 nghìn đồng cảm ơn và nhà trường tuyên dương dưới cờ!",
+            "statModifiers": { "cash": 100000, "karma": 15, "socialStatus": 10, "happiness": 15 }
           }
         ]
       },
@@ -563,14 +563,14 @@
         "outcomes": [
           {
             "probability": 0.75,
-            "conditionFormula": "intelligence >= 60",
-            "message": "Phần phản biện tự tin chinh phục ban giám khảo! Bạn giành Huy chương Vàng và học bổng ngoại ngữ!",
-            "statModifiers": { "intelligence": 10, "charisma": 12, "socialStatus": 12, "cash": 500000 }
+            "conditionFormula": "intelligence >= 62",
+            "message": "Phần phản biện tự tin chinh phục ban giám khảo! Bạn giành giải khuyến khích kèm 200 nghìn đồng.",
+            "statModifiers": { "intelligence": 10, "charisma": 12, "socialStatus": 12, "cash": 200000, "stress": 8 }
           },
           {
             "probability": 0.25,
-            "message": "Bạn lọt vào Top 10 toàn thành phố, trình độ giao tiếp ngoại ngữ tiến bộ vượt bậc.",
-            "statModifiers": { "intelligence": 7, "charisma": 8 }
+            "message": "Bạn lọt vào vòng chung khảo toàn thành phố nhưng trượt giải trong gang tấc.",
+            "statModifiers": { "intelligence": 7, "charisma": 8, "stress": 6 }
           }
         ]
       },
@@ -604,19 +604,25 @@
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Ông bà thưởng cho bạn chút tiền công nhỏ cùng sự khéo léo hiếm có!",
-            "statModifiers": { "practicalSkills": 14, "discipline": 10, "cash": 400000, "karma": 6 }
+            "message": "Sau kỳ phụ việc vất vả, ông bà thưởng cho bạn 150 nghìn đồng tiền công nhỏ.",
+            "statModifiers": { "practicalSkills": 14, "discipline": 10, "cash": 150000, "karma": 6, "stress": 4 }
           }
         ]
       },
       {
         "id": "opt_sell_online_help",
-        "label": "Chụp ảnh đẹp lập fanpage giới thiệu sản phẩm của ông bà cho khách gần xa",
+        "label": "Bỏ tiền túi chạy quảng cáo lập fanpage bán sản phẩm của ông bà online",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Đơn hàng tăng vọt gấp đôi nhờ tài marketing tuổi teen của bạn!",
-            "statModifiers": { "businessAcuity": 12, "financialLiteracy": 6, "cash": 450000 }
+            "probability": 0.55,
+            "conditionFormula": "businessAcuity >= 35",
+            "message": "Bài đăng tiếp cận đúng khách hàng, bạn chia được 200 nghìn đồng tiền lời bán online.",
+            "statModifiers": { "businessAcuity": 8, "financialLiteracy": 4, "cash": 200000 }
+          },
+          {
+            "probability": 0.45,
+            "message": "Quảng cáo đốt hết ngân sách mà không ra đơn nào, bạn lỗ mất 150 nghìn đồng tiền túi!",
+            "statModifiers": { "cash": -150000, "stress": 8, "financialLiteracy": 4 }
           }
         ]
       }
@@ -687,12 +693,18 @@
       },
       {
         "id": "opt_run_food_booth",
-        "label": "Mở gian hàng trà tắc & bánh tráng trộn bán gây quỹ cho lớp",
+        "label": "Bỏ vốn góp chung mở gian hàng trà tắc & bánh tráng trộn bán gây quỹ",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Gian hàng đắt khách cháy hàng chỉ sau 2 tiếng, thu lời ròng cho quỹ lớp và phần thưởng riêng!",
-            "statModifiers": { "businessAcuity": 12, "financialLiteracy": 8, "cash": 350000 }
+            "probability": 0.60,
+            "conditionFormula": "businessAcuity >= 30",
+            "message": "Gian hàng đắt khách cháy hàng, bạn thu về khoản chia lãi ròng 200 nghìn đồng.",
+            "statModifiers": { "businessAcuity": 8, "financialLiteracy": 6, "cash": 200000 }
+          },
+          {
+            "probability": 0.40,
+            "message": "Trời đổ mưa rào đúng giờ hội trại làm đồ ăn bị ế ẩm, bạn lỗ mất 150 nghìn đồng tiền vốn!",
+            "statModifiers": { "cash": -150000, "stress": 8, "happiness": -6 }
           }
         ]
       }
@@ -767,9 +779,14 @@
         "label": "Tự tay dựng một bộ phim ngắn lưu giữ thanh xuân tặng cả lớp",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Cả lớp vỡ òa xúc động khi xem video! Nhiều người đặt hàng bạn dựng clip kỷ yếu thuê.",
-            "statModifiers": { "practicalSkills": 12, "happiness": 14, "cash": 500000 }
+            "probability": 0.50,
+            "message": "Cả lớp xúc động khi xem video! Một vài bạn góp gửi bạn 200 nghìn đồng tiền công dựng clip.",
+            "statModifiers": { "cash": 200000, "practicalSkills": 10, "happiness": 12, "stress": 6 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Cả lớp vỡ òa xúc động và cảm ơn tấm lòng của bạn — kỷ niệm vô giá tuổi học trò.",
+            "statModifiers": { "practicalSkills": 8, "happiness": 10, "stress": 6 }
           }
         ]
       }
@@ -834,12 +851,18 @@
       },
       {
         "id": "opt_sell_flags_horns",
-        "label": "Nhanh nhạy nhập cờ áo và kèn cổ vũ bán dọc phố trung tâm",
+        "label": "Nhanh nhạy bỏ tiền túi nhập cờ áo và kèn cổ vũ bán dọc phố trung tâm",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Vừa hòa nhịp chiến thắng vừa bỏ túi khoản lãi bất ngờ ngay trong đêm!",
-            "statModifiers": { "cash": 450000, "businessAcuity": 10, "happiness": 10 }
+            "probability": 0.50,
+            "conditionFormula": "businessAcuity >= 35",
+            "message": "Đứng đúng ngã tư đông vui và bán hết gọn lô hàng, thu lãi ròng 250 nghìn đồng!",
+            "statModifiers": { "cash": 250000, "businessAcuity": 8, "happiness": 8 }
+          },
+          {
+            "probability": 0.50,
+            "message": "Bị trật tự đô thị nhắc nhở giải tán kèm tồn hàng không bán hết khiến bạn lỗ 250 nghìn đồng!",
+            "statModifiers": { "cash": -250000, "stress": 10, "happiness": -8 }
           }
         ]
       }
@@ -858,28 +881,28 @@
     "options": [
       {
         "id": "opt_practice_figure8",
-        "label": "Tập dượt kỹ giữ ga đều ở số 3 và vào cua mượt mà",
+        "label": "Đóng 350 nghìn lệ phí thi và tập dượt kỹ giữ ga đều ở số 3",
         "outcomes": [
           {
             "probability": 0.85,
-            "message": "Đạt điểm tuyệt đối 100/100! Tấm bằng lái đầu tiên đánh dấu sự trưởng thành tự do!",
-            "statModifiers": { "practicalSkills": 10, "happiness": 12, "discipline": 5 }
+            "message": "Đạt điểm tuyệt đối 100/100! Đóng 350 nghìn lệ phí nhận tấm bằng lái đầu tiên.",
+            "statModifiers": { "cash": -350000, "practicalSkills": 10, "happiness": 12, "discipline": 5 }
           },
           {
             "probability": 0.15,
-            "message": "Chạm vạch nhẹ ở khúc cua cuối, nhưng lần thi lại sau đó bạn vượt qua dễ dàng!",
-            "statModifiers": { "practicalSkills": 6, "stress": 5 }
+            "message": "Chạm vạch ở khúc cua cuối phải đóng thêm phí thi lại, tổng cộng mất 600 nghìn đồng!",
+            "statModifiers": { "cash": -600000, "practicalSkills": 6, "stress": 5 }
           }
         ]
       },
       {
         "id": "opt_deep_breath_focus",
-        "label": "Hít sâu giữ bình tĩnh tuyệt đối, không nhìn xuống bánh xe",
+        "label": "Đóng 350 nghìn lệ phí thi, hít sâu giữ bình tĩnh tuyệt đối",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Bạn lướt qua vòng số 8 êm ru trong tiếng vỗ tay của thí sinh chờ thi!",
-            "statModifiers": { "practicalSkills": 8, "discipline": 8, "happiness": 10 }
+            "message": "Tốn 350 nghìn lệ phí hồ sơ, bạn lướt qua vòng số 8 êm ru!",
+            "statModifiers": { "cash": -350000, "practicalSkills": 8, "discipline": 8, "happiness": 10 }
           }
         ]
       }
@@ -893,28 +916,28 @@
     "maxAge": 24,
     "priority": 62,
     "isOneTime": true,
-    "description": "Ngồi bên cửa sổ toa tàu lướt qua đèo Hải Vân hùng vĩ, một bên là núi xanh ngắt, một bên là biển cả bao la.",
+    "description": "Bạn mua vé tàu Thống Nhất (800 nghìn đồng) ngồi bên cửa sổ ngắm đèo Hải Vân hùng vĩ, một bên là núi xanh ngắt, một bên là biển cả bao la.",
     "conditions": [],
     "options": [
       {
         "id": "opt_meet_travelers",
-        "label": "Trò chuyện cùng các hành khách bốn phương trên toa tàu",
+        "label": "Chi 800 nghìn mua vé tàu và trò chuyện cùng các hành khách bốn phương",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Mỗi câu chuyện từ những vùng đất khác nhau mở rộng tầm nhìn và vốn sống của bạn.",
-            "statModifiers": { "charisma": 10, "intelligence": 6, "happiness": 12 }
+            "message": "Tốn 800 nghìn tiền vé nhưng mỗi câu chuyện trên tàu mở rộng tầm nhìn và vốn sống của bạn.",
+            "statModifiers": { "cash": -800000, "charisma": 10, "intelligence": 6, "happiness": 12 }
           }
         ]
       },
       {
         "id": "opt_journal_goals",
-        "label": "Viết danh sách mục tiêu chinh phục 1 Tỷ USD trong cuốn sổ tay hành trình",
+        "label": "Chi 800 nghìn mua vé tàu và viết danh sách mục tiêu trong sổ tay hành trình",
         "outcomes": [
           {
             "probability": 1.0,
-            "message": "Khát vọng lớn hình thành rõ nét giữa non sông gấm vóc tươi đẹp!",
-            "statModifiers": { "discipline": 10, "businessAcuity": 8, "happiness": 10 }
+            "message": "Tốn 800 nghìn cho chuyến đi đáng nhớ, khát vọng lớn hình thành rõ nét giữa non sông gấm vóc!",
+            "statModifiers": { "cash": -800000, "discipline": 10, "businessAcuity": 8, "happiness": 10 }
           }
         ]
       }
@@ -928,33 +951,39 @@
     "maxAge": 21,
     "priority": 64,
     "isOneTime": false,
-    "description": "Dịp lễ sắp tới, nhóm bạn rủ nhau dậy từ 4 giờ sáng ra chợ hoa đầu mối nhập hoa hồng về tự gói bán dọc vỉa hè.",
+    "description": "Dịp lễ sắp tới, nhóm bạn rủ nhau góp vốn nhập hoa hồng về tự gói bán dọc vỉa hè — lời ăn lỗ chịu tùy thời tiết và tay nghề.",
     "conditions": [],
     "options": [
       {
         "id": "opt_package_bouquets",
-        "label": "Gói hoa nghệ thuật kèm thiệp viết tay bán giá hợp lý",
+        "label": "Góp vốn nhập hoa tươi tự gói bán nghệ thuật dọc vỉa hè",
         "outcomes": [
           {
-            "probability": 0.85,
-            "message": "Khách mua tặng mẹ tặng người yêu khen nức nở! Chia lãi ròng thu về đầy túi!",
-            "statModifiers": { "cash": 2500000, "businessAcuity": 10, "practicalSkills": 8, "charisma": 6 }
+            "probability": 0.45,
+            "conditionFormula": "businessAcuity >= 40",
+            "message": "Gói hoa đẹp và chọn đúng góc phố đông người mua, bạn chia lãi ròng được 900 nghìn đồng!",
+            "statModifiers": { "cash": 900000, "businessAcuity": 8, "practicalSkills": 6, "charisma": 4 }
           },
           {
-            "probability": 0.15,
-            "message": "Cuối ngày phải giảm giá xả hàng để thu hồi vốn, lãi nhẹ một bữa liên hoan.",
-            "statModifiers": { "cash": 400000, "financialLiteracy": 6 }
+            "probability": 0.55,
+            "message": "Mưa lạnh làm hoa nhanh héo và ế hàng ngập vỉa hè! Bạn lỗ mất 700 nghìn đồng tiền vốn!",
+            "statModifiers": { "cash": -700000, "stress": 12, "happiness": -8 }
           }
         ]
       },
       {
         "id": "opt_be_delivery_rider",
-        "label": "Nhận chân giao hoa hỏa tốc quanh nội thành hưởng hoa hồng từng đơn",
+        "label": "Nhận chân giao hoa quanh nội thành hưởng công từng đơn",
         "outcomes": [
           {
-            "probability": 1.0,
-            "message": "Không lo rủi ro tồn hàng, bạn nhận tiền công xứng đáng với công sức chạy suốt cả ngày.",
-            "statModifiers": { "cash": 1500000, "discipline": 8, "health": 4 }
+            "probability": 0.75,
+            "message": "Chạy xe suốt cả ngày nắng gió cũng kiếm được 450 nghìn đồng tiền công.",
+            "statModifiers": { "cash": 450000, "discipline": 6, "stress": 10, "health": -2 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Va quẹt nhẹ làm dập nát bó hoa VIP của khách khiến bạn phải đền bù mất 250 nghìn đồng!",
+            "statModifiers": { "cash": -250000, "stress": 14 }
           }
         ]
       }

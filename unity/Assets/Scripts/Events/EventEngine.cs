@@ -35,7 +35,7 @@ namespace ZeroToBillionaire.Events
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
+                if (Application.isPlaying) DontDestroyOnLoad(gameObject);
                 LoadDefaultResources();
             }
             else
@@ -167,6 +167,17 @@ namespace ZeroToBillionaire.Events
 
             var eligible = GetEligibleEvents(stats);
             if (eligible.Count == 0) return null;
+
+            // Từ 19 tuổi trở lên, tăng tỷ lệ gặp sự kiện chi tiêu/rủi ro đời sống (exp_*) mà không miễn nhiễm theo tiền mặt
+            var expenseEvents = eligible
+                .Where(e => !string.IsNullOrEmpty(e.eventId) && e.eventId.StartsWith("exp_"))
+                .ToList();
+            if (stats.age >= 19 && expenseEvents.Count > 0 && UnityEngine.Random.value < 0.38f)
+            {
+                var pickedExp = expenseEvents[UnityEngine.Random.Range(0, expenseEvents.Count)];
+                MarkEventTriggered(pickedExp.eventId, stats.age);
+                return pickedExp;
+            }
 
             // Nhóm sự kiện cột mốc quan trọng (priority >= 75) luôn được ưu tiên
             int topPriority = eligible[0].priority;
@@ -312,10 +323,10 @@ namespace ZeroToBillionaire.Events
                 if (!string.IsNullOrWhiteSpace(outcome.conditionFormula))
                 {
                     bool passed = EvaluateFormula(outcome.conditionFormula, stats);
-                    w *= passed ? (1.25f + (stats.luck - 50) * 0.004f) : 0.45f;
+                    w *= passed ? (1.15f + (stats.luck - 50) * 0.003f) : 0.10f;
                 }
 
-                weights[i] = Mathf.Max(0.01f, w);
+                weights[i] = Mathf.Max(0.001f, w);
                 totalWeight += weights[i];
             }
 

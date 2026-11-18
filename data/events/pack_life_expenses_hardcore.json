@@ -7,9 +7,7 @@
     "maxAge": 55,
     "priority": 78,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 12000000 }
-    ],
+    "conditions": [],
     "description": "Một tháng nhận liền 6 chiếc thiệp mời đám cưới từ bạn đại học cũ đến đồng nghiệp phòng bên cạnh.",
     "options": [
       {
@@ -45,8 +43,7 @@
     "priority": 77,
     "isOneTime": false,
     "conditions": [
-      { "field": "netWorth", "operatorType": "<", "numberValue": 1200000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 10000000 }
+      { "field": "netWorth", "operatorType": "<", "numberValue": 1200000000 }
     ],
     "description": "Giá điện nước sinh hoạt leo thang, chủ nhà thông báo tăng tiền phòng và phí dịch vụ thêm một khoản đáng kể.",
     "options": [
@@ -75,9 +72,7 @@
     "maxAge": 55,
     "priority": 76,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 9000000 }
-    ],
+    "conditions": [],
     "description": "Cơn mưa lớn làm con đường về nhà ngập sâu nửa bánh xe. Xe của bạn chết máy giữa dòng nước, bugi và bộ nồi hỏng nặng.",
     "options": [
       {
@@ -105,9 +100,7 @@
     "maxAge": 45,
     "priority": 79,
     "isOneTime": true,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 16000000 }
-    ],
+    "conditions": [],
     "description": "Răng khôn mọc lệch đâm thẳng vào răng số 7 gây sưng má, sốt cao không thể ăn ngủ hay tập trung làm việc.",
     "options": [
       {
@@ -134,9 +127,7 @@
     "maxAge": 50,
     "priority": 80,
     "isOneTime": true,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 24000000 }
-    ],
+    "conditions": [],
     "description": "Laptop phục vụ kiếm tiền bất ngờ bốc khói bo mạch chủ đúng tuần cao điểm cần giao hồ sơ cho khách hàng lớn.",
     "options": [
       {
@@ -165,8 +156,7 @@
     "priority": 84,
     "isOneTime": true,
     "conditions": [
-      { "field": "notHasFlag", "operatorType": "==", "stringValue": "bg_orphan" },
-      { "field": "cash", "operatorType": ">=", "numberValue": 35000000 }
+      { "field": "notHasFlag", "operatorType": "==", "stringValue": "bg_orphan" }
     ],
     "description": "Cuộc gọi khẩn từ quê: một bên phụ huynh cần mổ nội soi gấp tại tuyến trên để tránh biến chứng lâu dài.",
     "options": [
@@ -194,9 +184,7 @@
     "maxAge": 75,
     "priority": 76,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
-    ],
+    "conditions": [],
     "description": "Cuối năm đi làm ăn xa trở về: quà biếu nội ngoại, giỏ quà sếp/đối tác và hàng chục phong bao lì xì đỏ chót xếp hàng chờ.",
     "options": [
       {
@@ -224,8 +212,7 @@
     "priority": 82,
     "isOneTime": false,
     "conditions": [
-      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 25000000 }
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
     ],
     "description": "Bước vào năm học mới với hàng loạt khoản thu: đồng phục, bán trú, ngoại ngữ và năng khiếu cho con trẻ.",
     "options": [
@@ -254,7 +241,7 @@
     "priority": 83,
     "isOneTime": true,
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 100000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 80000000 }
     ],
     "description": "Cơ quan thuế đối chiếu dữ liệu thu nhập vãng lai, đầu tư và kinh doanh nhiều năm trước, phát hiện thiếu sót kê khai.",
     "options": [
@@ -284,8 +271,7 @@
     "priority": 79,
     "isOneTime": false,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 1150000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 65000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1150000000 }
     ],
     "description": "Mùa mưa bão giật mạnh làm tốc mái hiên, thấm dột tường phòng khách và chập hệ thống điện âm tường căn nhà của bạn.",
     "options": [
@@ -314,8 +300,7 @@
     "priority": 78,
     "isOneTime": true,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 1800000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 50000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1800000000 }
     ],
     "description": "Khách thuê bùng 2 tháng tiền nhà và tháo dỡ hư hỏng toàn bộ thiết bị điện nước khi rời đi.",
     "options": [
@@ -344,9 +329,7 @@
     "maxAge": 75,
     "priority": 74,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 14000000 }
-    ],
+    "conditions": [],
     "description": "Nắng nóng kỷ lục kéo dài cả tháng khiến máy lạnh quá tải hỏng nặng và tiền điện tăng vọt gấp 3 lần.",
     "options": [
       {
@@ -373,9 +356,7 @@
     "maxAge": 75,
     "priority": 75,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
-    ],
+    "conditions": [],
     "description": "Đi đăng kiểm bất ngờ phát hiện 2 lỗi phạt nguội từ những chuyến công tác cùng bộ lốp đã đến hạn thay.",
     "options": [
       {
@@ -403,9 +384,7 @@
     "maxAge": 85,
     "priority": 81,
     "isOneTime": true,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
-    ],
+    "conditions": [],
     "description": "Kẻ gian dùng AI giả giọng và gương mặt giống hệt người quen gọi điện hối chuyển tiền xử lý sự cố khẩn cấp trong 5 phút.",
     "options": [
       {
@@ -434,7 +413,7 @@
     "priority": 75,
     "isOneTime": true,
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 50000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 150000000 }
     ],
     "description": "Trưởng tộc họp mặt các chi nhánh, kỳ vọng những người thành đạt trên thành phố đóng góp xây dựng lại nhà thờ tổ khang trang.",
     "options": [
@@ -462,9 +441,7 @@
     "maxAge": 65,
     "priority": 82,
     "isOneTime": true,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
-    ],
+    "conditions": [],
     "description": "Áp lực công việc kéo dài nhiều năm khiến các chỉ số mỡ máu, gan và cột sống bắt đầu lên tiếng cảnh báo.",
     "options": [
       {
@@ -493,7 +470,7 @@
     "isOneTime": true,
     "conditions": [
       { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 200000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 300000000 }
     ],
     "description": "Con bạn xuất sắc nhận thư mời nhập học từ trường danh tiếng nhưng học phí và sinh hoạt phí năm đầu là một khoản chi lớn.",
     "options": [
@@ -522,8 +499,7 @@
     "priority": 85,
     "isOneTime": true,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 5000000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 400000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 5000000000 }
     ],
     "description": "Đối thủ cạnh tranh đâm đơn khiếu nại thương hiệu và hợp đồng phân phối đúng lúc dự án của bạn đang mở rộng quy mô.",
     "options": [
@@ -553,8 +529,7 @@
     "priority": 80,
     "isOneTime": false,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 6000000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 180000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 6000000000 }
     ],
     "description": "Ban quản lý khu đô thị cao cấp thu phí bảo trì mặt ngoài, cảnh quan và nghĩa vụ tài chính cho khối tài sản lớn bạn nắm giữ.",
     "options": [
@@ -582,9 +557,7 @@
     "maxAge": 95,
     "priority": 83,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 35000000 }
-    ],
+    "conditions": [],
     "description": "Thời tiết giao mùa khiến khớp gối và tim mạch tuổi xế chiều cần chế độ thuốc bổ, vật lý trị liệu định kỳ.",
     "options": [
       {
@@ -612,7 +585,7 @@
     "priority": 76,
     "isOneTime": true,
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 120000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 250000000 }
     ],
     "description": "Thu nhập tăng lên kéo theo hội bạn mới rủ rê mua đồng hồ hiệu, thẻ hội viên golf và tiệc tùng cuối tuần sang chảnh.",
     "options": [
@@ -642,16 +615,16 @@
     "priority": 77,
     "isOneTime": true,
     "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 45000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 40000000 }
     ],
     "description": "Người bạn từng chung lưng đấu cật kinh doanh thua lỗ, vừa không trả nổi tiền cũ vừa cầu xin bạn ứng cứu thêm.",
     "options": [
       {
         "id": "opt_exp22_help_final",
-        "label": "Cho mượn thêm lần cuối trong giới hạn chịu được (-30 Triệu đ)",
+        "label": "Cho mượn thêm lần cuối trong giới hạn chịu được (rủi ro mất 35 Triệu đ)",
         "outcomes": [
-          { "probability": 0.35, "message": "Bạn ấy vực dậy thành công và mang ơn hoàn trả bạn gấp đôi (+60 Triệu đ, +10 Phúc đức)!", "statModifiers": { "money": 60000000, "karma": 10, "happiness": 10 } },
-          { "probability": 0.65, "message": "Khoản tiền khó lòng quay lại — bài học đắt giá khi cho người thân vay tiền (-30 Triệu đ).", "statModifiers": { "money": -30000000, "karma": 6, "stress": 8, "financialLiteracy": 4 } }
+          { "probability": 0.20, "message": "Bạn ấy chật vật xoay xở hoàn trả được vừa đủ tiền gốc bạn vừa ứng ra, không lãi thêm đồng nào.", "statModifiers": { "karma": 8, "happiness": 4 } },
+          { "probability": 0.80, "message": "Bạn ấy tuyên bố phá sản mất khả năng trả nợ! Bạn mất trắng thêm 35 triệu đồng.", "statModifiers": { "money": -35000000, "karma": 4, "stress": 10, "financialLiteracy": 4 } }
         ]
       },
       {
@@ -671,9 +644,7 @@
     "maxAge": 55,
     "priority": 73,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 16000000 }
-    ],
+    "conditions": [],
     "description": "Một phút sơ sẩy giữa đám đông, chiếc điện thoại chứa đầy app ngân hàng và công việc đã không cánh mà bay.",
     "options": [
       {
@@ -701,8 +672,7 @@
     "priority": 79,
     "isOneTime": false,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 1500000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 130000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 1500000000 }
     ],
     "description": "Cảng biển ùn tắc khiến lô hàng đầu tư của bạn bị đội cước vận tải và phí lưu container suốt nhiều tuần.",
     "options": [
@@ -730,9 +700,7 @@
     "maxAge": 70,
     "priority": 73,
     "isOneTime": false,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 18000000 }
-    ],
+    "conditions": [],
     "description": "Đồ gia dụng dùng nhiều năm cùng nhau hỏng hóc đúng tháng bạn vừa định trích tiền đi đầu tư.",
     "options": [
       {
@@ -759,9 +727,7 @@
     "maxAge": 62,
     "priority": 75,
     "isOneTime": true,
-    "conditions": [
-      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
-    ],
+    "conditions": [],
     "description": "Ngành nghề của bạn yêu cầu đóng gói bảo hiểm trách nhiệm nghề nghiệp và bảo hiểm sức khỏe bổ sung trước khi ký hợp đồng mới.",
     "options": [
       {
@@ -789,8 +755,7 @@
     "priority": 79,
     "isOneTime": false,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 12000000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 600000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 12000000000 }
     ],
     "description": "Bạn được mời dự bàn VIP đêm gala gây quỹ xây trường học vùng cao. Mọi ánh mắt giới tinh hoa đang hướng về mức đấu giá của bạn.",
     "options": [
@@ -819,17 +784,16 @@
     "priority": 82,
     "isOneTime": true,
     "conditions": [
-      { "field": "netWorth", "operatorType": ">=", "numberValue": 800000000 },
-      { "field": "cash", "operatorType": ">=", "numberValue": 120000000 }
+      { "field": "netWorth", "operatorType": ">=", "numberValue": 800000000 }
     ],
     "description": "Thị trường tài chính chao đảo bởi tin tức vĩ mô bất ngờ, công ty chứng khoán yêu cầu nộp thêm tiền ký quỹ hoặc cắt lỗ danh mục.",
     "options": [
       {
         "id": "opt_exp28_top_up",
-        "label": "Bơm thêm tiền mặt giữ vị thế chờ phục hồi (-100 Triệu đ)",
+        "label": "Bơm thêm tiền mặt giữ vị thế chờ nhịp hồi kỹ thuật",
         "outcomes": [
-          { "probability": 0.55, "conditionFormula": "financialLiteracy >= 70", "message": "Thị trường hồi phục chữ V sau 2 tuần, bạn không chỉ thoát hiểm mà còn lãi ngược (+140 Triệu đ, +10 Tài chính)!", "statModifiers": { "money": 140000000, "financialLiteracy": 10, "stress": 8 } },
-          { "probability": 0.45, "message": "Nhịp giảm kéo dài khiến khoản bơm thêm bốc hơi gần hết (-100 Triệu đ, +16 Lo âu).", "statModifiers": { "money": -100000000, "stress": 16, "happiness": -8 } }
+          { "probability": 0.40, "conditionFormula": "financialLiteracy >= 75", "message": "Thị trường hồi nhẹ giúp bạn giảm thiệt hại khi hạ tỷ trọng, nhưng vẫn lỗ ròng 25 triệu phí ký quỹ.", "statModifiers": { "money": -25000000, "financialLiteracy": 6, "stress": 10 } },
+          { "probability": 0.60, "message": "Đà giảm kéo dài xuyên thủng ngưỡng hỗ trợ khiến bạn bị giải chấp lỗ nặng 140 triệu đồng!", "statModifiers": { "money": -140000000, "stress": 18, "happiness": -10 } }
         ]
       },
       {
