@@ -386,7 +386,21 @@ def _check_js_balance(source: str, rel_path: str, errors: list[str]):
 
 def validate_web_client(errors: list[str]) -> int:
     web_dir = ROOT / "web"
-    required = ["index.html", "styles.css", "live_leaderboard.js", "audio.js", "vendor/three.min.js", "diorama3d.js", "game.js", "game_data.js"]
+    required = [
+        "index.html",
+        "styles.css",
+        "manifest.webmanifest",
+        "icons/apple-touch-icon.png",
+        "icons/logo-192.png",
+        "icons/logo-512.png",
+        "icons/favicon-64.png",
+        "live_leaderboard.js",
+        "audio.js",
+        "vendor/three.min.js",
+        "diorama3d.js",
+        "game.js",
+        "game_data.js",
+    ]
     for fname in required:
         fpath = web_dir / fname
         if not fpath.exists() or fpath.stat().st_size == 0:
@@ -598,14 +612,21 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
     web_index = web_dir / "index.html"
     if web_index.exists():
         html = web_index.read_text(encoding="utf-8")
-        html = html.replace('href="styles.css"', 'href="web/styles.css"')
+        html = html.replace('href="styles.css', 'href="web/styles.css')
+        html = html.replace('href="icons/', 'href="web/icons/')
+        html = html.replace('src="icons/', 'src="web/icons/')
         html = re.sub(
-            r'src="(game_data\.js|live_leaderboard\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)"',
+            r'src="((?:game_data\.js|live_leaderboard\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)(?:\?[^"]*)?)"',
             r'src="web/\1"',
             html,
         )
         banner = "<!-- Auto-synced from web/index.html for main-branch GitHub Pages deployment — DO NOT EDIT MANUALLY -->\n"
         (ROOT / "index.html").write_text(banner + html, encoding="utf-8")
+
+    web_manifest = web_dir / "manifest.webmanifest"
+    if web_manifest.exists():
+        m_text = web_manifest.read_text(encoding="utf-8").replace("./icons/", "./web/icons/")
+        (ROOT / "manifest.webmanifest").write_text(m_text, encoding="utf-8")
 
     print(f"Synced {len(sync_pairs)} JSON files to unity/Assets/Resources/Data/, web/game_data.js, and root index.html")
 

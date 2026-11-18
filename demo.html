@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zero to Billionaire - Luxury Dark Mode Demo</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=JetBrains+Mono:wght@500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0B0F14;
+      --surface: #151B23;
+      --surface-elevated: #1C2333;
+      --surface-border: #2A3142;
+      --accent-gold: #F5C542;
+      --accent-gold-dark: #D4A017;
+      --profit-green: #2ECC71;
+      --loss-red: #E74C3C;
+      --text-primary: #E6EDF3;
+      --text-secondary: #8D9CAB;
+    }
+
+    body {
+      background-color: #070A0E;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      user-select: none;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .font-orbitron { font-family: 'Orbitron', monospace; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-mono-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-feature-settings: "tnum" 1, "zero" 1;
+    }
+
+    /* Luxury Card Shadow & Hover */
+    .luxury-card {
+      background-color: var(--surface);
+      border: 1px solid rgba(245, 197, 66, 0.16);
+      box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.3),
+        0 16px 32px rgba(0, 0, 0, 0.2);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .luxury-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(245, 197, 66, 0.35);
+      box-shadow: 
+        0 4px 8px rgba(0, 0, 0, 0.4),
+        0 12px 24px rgba(0, 0, 0, 0.35),
+        0 24px 40px rgba(245, 197, 66, 0.08);
+    }
+
+    /* Gold CTA Button */
+    .btn-gold {
+      background: linear-gradient(135deg, #F5C542 0%, #D4A017 100%);
+      color: #0B0F14;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      box-shadow: 0 4px 14px rgba(245, 197, 66, 0.25);
+      transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-gold:hover {
+      background: linear-gradient(135deg, #FFD564 0%, #E0AA1E 100%);
+      box-shadow: 0 6px 20px rgba(245, 197, 66, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-gold:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 8px rgba(245, 197, 66, 0.2);
+    }
+
+    /* Option Button (Secondary) */
+    .btn-option {
+      background: rgba(28, 35, 51, 0.7);
+      border: 1px solid rgba(245, 197, 66, 0.3);
+      color: var(--text-primary);
+      transition: all 0.2s ease;
+    }
+    .btn-option:hover {
+      background: rgba(245, 197, 66, 0.12);
+      border-color: var(--accent-gold);
+      transform: translateX(4px);
+      color: #FFF;
+    }
+    .btn-option:active {
+      transform: scale(0.98);
+    }
+
+    /* Progress Glow Bars */
+    .glow-track {
+      background: rgba(11, 15, 20, 0.85);
+      border: 1px solid rgba(42, 49, 66, 0.7);
+      border-radius: 9999px;
+      overflow: hidden;
+      position: relative;
+    }
+    .glow-fill-green {
+      background: linear-gradient(90deg, #1A7942 0%, #2ECC71 100%);
+      box-shadow: 0 0 10px rgba(46, 204, 113, 0.5);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glow-fill-orange {
+      background: linear-gradient(90deg, #B9770E 0%, #F39C12 100%);
+      box-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glow-fill-red {
+      background: linear-gradient(90deg, #922B21 0%, #E74C3C 100%);
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+      transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Shake Screen Animation */
+    @keyframes shake {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      20% { transform: translate(-3px, 2px) rotate(-0.5deg); }
+      40% { transform: translate(3px, -2px) rotate(0.5deg); }
+      60% { transform: translate(-2px, -2px) rotate(0deg); }
+      80% { transform: translate(2px, 2px) rotate(0.3deg); }
+    }
+    .animate-shake {
+      animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    /* Shimmer Effect */
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(200%); }
+    }
+    .shimmer-active::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(245, 197, 66, 0.25), transparent);
+      animation: shimmer 1.2s ease-in-out infinite;
+    }
+
+    /* Pulse Gold */
+    @keyframes goldGlow {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(1.05); }
+    }
+    .ambient-glow {
+      animation: goldGlow 5s ease-in-out infinite;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #2A3142; border-radius: 4px; }
+  </style>
+</head>
+<body class="p-3 md:p-6 flex items-center justify-center min-h-screen">
+
+  <!-- Mobile Simulator Frame -->
+  <div id="phoneWrapper" class="relative w-full max-w-[420px] bg-[#0B0F14] border border-[#2A3142] rounded-[36px] overflow-hidden shadow-2xl transition-transform duration-300">
+    
+    <!-- Ambient Gold Aura Behind Net Worth -->
+    <div class="ambient-glow absolute top-12 left-1/2 -translate-x-1/2 w-72 h-44 bg-[#F5C542] rounded-full blur-[70px] pointer-events-none opacity-20"></div>
+
+    <!-- Canvas for Floating Coins & Confetti -->
+    <canvas id="particleCanvas" class="absolute inset-0 w-full h-full pointer-events-none z-50"></canvas>
+
+    <!-- Milestone Celebration Overlay -->
+    <div id="milestoneOverlay" class="absolute inset-0 z-40 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center opacity-0 pointer-events-none transition-all duration-400 transform scale-95">
+      <div class="w-16 h-16 rounded-full bg-gradient-to-tr from-[#D4A017] to-[#F5C542] flex items-center justify-center text-3xl shadow-[0_0_30px_rgba(245,197,66,0.6)] mb-3 animate-bounce">
+        👑
+      </div>
+      <p id="milestoneTag" class="text-xs uppercase tracking-widest text-[#F5C542] font-semibold">MILESTONE UNLOCKED</p>
+      <h2 id="milestoneTitle" class="text-3xl font-orbitron font-extrabold text-[#F5C542] my-1">✦ TỶ PHÚ ✦</h2>
+      <p id="milestoneDesc" class="text-sm text-[#8D9CAB] max-w-[260px] mb-6">Bạn đã chính thức gia nhập giới siêu giàu 1% quyền lực nhất thế giới!</p>
+      <button onclick="dismissMilestone()" class="btn-gold px-8 py-2.5 rounded-full text-xs font-bold tracking-wider uppercase">
+        TIẾP TỤC ĐẾ CHẾ
+      </button>
+    </div>
+
+    <!-- Phone Screen Content (Safe Area) -->
+    <div class="relative z-10 flex flex-col h-[780px] p-4 text-[#E6EDF3] overflow-y-auto">
+
+      <!-- Status Bar Mock -->
+      <div class="flex items-center justify-between text-[11px] text-[#8D9CAB] px-2 mb-2 font-mono-num">
+        <span class="font-bold text-[#E6EDF3]">09:41</span>
+        <div class="flex items-center gap-1.5">
+          <span>5G</span>
+          <span>●●●</span>
+          <span>100%</span>
+        </div>
+      </div>
+
+      <!-- App Header -->
+      <div class="flex items-center justify-between border-b border-[#2A3142]/60 pb-2.5 mb-3 px-1">
+        <div class="flex items-center gap-2">
+          <div class="w-2.5 h-2.5 rounded-full bg-[#F5C542] shadow-[0_0_8px_#F5C542]"></div>
+          <span class="font-orbitron font-bold text-xs tracking-[0.2em] text-[#F5C542]">ZERO TO BILLIONAIRE</span>
+        </div>
+        <span class="text-[10px] font-mono-num px-2 py-0.5 rounded bg-[#1C2333] border border-[#2A3142] text-[#8D9CAB]">v2.0 LUX</span>
+      </div>
+
+      <!-- Net Worth Main Hero Card -->
+      <div id="netWorthCard" class="luxury-card rounded-2xl p-4 mb-3 relative overflow-hidden">
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-1.5">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#2ECC71]"></span>
+            <span class="text-[10px] tracking-[0.18em] font-semibold text-[#8D9CAB] uppercase">TÀI SẢN RÒNG HIỆN TẠI</span>
+          </div>
+          <span id="tierBadge" class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#F5C542]/15 text-[#F5C542] border border-[#F5C542]/30">
+            Khởi Nghiệp
+          </span>
+        </div>
+
+        <!-- Big Animated Number -->
+        <div class="my-2 flex items-baseline gap-1">
+          <span class="font-mono-num text-3xl font-extrabold text-[#F5C542] tracking-tight drop-shadow-[0_2px_12px_rgba(245,197,66,0.3)]">
+            <span id="cashDisplay">₫15.000.000</span>
+          </span>
+        </div>
+
+        <!-- Monthly Flow Row -->
+        <div class="flex items-center justify-between pt-2 border-t border-[#2A3142]/60 text-xs font-mono-num">
+          <div class="flex items-center gap-1.5">
+            <span id="trendIcon" class="text-[#2ECC71] text-xs">▲</span>
+            <span class="text-[#8D9CAB] text-[11px]">Thu nhập / năm:</span>
+          </div>
+          <span id="incomeDisplay" class="font-bold text-[#2ECC71]">+₫72.000.000</span>
+        </div>
+      </div>
+
+      <!-- Quick Info Grid -->
+      <div class="grid grid-cols-4 gap-2 mb-3">
+        <div class="luxury-card rounded-xl p-2 text-center">
+          <span class="text-[9px] uppercase tracking-wider text-[#8D9CAB] block">Tuổi</span>
+          <span id="ageDisplay" class="font-orbitron font-bold text-base text-[#E6EDF3]">22</span>
+        </div>
+        <div class="luxury-card rounded-xl p-2 text-center col-span-2">
+          <span class="text-[9px] uppercase tracking-wider text-[#8D9CAB] block">Nghề nghiệp</span>
+          <span id="jobDisplay" class="font-semibold text-xs text-[#E6EDF3] truncate block mt-0.5">Lập trình viên Jr</span>
+        </div>
+        <div class="luxury-card rounded-xl p-2 text-center">
+          <span class="text-[9px] uppercase tracking-wider text-[#8D9CAB] block">Tình trạng</span>
+          <span id="maritalDisplay" class="font-semibold text-[11px] text-[#E6EDF3] block mt-0.5">Độc thân</span>
+        </div>
+      </div>
+
+      <!-- Core Stats Card -->
+      <div class="luxury-card rounded-2xl p-3.5 mb-3 space-y-2.5">
+        <div class="flex items-center justify-between text-[10px] tracking-wider uppercase text-[#8D9CAB] font-semibold mb-1">
+          <span>Chỉ số sinh tồn & Năng lực</span>
+          <span class="text-[#F5C542]">Tối ưu hóa</span>
+        </div>
+
+        <!-- Health -->
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-[#8D9CAB] flex items-center gap-1">🫀 Sức khỏe</span>
+            <span id="valHealth" class="font-mono-num font-semibold text-[#2ECC71]">85%</span>
+          </div>
+          <div class="glow-track h-2">
+            <div id="barHealth" class="glow-fill-green h-full" style="width: 85%;"></div>
+          </div>
+        </div>
+
+        <!-- Happiness -->
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-[#8D9CAB] flex items-center gap-1">😊 Hạnh phúc</span>
+            <span id="valHappy" class="font-mono-num font-semibold text-[#2ECC71]">78%</span>
+          </div>
+          <div class="glow-track h-2">
+            <div id="barHappy" class="glow-fill-green h-full" style="width: 78%;"></div>
+          </div>
+        </div>
+
+        <!-- Intelligence -->
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-[#8D9CAB] flex items-center gap-1">🧠 Trí tuệ</span>
+            <span id="valIntel" class="font-mono-num font-semibold text-[#2ECC71]">92%</span>
+          </div>
+          <div class="glow-track h-2">
+            <div id="barIntel" class="glow-fill-green h-full" style="width: 92%;"></div>
+          </div>
+        </div>
+
+        <!-- Discipline -->
+        <div>
+          <div class="flex justify-between text-xs mb-1">
+            <span class="text-[#8D9CAB] flex items-center gap-1">⚡ Kỷ luật</span>
+            <span id="valDisc" class="font-mono-num font-semibold text-[#F39C12]">65%</span>
+          </div>
+          <div class="glow-track h-2">
+            <div id="barDisc" class="glow-fill-orange h-full" style="width: 65%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary Action CTA -->
+      <div class="mt-auto pt-2">
+        <button id="btnAgeUp" onclick="onAgeUpClicked()" class="btn-gold w-full py-3.5 rounded-xl flex items-center justify-center gap-2 text-sm">
+          <span>🎂</span>
+          <span>SỐNG THÊM 1 NĂM (+1 TUỔI)</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Event Decision Bottom Sheet -->
+    <div id="eventBottomSheet" class="absolute bottom-0 left-0 right-0 bg-[#151B23]/98 border-t border-[#F5C542]/40 rounded-t-[28px] p-5 z-30 shadow-[0_-12px_40px_rgba(0,0,0,0.85)] transform translate-y-full transition-transform duration-300 ease-out">
+      <div class="w-12 h-1 bg-[#2A3142] rounded-full mx-auto mb-3"></div>
+      
+      <div class="flex items-center gap-1.5 mb-1.5">
+        <span class="px-2 py-0.5 rounded bg-[#F5C542]/15 text-[#F5C542] text-[10px] font-bold tracking-widest uppercase" id="eventCategory">
+          CƠ HỘI ĐẦU TƯ
+        </span>
+      </div>
+
+      <h3 id="eventTitle" class="text-base font-bold text-[#E6EDF3] mb-1.5 font-orbitron">
+        Tham gia dự án Crypto Web3
+      </h3>
+      <p id="eventDesc" class="text-xs text-[#8D9CAB] mb-4 leading-relaxed">
+        Một người bạn đại học mời bạn làm Co-Founder một sàn giao dịch AI Web3. Yêu cầu vốn ban đầu 50.000.000 VNĐ.
+      </p>
+
+      <!-- Dynamic Options List -->
+      <div id="eventOptionsContainer" class="space-y-2">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ═════════════════════════════════════════════════════════════════
+    // GAME STATE (Mock logic giữ nguyên 100% khớp GameEngine C#)
+    // ═════════════════════════════════════════════════════════════════
+    const state = {
+      age: 22,
+      cash: 15000000,
+      annualIncome: 72000000,
+      health: 85,
+      happiness: 78,
+      intel: 92,
+      discipline: 65,
+      job: "Lập trình viên Jr",
+      marital: "Độc thân",
+      hasReachedBillionaire: false,
+      hasReachedMillionaire: true
+    };
+
+    // Sample events list
+    const lifeEvents = [
+      {
+        category: "CƠ HỘI ĐẦU TƯ",
+        title: "Dự án Khởi nghiệp AI Automation",
+        desc: "Thị trường AI bùng nổ. Bạn có ý tưởng phát triển công cụ tự động hóa cho doanh nghiệp.",
+        options: [
+          { text: "🚀 Đầu tư 20.000.000₫ & Dành hết thời gian", cashCost: -20000000, cashGain: 180000000, disc: 10, happy: -5, newJob: "CEO Startup AI" },
+          { text: "🤝 Rủ đối tác chia vốn (Đầu tư 5.000.000₫)", cashCost: -5000000, cashGain: 60000000, disc: 5, happy: 5 },
+          { text: "❌ Bỏ qua, tiếp tục đi làm công ăn lương", cashCost: 0, cashGain: 0, disc: -2, happy: -2 }
+        ]
+      },
+      {
+        category: "SỰ NGHIỆP",
+        title: "Được tập đoàn Quốc tế săn đón",
+        desc: "Headhunter từ Singapore gửi lời mời phỏng vấn vị trí Tech Lead với mức lương khủng.",
+        options: [
+          { text: "💼 Nhận việc ngay (Tăng 150.000.000₫/năm)", newSalary: 220000000, newJob: "Tech Lead Global", happy: 15, disc: 8 },
+          { text: "🧘 Từ chối để giữ cân bằng cuộc sống", happy: 10, disc: -5 }
+        ]
+      },
+      {
+        category: "THỊ TRƯỜNG CHỨNG KHOÁN",
+        title: "Sóng Thần Thị Trường Tài Chính",
+        desc: "Thị trường xuất hiện chu kỳ tăng trưởng mạnh mẽ kéo dài.",
+        options: [
+          { text: "📈 All-in danh mục cổ phiếu công nghệ", cashGain: 450000000, disc: 5, happy: 20 },
+          { text: "🛡️ Chỉ gửi tiết kiệm ngân hàng an toàn", cashGain: 20000000, disc: 2, happy: 2 }
+        ]
+      },
+      {
+        category: "ĐẾ CHẾ TỶ PHÚ",
+        title: "Thương Vụ Mua Lại (M&A) 1.000 TỶ",
+        desc: "Quỹ đầu tư hàng đầu muốn mua lại 40% cổ phần doanh nghiệp của bạn với định giá kỷ lục.",
+        options: [
+          { text: "👑 Đồng ý thoái vốn - Trở thành TỶ PHÚ!", cashGain: 1200000000, newJob: "Chủ tịch Hội đồng Quản trị", happy: 25 },
+          { text: "🔥 Từ chối, tự mình xây dựng tập đoàn đa quốc gia", cashGain: 500000000, disc: 15, happy: 20 }
+        ]
+      }
+    ];
+
+    let currentEventIndex = 0;
+
+    // ═════════════════════════════════════════════════════════════════
+    // COUNT-UP ANIMATION FOR MONEY
+    // ═════════════════════════════════════════════════════════════════
+    let displayedCash = state.cash;
+    let animFrame = null;
+
+    function formatVND(value) {
+      return "₫" + Math.round(value).toLocaleString("vi-VN");
+    }
+
+    function animateCashTo(targetValue) {
+      if (animFrame) cancelAnimationFrame(animFrame);
+      const startValue = displayedCash;
+      const startTime = performance.now();
+      const duration = 900; // ms
+
+      function step(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        // Ease-out cubic
+        const ease = 1 - Math.pow(1 - progress, 3);
+        displayedCash = startValue + (targetValue - startValue) * ease;
+
+        document.getElementById("cashDisplay").textContent = formatVND(displayedCash);
+
+        if (progress < 1) {
+          animFrame = requestAnimationFrame(step);
+        } else {
+          displayedCash = targetValue;
+          document.getElementById("cashDisplay").textContent = formatVND(targetValue);
+        }
+      }
+      animFrame = requestAnimationFrame(step);
+    }
+
+    // ═════════════════════════════════════════════════════════════════
+    // CANVAS PARTICLE SYSTEM (FLYING COINS & SPARKS)
+    // ═════════════════════════════════════════════════════════════════
+    const canvas = document.getElementById("particleCanvas");
+    const ctx = canvas.getContext("2d");
+    let particles = [];
+
+    function resizeCanvas() {
+      const rect = document.getElementById("phoneWrapper").getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+    }
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+
+    function spawnCoins(originX, originY, count = 18) {
+      for (let i = 0; i < count; i++) {
+        const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.5;
+        const speed = 4 + Math.random() * 8;
+        particles.push({
+          x: originX,
+          y: originY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          gravity: 0.35,
+          size: 7 + Math.random() * 7,
+          rotation: Math.random() * Math.PI,
+          rotSpeed: (Math.random() - 0.5) * 0.3,
+          alpha: 1,
+          color: Math.random() > 0.3 ? "#F5C542" : "#FFF"
+        });
+      }
+    }
+
+    function updateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.gravity;
+        p.rotation += p.rotSpeed;
+        p.alpha -= 0.018;
+
+        if (p.alpha <= 0 || p.y > canvas.height + 20) {
+          particles.splice(i, 1);
+          continue;
+        }
+
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, p.alpha);
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation);
+
+        // Draw Gold Coin
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "#D4A017";
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+      requestAnimationFrame(updateParticles);
+    }
+    requestAnimationFrame(updateParticles);
+
+    // ═════════════════════════════════════════════════════════════════
+    // SCREEN SHAKE & EFFECTS
+    // ═════════════════════════════════════════════════════════════════
+    function triggerScreenShake() {
+      const phone = document.getElementById("phoneWrapper");
+      phone.classList.remove("animate-shake");
+      void phone.offsetWidth; // re-flow
+      phone.classList.add("animate-shake");
+    }
+
+    function checkMilestones(newCash) {
+      if (newCash >= 1000000000 && !state.hasReachedBillionaire) {
+        state.hasReachedBillionaire = true;
+        showMilestonePopup("✦ TỶ PHÚ TOÀN CẦU ✦", "Gia tài của bạn đã vượt mốc 1.000.000.000 VNĐ!");
+      }
+    }
+
+    function showMilestonePopup(title, desc) {
+      triggerScreenShake();
+      const rect = canvas.getBoundingClientRect();
+      spawnCoins(rect.width / 2, rect.height / 2, 45);
+
+      const overlay = document.getElementById("milestoneOverlay");
+      document.getElementById("milestoneTitle").textContent = title;
+      document.getElementById("milestoneDesc").textContent = desc;
+
+      overlay.classList.remove("opacity-0", "pointer-events-none", "scale-95");
+      overlay.classList.add("opacity-100", "scale-100");
+    }
+
+    function dismissMilestone() {
+      const overlay = document.getElementById("milestoneOverlay");
+      overlay.classList.add("opacity-0", "pointer-events-none", "scale-95");
+      overlay.classList.remove("opacity-100", "scale-100");
+    }
+
+    // ═════════════════════════════════════════════════════════════════
+    // UI REFRESH
+    // ═════════════════════════════════════════════════════════════════
+    function updateUI() {
+      // Numbers
+      animateCashTo(state.cash);
+      document.getElementById("incomeDisplay").textContent = "+" + formatVND(state.annualIncome);
+      document.getElementById("ageDisplay").textContent = state.age;
+      document.getElementById("jobDisplay").textContent = state.job;
+      document.getElementById("maritalDisplay").textContent = state.marital;
+
+      // Stats Bars
+      setBar("Health", state.health);
+      setBar("Happy", state.happiness);
+      setBar("Intel", state.intel);
+      setBar("Disc", state.discipline);
+
+      // Badge Tier
+      const tierBadge = document.getElementById("tierBadge");
+      if (state.cash >= 1000000000) {
+        tierBadge.textContent = "👑 Siêu Tỷ Phú";
+        tierBadge.className = "text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#F5C542] text-[#0B0F14] shadow-[0_0_12px_#F5C542]";
+      } else if (state.cash >= 100000000) {
+        tierBadge.textContent = "✦ Thượng Lưu";
+        tierBadge.className = "text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-[#2ECC71]/20 text-[#2ECC71] border border-[#2ECC71]/40";
+      }
+    }
+
+    function setBar(name, val) {
+      val = Math.max(0, Math.min(100, val));
+      const bar = document.getElementById("bar" + name);
+      const text = document.getElementById("val" + name);
+      bar.style.width = val + "%";
+      text.textContent = val + "%";
+
+      if (val >= 70) {
+        bar.className = "glow-fill-green h-full";
+        text.className = "font-mono-num font-semibold text-[#2ECC71]";
+      } else if (val >= 40) {
+        bar.className = "glow-fill-orange h-full";
+        text.className = "font-mono-num font-semibold text-[#F39C12]";
+      } else {
+        bar.className = "glow-fill-red h-full";
+        text.className = "font-mono-num font-semibold text-[#E74C3C]";
+      }
+    }
+
+    // ═════════════════════════════════════════════════════════════════
+    // CORE GAMEPLAY ACTIONS
+    // ═════════════════════════════════════════════════════════════════
+    function onAgeUpClicked() {
+      state.age += 1;
+      state.cash += state.annualIncome;
+
+      // Random small health/stress flux
+      state.health = Math.max(20, state.health - Math.floor(Math.random() * 2));
+      state.happiness = Math.max(20, Math.min(100, state.happiness + Math.floor(Math.random() * 5 - 2)));
+
+      // Spawn coins from CTA button
+      const btn = document.getElementById("btnAgeUp");
+      const rect = btn.getBoundingClientRect();
+      const parentRect = document.getElementById("phoneWrapper").getBoundingClientRect();
+      spawnCoins(rect.left - parentRect.left + rect.width / 2, rect.top - parentRect.top, 14);
+
+      checkMilestones(state.cash);
+      updateUI();
+
+      // Trigger life event every 1-2 years
+      setTimeout(() => {
+        showEvent(lifeEvents[currentEventIndex % lifeEvents.length]);
+        currentEventIndex++;
+      }, 500);
+    }
+
+    function showEvent(evt) {
+      document.getElementById("eventCategory").textContent = evt.category;
+      document.getElementById("eventTitle").textContent = evt.title;
+      document.getElementById("eventDesc").textContent = evt.desc;
+
+      const container = document.getElementById("eventOptionsContainer");
+      container.innerHTML = "";
+
+      evt.options.forEach((opt) => {
+        const btn = document.createElement("button");
+        btn.className = "btn-option w-full py-2.5 px-3 rounded-xl text-left text-xs font-medium flex items-center justify-between";
+        btn.innerHTML = `<span>${opt.text}</span> <span class="text-[#F5C542] text-sm">›</span>`;
+        btn.onclick = () => chooseOption(opt);
+        container.appendChild(btn);
+      });
+
+      const sheet = document.getElementById("eventBottomSheet");
+      sheet.classList.remove("translate-y-full");
+    }
+
+    function chooseOption(opt) {
+      const sheet = document.getElementById("eventBottomSheet");
+      sheet.classList.add("translate-y-full");
+
+      if (opt.cashCost) state.cash += opt.cashCost;
+      if (opt.cashGain) {
+        state.cash += opt.cashGain;
+        const rect = canvas.getBoundingClientRect();
+        spawnCoins(rect.width / 2, rect.height * 0.4, 25);
+      }
+      if (opt.newSalary) state.annualIncome = opt.newSalary;
+      if (opt.newJob) state.job = opt.newJob;
+      if (opt.happy) state.happiness = Math.min(100, state.happiness + opt.happy);
+      if (opt.disc) state.discipline = Math.min(100, state.discipline + opt.disc);
+
+      checkMilestones(state.cash);
+      updateUI();
+    }
+
+    // Init UI
+    updateUI();
+  </script>
+</body>
+</html>

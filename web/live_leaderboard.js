@@ -93,15 +93,18 @@
       this.uid = this.ensureUid();
       this.players = {};
       this.onlineFlags = {};
+      this.lastSeenLocal = {};
       this.localState = null;
       this.onUpdate = null;
 
       this.ws = null;
       this.connected = false;
       this.brokerIdx = 0;
+      this.failStreak = 0;
       this.reconnectTimer = null;
       this.pingTimer = null;
       this.heartbeatTimer = null;
+      this.pruneTimer = null;
       this.publishDebounce = null;
       this.bc = null;
 
@@ -110,6 +113,18 @@
 
     ensureUid() {
       try {
+        if (typeof window !== "undefined" && window.location && window.location.search) {
+          const params = new URLSearchParams(window.location.search);
+          const peerSlot = params.get("peer");
+          if (peerSlot && /^[a-zA-Z0-9_-]{1,20}$/.test(peerSlot)) {
+            const skey = `${UID_KEY}_peer_${peerSlot}`;
+            const sExisting = sessionStorage.getItem(skey);
+            if (sExisting && /^[a-zA-Z0-9_-]{6,48}$/.test(sExisting)) return sExisting;
+            const sFresh = `p_${peerSlot}_${Math.random().toString(36).slice(2, 8)}`;
+            sessionStorage.setItem(skey, sFresh);
+            return sFresh;
+          }
+        }
         const existing = localStorage.getItem(UID_KEY);
         if (existing && /^[a-zA-Z0-9_-]{6,48}$/.test(existing)) return existing;
         const fresh = `p_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
@@ -160,6 +175,8 @@
 
     init(opts = {}) {
       this.onUpdate = typeof opts.onUpdate === "function" ? opts.onUpdate : null;
+      this.lastSeenLocal[this.uid] = Date.now();
+      this.onlineFlags[this.uid] = "1";
 
       if (typeof BroadcastChannel !== "undefined") {
         try {
@@ -172,13 +189,28 @@
               if (clean) {
                 this.players[clean.uid] = clean;
                 this.onlineFlags[clean.uid] = "1";
+                this.lastSeenLocal[clean.uid] = Date.now();
                 this.saveCache();
                 if (this.onUpdate) this.onUpdate();
               }
+            } else if (data.type === "ping" && data.uid !== this.uid && this.localState) {
+              try {
+                this.bc.postMessage({ type: "player", payload: this.localState });
+              } catch (_) {}
+            } else if (data.type === "offline" && data.uid) {
+              this.onlineFlags[data.uid] = "0";
+              delete this.lastSeenLocal[data.uid];
+              if (this.onUpdate) this.onUpdate();
             }
           };
+          this.bc.postMessage({ type: "ping", uid: this.uid });
         } catch (_) {}
       }
+
+      if (this.pruneTimer) clearInterval(this.pruneTimer);
+      this.pruneTimer = setInterval(() => {
+        if (this.onUpdate) this.onUpdate();
+      }, 15_000);
 
       if (typeof window !== "undefined") {
         window.addEventListener("pagehide", () => this.sendOfflineSignal());
@@ -246,12 +278,16 @@
           this.connected = false;
           this.clearTimers();
           if (this.onUpdate && wasConnected) this.onUpdate();
-          this.brokerIdx = (this.brokerIdx + 1) % BROKERS.length;
-          this.reconnectTimer = setTimeout(() => this.connectNextBroker(), wasConnected ? 4000 : 7000);
+          this.failStreak += 1;
+          if (this.failStreak >= 2) {
+            this.brokerIdx = (this.brokerIdx + 1) % BROKERS.length;
+            this.failStreak = 0;
+          }
+          this.reconnectTimer = setTimeout(() => this.connectNextBroker(), wasConnected ? 3500 : 6000);
         };
       } catch (_) {
         this.brokerIdx = (this.brokerIdx + 1) % BROKERS.length;
-        this.reconnectTimer = setTimeout(() => this.connectNextBroker(), 9000);
+        this.reconnectTimer = setTimeout(() => this.connectNextBroker(), 8000);
       }
     }
 
@@ -272,7 +308,7 @@
         0x00, 0x04, 0x4d, 0x51, 0x54, 0x54, // "MQTT"
         0x04, // Level 4 (3.1.1)
         0x26, // CleanSession(0x02) + WillFlag(0x04) + WillRetain(0x20)
-        0x00, 0x2d // KeepAlive = 45s
+        0x00, 0x28 // KeepAlive = 40s
       ]);
       const pkt = buildMqttPacket(0x10, [
         fixedProto,
@@ -296,9 +332,24 @@
       return this.sendRaw(pkt);
     }
 
+    announceHeartbeat() {
+      if (!this.connected) return;
+      this.sendPublish(`${TOPIC_PREFIX}/online/${this.uid}`, "1", true);
+      this.sendPublish(`${TOPIC_PREFIX}/heartbeat/${this.uid}`, "1", false);
+      if (this.localState) {
+        this.sendPublish(`${TOPIC_PREFIX}/board/${this.uid}`, JSON.stringify(this.localState), true);
+      }
+    }
+
     sendOfflineSignal() {
+      if (this.bc) {
+        try {
+          this.bc.postMessage({ type: "offline", uid: this.uid });
+        } catch (_) {}
+      }
       if (this.connected) {
         this.sendPublish(`${TOPIC_PREFIX}/online/${this.uid}`, "0", true);
+        this.sendPublish(`${TOPIC_PREFIX}/heartbeat/${this.uid}`, "0", false);
         this.sendRaw(new Uint8Array([0xe0, 0x00]));
       }
     }
@@ -332,16 +383,17 @@
           // CONNACK
           if (offset + 1 < pktEnd && buf[offset + 1] === 0) {
             this.connected = true;
+            this.failStreak = 0;
             this.sendSubscribe(`${TOPIC_PREFIX}/#`);
-            this.sendPublish(`${TOPIC_PREFIX}/online/${this.uid}`, "1", true);
-            if (this.localState) {
-              this.sendPublish(`${TOPIC_PREFIX}/board/${this.uid}`, JSON.stringify(this.localState), true);
-            }
+            this.announceHeartbeat();
+            // Ping all currently active peers across devices so onlineCount syncs immediately
+            this.sendPublish(`${TOPIC_PREFIX}/ping`, this.uid, false);
             this.startKeepAliveLoops();
             if (this.onUpdate) this.onUpdate();
           }
         } else if (ptype === 3) {
           // PUBLISH
+          const retainFlag = (hdr & 0x01) === 1;
           const qos = (hdr >> 1) & 0x03;
           if (offset + 2 <= pktEnd) {
             const topicLen = (buf[offset] << 8) | buf[offset + 1];
@@ -353,7 +405,7 @@
               offset += 2; // Skip Packet Identifier on QoS 1/2 deliveries
             }
             const payloadStr = fromUtf8(buf.subarray(offset, pktEnd));
-            this.handleMqttMessage(topic, payloadStr);
+            this.handleMqttMessage(topic, payloadStr, retainFlag);
           }
         }
 
@@ -361,14 +413,43 @@
       }
     }
 
-    handleMqttMessage(topic, payloadStr) {
+    handleMqttMessage(topic, payloadStr, isRetained = false) {
       const onlinePrefix = `${TOPIC_PREFIX}/online/`;
+      const hbPrefix = `${TOPIC_PREFIX}/heartbeat/`;
       const boardPrefix = `${TOPIC_PREFIX}/board/`;
+      const pingTopic = `${TOPIC_PREFIX}/ping`;
 
-      if (topic.startsWith(onlinePrefix)) {
+      if (topic === pingTopic) {
+        const sender = payloadStr.trim();
+        if (sender && sender !== this.uid) {
+          this.onlineFlags[sender] = "1";
+          this.lastSeenLocal[sender] = Date.now();
+          this.announceHeartbeat();
+          if (this.onUpdate) this.onUpdate();
+        }
+      } else if (topic.startsWith(hbPrefix)) {
+        const uid = topic.slice(hbPrefix.length).trim();
+        if (!uid) return;
+        const val = payloadStr.trim();
+        if (val === "0") {
+          this.onlineFlags[uid] = "0";
+          delete this.lastSeenLocal[uid];
+        } else {
+          this.onlineFlags[uid] = "1";
+          this.lastSeenLocal[uid] = Date.now();
+        }
+        if (this.onUpdate) this.onUpdate();
+      } else if (topic.startsWith(onlinePrefix)) {
         const uid = topic.slice(onlinePrefix.length).trim();
         if (uid) {
-          this.onlineFlags[uid] = payloadStr.trim();
+          const flag = payloadStr.trim();
+          this.onlineFlags[uid] = flag;
+          if (flag === "0") {
+            delete this.lastSeenLocal[uid];
+          } else if (!isRetained) {
+            // Live (non-retained) online="1" arrived right now -> mark active on local clock
+            this.lastSeenLocal[uid] = Date.now();
+          }
           if (this.onUpdate) this.onUpdate();
         }
       } else if (topic.startsWith(boardPrefix)) {
@@ -377,6 +458,9 @@
           const clean = sanitizeEntry(parsed);
           if (clean) {
             this.players[clean.uid] = clean;
+            if (!isRetained && this.onlineFlags[clean.uid] !== "0") {
+              this.lastSeenLocal[clean.uid] = Date.now();
+            }
             this.saveCache();
             if (this.onUpdate) this.onUpdate();
           }
@@ -390,15 +474,19 @@
 
       this.pingTimer = setInterval(() => {
         if (this.connected) this.sendRaw(new Uint8Array([0xc0, 0x00]));
-      }, 25_000);
+      }, 22_000);
 
       this.heartbeatTimer = setInterval(() => {
-        if (this.connected && this.localState) {
-          this.localState.ts = Date.now();
-          this.sendPublish(`${TOPIC_PREFIX}/online/${this.uid}`, "1", true);
-          this.sendPublish(`${TOPIC_PREFIX}/board/${this.uid}`, JSON.stringify(this.localState), true);
+        if (this.connected) {
+          if (this.localState) this.localState.ts = Date.now();
+          this.announceHeartbeat();
         }
-      }, 30_000);
+        if (this.bc && this.localState) {
+          try {
+            this.bc.postMessage({ type: "player", payload: this.localState });
+          } catch (_) {}
+        }
+      }, 20_000);
     }
 
     publishPlayerState(state, immediate = false) {
@@ -411,6 +499,7 @@
       this.localState = candidate;
       this.players[this.uid] = candidate;
       this.onlineFlags[this.uid] = "1";
+      this.lastSeenLocal[this.uid] = Date.now();
       this.saveCache();
 
       if (this.bc) {
@@ -422,6 +511,7 @@
       const doSend = () => {
         if (this.connected) {
           this.sendPublish(`${TOPIC_PREFIX}/online/${this.uid}`, "1", true);
+          this.sendPublish(`${TOPIC_PREFIX}/heartbeat/${this.uid}`, "1", false);
           this.sendPublish(`${TOPIC_PREFIX}/board/${this.uid}`, JSON.stringify(candidate), true);
         }
       };
@@ -434,13 +524,19 @@
         doSend();
       } else {
         if (this.publishDebounce) clearTimeout(this.publishDebounce);
-        this.publishDebounce = setTimeout(doSend, 800);
+        this.publishDebounce = setTimeout(doSend, 700);
       }
     }
 
     forceSync() {
+      if (this.bc) {
+        try {
+          this.bc.postMessage({ type: "ping", uid: this.uid });
+        } catch (_) {}
+      }
       if (this.connected) {
         this.sendSubscribe(`${TOPIC_PREFIX}/#`);
+        this.sendPublish(`${TOPIC_PREFIX}/ping`, this.uid, false);
         if (this.localState) this.publishPlayerState(this.localState, true);
       } else {
         this.connectNextBroker();
@@ -451,8 +547,9 @@
       const now = Date.now();
       const entries = Object.values(this.players).map((p) => {
         const isMe = p.uid === this.uid;
-        const recent = (now - (p.ts || 0)) < 180_000;
-        const isOnline = isMe || (this.onlineFlags[p.uid] === "1" && recent);
+        const seenAt = this.lastSeenLocal[p.uid] || 0;
+        const freshLocal = seenAt > 0 && (now - seenAt) < 65_000;
+        const isOnline = isMe || (this.onlineFlags[p.uid] !== "0" && freshLocal);
         return {
           uid: p.uid,
           name: p.name,
@@ -464,6 +561,7 @@
           vip: !!p.vip,
           alive: p.alive !== false,
           ts: p.ts || now,
+          lastSeenLocal: seenAt,
           isPlayer: isMe,
           isOnline
         };
@@ -474,7 +572,7 @@
         return b.peakNetWorth - a.peakNetWorth;
       });
 
-      const onlineCount = entries.filter((e) => e.isOnline).length;
+      const onlineCount = Math.max(1, entries.filter((e) => e.isOnline).length);
       const activeUrl = BROKERS[this.brokerIdx % BROKERS.length];
       let brokerHost = "local";
       try {

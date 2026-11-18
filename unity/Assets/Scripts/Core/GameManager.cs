@@ -26,6 +26,7 @@ namespace ZeroToBillionaire.Core
 
         [Header("Character State")]
         public CharacterStats currentStats = new CharacterStats();
+        public CharacterStats Stats { get { return currentStats; } }
 
         [Header("Life Log")]
         public List<string> lifeLog = new List<string>();
@@ -379,17 +380,92 @@ namespace ZeroToBillionaire.Core
             return true;
         }
 
+        private const int FREE_REWIND_LIMIT = 5;
+
         /// <summary>
-        /// Cỗ Máy Thời Gian: Quay ngược về năm trước để sửa chữa sai lầm.
+        /// Cỗ Máy Thời Gian: Tối đa 5 lần miễn phí mỗi đời; từ lần thứ 6 phải đánh đổi một khoản tài sản lớn.
         /// </summary>
         public bool UseTimeMachine(int yearsBack = 1)
         {
+            int usedBefore = currentStats != null ? currentStats.rewindsUsed : 0;
+            long preRewindWealth = EconomySystem.Instance != null
+                ? EconomySystem.Instance.CalculateNetWorth(currentStats)
+                : (currentStats.cash + currentStats.trustFund - currentStats.debt);
+
             var snapshot = SaveSystem.PopTimeMachineSnapshot(yearsBack);
             if (snapshot == null) return false;
 
+            long postRewindWealth = snapshot.stats.cash + snapshot.stats.trustFund - snapshot.stats.debt;
+            if (snapshot.portfolio != null)
+            {
+                foreach (var a in snapshot.portfolio) postRewindWealth += a.currentUnitValue * a.quantity;
+            }
+
+            long rewindFee = 0L;
+            if (usedBefore >= FREE_REWIND_LIMIT)
+            {
+                int extraIdx = usedBefore - FREE_REWIND_LIMIT + 1;
+                long refWealth = Math.Max(preRewindWealth, postRewindWealth);
+                double pct = Math.Min(0.75, 0.15 + extraIdx * 0.10);
+                rewindFee = Math.Max(100_000_000L * extraIdx, (long)Math.Round(refWealth * pct));
+                if (postRewindWealth < rewindFee)
+                {
+                    SaveSystem.PushTimeMachineSnapshot(snapshot);
+                    AddLog($"⚠️ Không đủ tài sản để lùi tuổi lần #{usedBefore + 1}! Cần {CharacterStats.FormatVND(rewindFee)}.");
+                    return false;
+                }
+            }
+
             ApplySnapshot(snapshot);
+            currentStats.rewindsUsed = usedBefore + 1;
+
+            if (rewindFee > 0L)
+            {
+                long remaining = rewindFee;
+                long fromCash = Math.Min(currentStats.cash, remaining);
+                currentStats.cash -= fromCash;
+                remaining -= fromCash;
+
+                if (remaining > 0L && currentStats.trustFund > 0L)
+                {
+                    long fromTrust = Math.Min(currentStats.trustFund, remaining);
+                    currentStats.trustFund -= fromTrust;
+                    remaining -= fromTrust;
+                }
+
+                if (remaining > 0L && EconomySystem.Instance != null)
+                {
+                    var port = EconomySystem.Instance.portfolio;
+                    for (int i = port.Count - 1; i >= 0 && remaining > 0L; i--)
+                    {
+                        while (port[i].quantity > 0 && remaining > 0L)
+                        {
+                            long unitVal = port[i].currentUnitValue;
+                            port[i].quantity -= 1;
+                            if (unitVal > remaining)
+                            {
+                                currentStats.cash += (unitVal - remaining);
+                                remaining = 0L;
+                            }
+                            else
+                            {
+                                remaining -= unitVal;
+                            }
+                        }
+                        if (port[i].quantity <= 0) port.RemoveAt(i);
+                    }
+                }
+
+                currentStats.ClampStats();
+                AddLog($"⏳ Cỗ Máy Thời Gian lần #{currentStats.rewindsUsed} (vượt mốc 5 lần): Đã khấu trừ {CharacterStats.FormatVND(rewindFee)} từ tài sản để quay về năm {currentStats.age} tuổi!");
+            }
+            else
+            {
+                int freeLeft = FREE_REWIND_LIMIT - currentStats.rewindsUsed;
+                AddLog($"⏪ Cỗ Máy Thời Gian kích hoạt! Quay lại năm {currentStats.age} tuổi (còn {freeLeft}/{FREE_REWIND_LIMIT} lượt miễn phí).");
+            }
+
             IOSHapticFeedback.TriggerNotification(IOSHapticFeedback.HapticNotificationType.Success);
-            AddLog($"⏪ Cỗ Máy Thời Gian kích hoạt! Bạn đã quay trở lại năm {currentStats.age} tuổi.");
             NotifyStateUpdated();
             AutoSave();
             return true;

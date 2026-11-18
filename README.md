@@ -1,18 +1,17 @@
 <div align="center">
 
 # 💎 ZERO TO BILLIONAIRE SIMULATOR
-### *Từ Tay Trắng Đến Tỉ Phú — Life Sim 3D*
+### *Từ Tay Trắng Đến Tỉ Phú — Life Sim Pixel 2D*
 
 [![Play Online Demo](https://img.shields.io/badge/🎮_CHƠI_NGAY_DEMO_ONLINE-GitHub_Pages-10b981?style=for-the-badge)](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/)
 [![Unity](https://img.shields.io/badge/Unity-2022.3%20%2F%20Unity%206-black?style=for-the-badge&logo=unity)](https://unity.com/)
 [![iOS](https://img.shields.io/badge/iOS-16.0%2B-black?style=for-the-badge&logo=apple)](https://developer.apple.com/ios/)
-[![Graphics API](https://img.shields.io/badge/Graphics-Apple%20Metal-orange?style=for-the-badge)](https://developer.apple.com/metal/)
-[![Language](https://img.shields.io/badge/Language-C%23-blue?style=for-the-badge&logo=c-sharp)](https://dotnet.microsoft.com/)
+[![Graphics](https://img.shields.io/badge/Graphics-Pixel%202D-orange?style=for-the-badge)](#)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](.github/ISSUE_TEMPLATE/event_proposal.md)
 
 <p align="center">
-  <b>Sự kết hợp giữa chiều sâu mô phỏng cuộc đời rẽ nhánh của BitLife và thế giới 3D trực quan sống động của The Sims — gói trọn trong bối cảnh đời sống Việt Nam.</b>
+  <b>Một game mô phỏng cuộc đời rẽ nhánh với cảnh pixel 2D, nhân vật thay đổi theo lựa chọn và bối cảnh đời sống Việt Nam.</b>
 </p>
 
 [🎮 Chơi Ngay Bản Web 3D Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) • [Tài liệu Kế hoạch Gốc](docs/ORIGINAL_PLAN.md) • [Kế hoạch Phát triển iOS](docs/IOS_DEVELOPMENT_PLAN.md) • [Kho Dữ liệu Game](data/) • [Đóng góp sự kiện](.github/ISSUE_TEMPLATE/event_proposal.md)
@@ -69,7 +68,7 @@ Bắt đầu từ một đứa trẻ sơ sinh với hoàn cảnh ngẫu nhiên (
 |                      TRIẾT LÝ THIẾT KẾ                      |
 +-------------------------------------------------------------+
 |  🧠 Bộ não BitLife : Đồ thị sự kiện rẽ nhánh sâu sắc, đa dạng|
-|  🏡 Thể xác The Sims: Phòng 3D Diorama Low-poly đổi theo tài sản|
+|  🏡 Thể xác game: Scene pixel 2D và nhân vật thay đổi theo tài sản|
 |  🇻🇳 Linh hồn Việt Nam: Đậm chất đời sống văn hóa, gia đình   |
 |  📱 Trải nghiệm iPhone: Chơi 1 tay, màn hình dọc, Taptic haptic|
 +-------------------------------------------------------------+
@@ -79,9 +78,9 @@ Bắt đầu từ một đứa trẻ sơ sinh với hoàn cảnh ngẫu nhiên (
 
 ## 🌟 Điểm khác biệt cốt lõi
 
-### 1. Hybrid 3D Diorama + Action Stream
+### 1. Pixel Scene + Story Stream
 Không còn là những trang văn bản đơn điệu! Game sử dụng bố cục chia đôi màn hình:
-* **Nửa trên (3D Diorama):** Không gian sống 3D Isometric phản chiếu trực tiếp độ tuổi, độ giàu có và tâm trạng nhân vật (từ phòng trọ 10m² chật hẹp thời sinh viên đến dinh thự Penthouse triệu đô).
+* **Pixel Scene:** Không gian pixel phản chiếu trực tiếp độ tuổi, câu chuyện, tâm trạng và tài sản nhân vật.
 * **Nửa dưới (Event Stream):** Dòng thời gian mượt mà với các thẻ quyết định vuốt/chạm nhanh bằng một ngón tay cái.
 
 ### 2. Bản sắc Văn hóa Việt Nam chân thực
@@ -103,7 +102,7 @@ Tối ưu hóa chuyên sâu cho người dùng iPhone:
 +-----------------------------------------------+
 |  [ Notch / Dynamic Island - Safe Area ]       |
 |                                               |
-|           3D ISOMETRIC DIORAMA VIEW           |
+|             PIXEL STORY SCENE                 |
 |      (Phòng ở, Nội thất, Hoạt ảnh nhân vật)   |
 |                                               |
 +-----------------------------------------------+
@@ -127,7 +126,7 @@ Tối ưu hóa chuyên sâu cho người dùng iPhone:
 ```
 
 * **Apple Taptic Engine:** Phản hồi xúc giác chân thật qua từng cú chạm chọn lựa, rung mạnh khi trúng giải đặc biệt hay gặp tai nạn bất ngờ.
-* **Quản lý Pin & Nhiệt độ (Thermal Protection):** Chạy **60 FPS** khi xem hoạt cảnh 3D; tự động chuyển về **30 FPS** khi người chơi dừng đọc nội dung hoặc mở popup chi tiết để giữ iPhone luôn mát mẻ.
+* **Quản lý Pin & Nhiệt độ (Thermal Protection):** Hoạt cảnh pixel nhẹ, ưu tiên thời lượng pin và thao tác ổn định trên iPhone.
 * **Apple App Store Ready:** Tích hợp StoreKit 2 cho IAP (Gói ủng hộ không Pay-to-Win), khai báo Privacy Manifest iOS 17+ và Apple Sign-in / CloudKit Save.
 
 ---
@@ -139,7 +138,7 @@ flowchart TD
     A[Khởi đầu ngẫu nhiên: Gia cảnh, Chỉ số] --> B[Vòng đời hàng năm: 0 - 80+ tuổi]
     B --> C[Event Engine: Đồ thị sự kiện & Lựa chọn]
     C --> D[Cập nhật Chỉ số & Tài chính]
-    D --> E[Thay đổi Ngoại hình & Căn phòng 3D]
+    D --> E[Thay đổi Ngoại hình & Pixel Scene]
     E --> F{Nhân vật qua đời?}
     F -- Chưa --> B
     F -- Đã qua đời --> G[Viết Di chúc & Thừa kế đời sau]
@@ -161,12 +160,9 @@ flowchart TD
 
 | Thành phần | Công nghệ lựa chọn | Mục đích |
 | :--- | :--- | :--- |
-| **Engine** | Unity 2022.3 LTS / Unity 6 LTS | Ổn định, tương thích xuất sắc với iOS |
-| **Render Pipeline** | Universal Render Pipeline (URP) | Render Low-poly Stylized siêu nhẹ |
-| **Graphics API** | Apple Metal | Tối đa hóa hiệu năng GPU Apple Silicon |
-| **Texture Format** | ASTC (4x4, 6x6, 8x8) | Nén ảnh chất lượng cao với dung lượng bộ nhớ tối thiểu |
-| **Draw Calls Budget** | < 100 calls / frame | Đảm bảo mượt mà ngay cả trên iPhone 11 |
-| **RAM Runtime** | < 350 MB | Ngăn ngừa iOS Watchdog tắt ứng dụng đột ngột |
+| **Engine** | Vite + Canvas 2D | Bundle web nhẹ, tương thích PWA và Capacitor |
+| **Render** | Pixel art 2D procedural | Scene và nhân vật thay đổi theo câu chuyện |
+| **Runtime** | JavaScript + Web Audio API | Hoạt cảnh, âm thanh và tương tác không cần engine ngoài |
 | **Save System** | Encrypted JSON + SQLite + CloudKit | Lưu an toàn tại máy và đồng bộ iCloud |
 
 ---
@@ -192,6 +188,8 @@ Zero-to-Billionaire-Simulator/
 │       ├── pack_life_expenses_hardcore.json # 28 kịch bản Áp lực Chi tiêu, Thuế & Biến cố
 │       └── sample_events.json     # File sự kiện mẫu minh họa cho cộng đồng
 ├── docs/                          # Tài liệu GDD, iOS Plan & 3D Art Pipeline
+│   ├── ORIGINAL_PLAN.md           # Kế hoạch phát triển game gốc
+│   ├── IOS_DEVELOPMENT_PLAN.md    # Kế hoạch chi tiết tối ưu hóa trên iOS
 │   └── screenshots/               # Ảnh chụp demo gameplay hiển thị trong README
 ├── tools/
 │   └── validate_game_data.py      # Kiểm tra schema, mô phỏng 0-90 tuổi, DOM & đồng bộ dữ liệu
@@ -204,18 +202,23 @@ Zero-to-Billionaire-Simulator/
 │   ├── audio.js                   # Âm thanh tổng hợp Web Audio & rung Haptic
 │   ├── game.js                    # Vòng lặp mô phỏng, cân bằng chi tiêu, quảng cáo/VIP & mã sao lưu
 │   └── game_data.js               # Bundle dữ liệu tự đồng bộ từ data/
+├── web-demo/                      # Prototype Pixel 2D độc lập (Vite, PWA & Capacitor)
+│   ├── index.html                 # Loading, start screen, HUD và story scene
+│   ├── main.js                    # Game loop, sự kiện, chỉ số và hoạt cảnh pixel
+│   └── style.css                  # Luxury mobile UI
 ├── index.html                     # Bản Web 3D đồng bộ tại thư mục gốc (deploy trực tiếp từ nhánh main)
 ├── .nojekyll                      # Tắt Jekyll processing trên GitHub Pages
 ├── unity/                         # Dự án Unity Game Client (URP / iOS Metal)
 │   ├── Packages/manifest.json     # Khai báo URP, TextMeshPro, InputSystem, Test Framework
 │   └── Assets/
+│       ├── Editor/                # Công cụ dựng nhanh scene demo nhân vật
 │       ├── Plugins/iOS/           # Objective-C++ Taptic Bridge (.mm) & PrivacyInfo.xcprivacy
 │       ├── Resources/Data/        # Dữ liệu JSON đồng bộ tải nhanh lúc runtime
 │       ├── Scripts/
 │       │   ├── Core/              # GameManager, GameBootstrapper, Career, Economy, Relationship, SaveSystem
 │       │   ├── Events/            # EventEngine (hỗ trợ Formula & Chaining), GameEventModels
-│       │   ├── Models/            # ModularCharacter & ProceduralRoomGenerator 3D
-│       │   ├── UI/                # DioramaViewController & MobilePortraitUI
+│       │   ├── Models/            # ModularCharacter, ProceduralCharacterVisual & ProceduralRoomGenerator
+│       │   ├── UI/                # DioramaViewController, MobilePortraitUI, MainScreenUI, Luxury Components/Effects/Theme
 │       │   └── Mobile/iOS/        # IOSHapticFeedback & AdaptiveFrameRateManager (60/30 FPS)
 │       └── Tests/EditMode/        # Unit Test mô phỏng lõi C# (GameSimulationTests.cs)
 ├── .gitattributes                 # Cấu hình Git LFS cho 3D, Texture, Audio
@@ -236,9 +239,10 @@ Zero-to-Billionaire-Simulator/
   - [x] Xây dựng Event Engine hoàn chỉnh (Data-driven JSON, hỗ trợ `conditionFormula` & `nextEventId`).
   - [x] Hoàn thiện hệ thống Nghề nghiệp (22 nghề), Kinh tế Vĩ mô & Tài sản (18 loại), Quan hệ Gia phả & Thừa kế, Cỗ máy Thời gian và Lưu game SHA-256.
   - [x] Xây dựng bộ kiểm định dữ liệu, mô phỏng không đầu 0–90 tuổi và Unit Test C# (`tools/validate_game_data.py`, `GameSimulationTests.cs`).
-- [x] **Giai đoạn 2: Playable 3D Vertical Slice (Web + Unity Core)**
+- [x] **Giai đoạn 2: Vertical Slice (Web 3D + Pixel 2D Prototype + Unity Core)**
   - [x] Ra mắt bản chơi thử ngay trên trình duyệt (`web/index.html`) với 3D Isometric Diorama 5 cấp độ phòng & âm thanh.
-  - [x] Xây dựng `GameBootstrapper.cs`, `ProceduralRoomGenerator.cs`, `ModularCharacter.cs` tự động dựng cảnh URP trong Unity.
+  - [x] Dựng prototype Pixel 2D độc lập (`web-demo/`), nhân vật procedural và hoạt cảnh câu chuyện tương thích PWA/Capacitor.
+  - [x] Xây dựng `GameBootstrapper.cs`, `ProceduralRoomGenerator.cs`, `ModularCharacter.cs` và bộ Luxury UI Components trong Unity.
   - [x] Tích hợp Native iOS Taptic Bridge (`IOSHapticBridge.mm`), `PrivacyInfo.xcprivacy` và `AdaptiveFrameRateManager` (60/30 FPS).
   - [ ] Nạp bộ model 3D Blender/FBX hoàn chỉnh và xuất bản build TestFlight nội bộ.
 - [ ] **Giai đoạn 3: Mở rộng Nội dung & Alpha TestFlight**
@@ -270,7 +274,6 @@ Zero-to-Billionaire-Simulator/
 ### Cách 2: Mở & Chạy trên Unity (Phát triển iOS / Mobile)
 #### Yêu cầu tiên quyết
 * **Hệ điều hành:** macOS (khuyến nghị để build Xcode/iOS) hoặc Windows 10/11.
-* **Unity Hub & Engine:** Unity **2022.3 LTS** (hoặc Unity 6 LTS) có cài đặt module **iOS Build Support**.
 * **Xcode:** Phiên bản 15.0+ (nếu build ra thiết bị iPhone/iPad).
 * **Git LFS:** Đã cài đặt `git lfs` trên máy tính (`git lfs install`).
 
@@ -294,11 +297,38 @@ Zero-to-Billionaire-Simulator/
      * Graphics API: `Metal`.
      * Texture Compression: `ASTC`.
 
+### Cách 3: Chạy Demo Pixel 2D trên Web (Vite + PWA + Capacitor)
+
+Demo web độc lập nằm trong [web-demo/](web-demo/). Bản prototype dùng pixel art 2D để ưu tiên vòng lặp mô phỏng và nội dung sự kiện:
+
+```powershell
+cd web-demo
+npm install
+npm run dev
+```
+
+Mở địa chỉ Vite hiển thị trong terminal, thường là `http://localhost:5173`. Luồng chơi gồm loading screen, chọn hoàn cảnh xuất phát, tua thời gian theo tốc độ và sự kiện bắt buộc từ lúc sinh ra đến hết cấp 3. Mỗi lựa chọn cập nhật chỉ số và sprite pixel của nhân vật (tóc, màu áo, kính, phụ kiện, biểu cảm).
+
+Demo đã có manifest PWA, service worker và cấu hình Capacitor tại [web-demo/](web-demo/). Logo hiện tại được dùng làm icon giao diện và iOS tại [logo.png](web-demo/public/icons/logo.png). Trên iPhone, mở bằng Safari rồi chọn **Share -> Add to Home Screen** để cài như ứng dụng.
+
+Để chuẩn bị project iOS trên macOS:
+
+```bash
+cd web-demo
+npm install
+npm run build
+npx cap add ios
+npx cap sync ios
+npx cap open ios
+```
+
+Việc build/sign App Store cần macOS, Xcode, Apple Developer account và bộ icon iOS hợp lệ.
+
 ---
 
 ## ✍️ Hướng dẫn Viết Kịch bản / Sự kiện
 
-Bạn không cần biết lập trình Unity vẫn có thể đóng góp vào kho tàng hàng ngàn câu chuyện rẽ nhánh của game!
+Bạn không cần biết lập trình vẫn có thể đóng góp vào kho tàng hàng ngàn câu chuyện rẽ nhánh của game!
 
 Mỗi sự kiện được định nghĩa đơn giản trong thư mục [`data/events/`](data/events/sample_events.json):
 
@@ -331,7 +361,7 @@ Mỗi sự kiện được định nghĩa đơn giản trong thư mục [`data/e
 
 ## 🤝 Đóng góp & Giấy phép
 
-Dự án phát triển theo giấy phép mã nguồn mở [MIT License](LICENSE). Mọi ý kiến đóng góp kịch bản, 3D low-poly model hoặc đề xuất tính năng đều được hoan nghênh nồng nhiệt!
+Dự án phát triển theo giấy phép mã nguồn mở [MIT License](LICENSE). Mọi ý kiến đóng góp kịch bản pixel, hoạt cảnh và đề xuất tính năng đều được hoan nghênh nồng nhiệt!
 
 <div align="center">
   <sub>Được ấp ủ và phát triển với niềm tự hào game mô phỏng Việt Nam 🇻🇳</sub>
