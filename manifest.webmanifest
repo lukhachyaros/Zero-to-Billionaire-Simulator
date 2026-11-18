@@ -1,24 +1,31 @@
 {
-  "name": "Zero to Billionaire Simulator",
-  "short_name": "Zero to Billionaire",
+  "name": "Zero to Billionaire",
+  "short_name": "Tỷ Phú 3D",
   "description": "Từ Tay Trắng Đến Tỷ Phú — Mô phỏng cuộc đời 3D Việt Nam",
-  "start_url": "./index.html",
+  "start_url": "./?v=4",
+  "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#090e1c",
   "theme_color": "#090e1c",
   "icons": [
     {
-      "src": "./web/icons/logo-192.png",
-      "sizes": "192x192",
+      "src": "./web/icons/apple-touch-icon.png?v=4",
+      "sizes": "180x180",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
-      "src": "./web/icons/logo-512.png",
+      "src": "./web/icons/logo-192.png?v=4",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./web/icons/logo-512.png?v=4",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

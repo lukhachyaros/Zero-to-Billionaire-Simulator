@@ -8,10 +8,21 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Zero to Billionaire" />
   <title>Zero to Billionaire Simulator — Life Sim 3D</title>
-  <link rel="manifest" href="manifest.webmanifest" />
-  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="manifest" href="manifest.webmanifest?v=4" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png?v=4" />
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png?v=4" />
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="icons/apple-touch-icon.png?v=4" />
+  <link rel="icon" type="image/png" sizes="64x64" href="icons/favicon-64.png?v=4" />
+  <style>
+    html, body { background-color: #090e1c; margin: 0; padding: 0; }
+    #game-loading-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: radial-gradient(circle at 50% 28%, #1e3a8a 0%, #090e1c 58%, #040711 100%);
+      display: flex; align-items: center; justify-content: center;
+      color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+  </style>
+  <link rel="stylesheet" href="styles.css?v=4" />
 </head>
 <body>
   <!-- Màn hình Loading thẩm mỹ & Preload toàn bộ Model/Shader 3D chống lag đầu game -->
@@ -21,7 +32,7 @@
       <div class="loading-logo-stage">
         <div class="loading-orbit-ring outer"></div>
         <div class="loading-orbit-ring inner"></div>
-        <img src="icons/logo-512.png" alt="Zero to Billionaire Logo" class="loading-logo-img" id="loading-logo-img" />
+        <img src="icons/logo-512.png?v=4" alt="Zero to Billionaire Logo" class="loading-logo-img" id="loading-logo-img" />
       </div>
 
       <div class="loading-eyebrow">💎 3D ISOMETRIC LIFE SIM</div>
@@ -487,11 +498,11 @@
     </main>
   </div>
 
-  <script src="game_data.js"></script>
-  <script src="live_leaderboard.js"></script>
-  <script src="audio.js"></script>
-  <script src="vendor/three.min.js"></script>
-  <script src="diorama3d.js"></script>
-  <script src="game.js"></script>
+  <script src="game_data.js?v=4"></script>
+  <script src="live_leaderboard.js?v=4"></script>
+  <script src="audio.js?v=4"></script>
+  <script src="vendor/three.min.js?v=4"></script>
+  <script src="diorama3d.js?v=4"></script>
+  <script src="game.js?v=4"></script>
 </body>
 </html>
