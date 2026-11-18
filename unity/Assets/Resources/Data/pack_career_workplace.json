@@ -1,0 +1,963 @@
+[
+  {
+    "eventId": "p2_01_messy_roommate",
+    "category": "culture",
+    "title": "Cuộc Chiến Với Bạn Cùng Phòng Bừa Bộn",
+    "minAge": 19,
+    "maxAge": 24,
+    "priority": 65,
+    "isOneTime": true,
+    "description": "Bạn ở ghép tiết kiệm tiền trọ, nhưng bạn cùng phòng để bát đũa chất cao như núi 4 ngày chưa rửa.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_set_house_rules",
+        "label": "Họp phòng phân chia lịch trực nhật và quỹ sinh hoạt công bằng rõ ràng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Căn phòng gọn gàng hẳn lên, cả hai trở thành cặp bạn cùng phòng ăn ý!",
+            "statModifiers": { "charisma": 8, "discipline": 8, "stress": -8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_headphones_ignore",
+        "label": "Chỉ dọn phần góc của mình rồi đeo tai nghe tập trung cày kỹ năng nghề",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Tốc độ học kỹ năng của bạn tăng vọt dù đôi lúc hơi bực mình nhẹ.",
+            "statModifiers": { "practicalSkills": 10, "stress": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_02_military_semester",
+    "category": "education",
+    "title": "Kỳ Học Quân Sự Trên Đồi Gió Lộng",
+    "minAge": 19,
+    "maxAge": 21,
+    "priority": 70,
+    "isOneTime": true,
+    "description": "Một tháng mặc quân phục xanh gấp chăn vuông góc như bao diêm, sáng 5 rưỡi tập thể dục, tối đàn hát giao lưu cùng đại đội.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_shine_boot_camp",
+        "label": "Chấp hành kỷ luật nghiêm túc và làm tiểu đội trưởng gương mẫu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thể lực dẻo dai hơn hẳn và kết bạn thân với hàng chục sinh viên khoa khác!",
+            "statModifiers": { "health": 10, "discipline": 14, "charisma": 8, "happiness": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_night_snack_fun",
+        "label": "Tham gia văn nghệ buổi tối và ăn đêm cùng đồng đội",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Kỷ niệm thanh xuân không thể nào quên thời sinh viên!",
+            "statModifiers": { "happiness": 15, "stress": -10, "charisma": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_03_mlm_seminar_trap",
+    "category": "finance",
+    "title": "Hội Thảo 'Việc Nhẹ Lương Ngàn Đô'",
+    "minAge": 19,
+    "maxAge": 25,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Người quen mời bạn tới hội trường khách sạn nghe diễn giả mặc vest hô hào 'đầu tư 10 triệu để tự do tài chính sau 3 tháng'.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_walk_out_smart",
+        "label": "Nhận ra dấu hiệu đa cấp biến tướng và lịch sự ra về ngay lập tức",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn giữ nguyên ví tiền an toàn và nâng cao cảnh giác tài chính!",
+            "statModifiers": { "financialLiteracy": 12, "intelligence": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_warn_friends",
+        "label": "Chụp lại tài liệu phân tích lỗ hổng mô hình để cảnh báo bạn bè trong ký túc xá",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhiều bạn sinh viên thoát cảnh vay nợ oan nhờ bài phân tích sắc bén của bạn!",
+            "statModifiers": { "karma": 15, "socialStatus": 10, "financialLiteracy": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_04_former_boss_poach",
+    "category": "career",
+    "title": "Sếp Cũ Rủ Sang Công Ty Mới Cùng Đánh Lớn",
+    "minAge": 24,
+    "maxAge": 42,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Người sếp từng dìu dắt bạn nay đầu quân sang tập đoàn đối thủ làm Giám đốc, ngỏ lời mời bạn theo sang giữ vị trí chủ chốt.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_follow_mentor",
+        "label": "Tin tưởng đi theo sếp cũ nhận mức thưởng chuyển việc hấp dẫn",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "message": "Hai thầy trò phối hợp ăn ý tạo nên doanh số kỷ lục ngay năm đầu!",
+            "statModifiers": { "cash": 45000000, "socialStatus": 12, "businessAcuity": 10 }
+          },
+          {
+            "probability": 0.2,
+            "message": "Môi trường mới áp lực tái cơ cấu nặng nề nhưng thu nhập khá tốt.",
+            "statModifiers": { "cash": 20000000, "stress": 14 }
+          }
+        ]
+      },
+      {
+        "id": "opt_stay_loyal",
+        "label": "Ở lại công ty hiện tại khẳng định lòng trung thành và vị thế nội bộ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Ban lãnh đạo ghi nhận sự gắn bó của bạn và trao thêm quyền lợi dự án!",
+            "statModifiers": { "karma": 10, "socialStatus": 10, "discipline": 8, "cash": 15000000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_05_english_client_pitch",
+    "category": "career",
+    "title": "Thuyết Trình Dự Án Trước Đối Tác Quốc Tế",
+    "minAge": 23,
+    "maxAge": 48,
+    "priority": 66,
+    "isOneTime": true,
+    "description": "Đối tác từ Tokyo và Singapore đang ngồi trong phòng họp lớn lắng nghe bản đề xuất trị giá hàng tỷ đồng của đội bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_pitch_confidently",
+        "label": "Trình bày lưu loát bằng tiếng Anh kèm số liệu ROI thuyết phục",
+        "outcomes": [
+          {
+            "probability": 0.78,
+            "conditionFormula": "intelligence >= 65",
+            "message": "Hợp đồng được ký kết ngay tại bàn họp! Bạn nhận khoản hoa hồng hậu hĩnh!",
+            "statModifiers": { "cash": 65000000, "charisma": 12, "socialStatus": 14, "businessAcuity": 10 }
+          },
+          {
+            "probability": 0.22,
+            "message": "Đối tác hẹn xem xét thêm báo giá nhưng khen ngợi tác phong chuyên nghiệp của bạn.",
+            "statModifiers": { "charisma": 6, "practicalSkills": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_focus_demo_live",
+        "label": "Tập trung demo sản phẩm chạy mượt mà thực tế để chứng minh năng lực",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sản phẩm chạy trơn tru không lỗi khiến khách hàng gật đầu ngay lập tức!",
+            "statModifiers": { "practicalSkills": 12, "cash": 35000000, "socialStatus": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_06_wrong_group_chat",
+    "category": "career",
+    "title": "Tai Nạn Gửi Nhầm Tin Nhắn Vào Group Công Ty!",
+    "minAge": 22,
+    "maxAge": 40,
+    "priority": 62,
+    "isOneTime": true,
+    "description": "Tim bạn ngừng đập 3 giây khi phát hiện tin nhắn than thở 'Deadline vô lý quá' vừa gửi thẳng vào nhóm chat có cả Tổng Giám đốc!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_own_up_solution",
+        "label": "Không thu hồi muộn màng — nhắn tiếp ngay giải pháp tối ưu tiến độ chuyên nghiệp",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "message": "Cú xoay tình thế cực đỉnh! Sếp bất ngờ ghi nhận sự thẳng thắn và lắng nghe góp ý của bạn!",
+            "statModifiers": { "charisma": 12, "socialStatus": 8, "discipline": 6 }
+          },
+          {
+            "probability": 0.2,
+            "message": "Bị nhắc nhở nhẹ trong cuộc họp giao ban nhưng mọi chuyện êm xuôi nhanh chóng.",
+            "statModifiers": { "stress": 10, "discipline": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_apologize_privately",
+        "label": "Thu hồi khẩn cấp và nhắn tin xin lỗi chân thành trực tiếp tới sếp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sếp mỉm cười bỏ qua sự cố 'người mới' và dặn dò cẩn thận hơn.",
+            "statModifiers": { "stress": 8, "karma": 4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_07_tech_layoff_wave",
+    "category": "career",
+    "title": "Làn Sóng Tinh Giản Nhân Sự Mùa Khó Khăn",
+    "minAge": 25,
+    "maxAge": 50,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Kinh tế thắt chặt khiến công ty phải cắt giảm 20% chi phí vận hành. Phòng nhân sự triệu tập cuộc họp toàn thể.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_prove_core_value",
+        "label": "Chứng minh hiệu suất vượt trội và nhận kiêm nhiệm tối ưu hệ thống",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "conditionFormula": "discipline >= 55",
+            "message": "Bạn không những giữ vững vị trí mà còn được thăng làm nhân sự nòng cốt kèm thưởng!",
+            "statModifiers": { "cash": 25000000, "discipline": 10, "socialStatus": 10, "stress": 10 }
+          },
+          {
+            "probability": 0.2,
+            "message": "Khối lượng công việc tăng gấp rưỡi nhưng kỹ năng quản trị khủng hoảng của bạn nâng tầm rõ rệt.",
+            "statModifiers": { "practicalSkills": 10, "stress": 16 }
+          }
+        ]
+      },
+      {
+        "id": "opt_upskill_freelance",
+        "label": "Chủ động chuẩn bị hồ sơ năng lực và tìm thêm nguồn thu dự án ngoài",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhờ chuẩn bị phương án B từ sớm, bạn luôn giữ thế chủ động tài chính!",
+            "statModifiers": { "cash": 18000000, "financialLiteracy": 10, "practicalSkills": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_08_stolen_credit",
+    "category": "career",
+    "title": "Ý Tưởng Của Bạn Bị Người Khác Nhận Vơ",
+    "minAge": 24,
+    "maxAge": 45,
+    "priority": 60,
+    "isOneTime": true,
+    "description": "Trong cuộc họp chiến lược, một đồng nghiệp trình bày nguyên bản kế hoạch tối ưu chi phí mà bạn thức trắng soạn tuần trước mà không nhắc tên bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_present_deep_data",
+        "label": "Lịch sự xin bổ sung phần số liệu chi tiết và bản thiết kế gốc chỉ mình bạn nắm rõ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Ban giám đốc nhận ra ngay ai mới là tác giả thực sự của sáng kiến này!",
+            "statModifiers": { "intelligence": 8, "socialStatus": 14, "charisma": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_document_future",
+        "label": "Giữ bình tĩnh trong cuộc họp và từ nay luôn gửi email cc tài liệu trước khi trao đổi",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bài học chốn công sở giúp bạn bảo vệ thành quả chuyên môn chặt chẽ hơn.",
+            "statModifiers": { "discipline": 10, "businessAcuity": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_09_singapore_business_trip",
+    "category": "career",
+    "title": "Chuyến Công Tác Quốc Tế Đầu Tiên Tại Singapore",
+    "minAge": 25,
+    "maxAge": 45,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Lần đầu đặt chân đến trung tâm tài chính châu Á dự hội nghị công nghệ và đầu tư quy mô khu vực.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_network_summit",
+        "label": "Tích cực giao lưu trao đổi danh thiếp với các nhà sáng lập quốc tế",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn kết nối được nhiều cố vấn tầm cỡ và mở mang tư duy toàn cầu!",
+            "statModifiers": { "businessAcuity": 14, "charisma": 10, "socialStatus": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_study_urban_model",
+        "label": "Quan sát mô hình vận hành bán lẻ thông minh & bất động sản xanh tại đảo quốc",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhiều ý tưởng kinh doanh giá trị cao được bạn ghi chép đầy sổ tay mang về Việt Nam.",
+            "statModifiers": { "financialLiteracy": 12, "intelligence": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_10_guest_lecturer",
+    "category": "education",
+    "title": "Lời Mời Làm Diễn Giả & Giảng Viên Thỉnh Giảng",
+    "minAge": 28,
+    "maxAge": 55,
+    "priority": 60,
+    "isOneTime": true,
+    "description": "Một trường đại học cũ mời bạn quay lại chia sẻ kinh nghiệm thực chiến cho sinh viên năm cuối vào cuối tuần.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_teach_passionately",
+        "label": "Nhận lời truyền lửa cho thế hệ trẻ và tuyển thực tập sinh tài năng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bài giảng chật kín hội trường! Bạn vừa có thêm thu nhập thù lao vừa nâng tầm uy tín cá nhân.",
+            "statModifiers": { "cash": 15000000, "socialStatus": 14, "karma": 12, "charisma": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_donate_back_scholar",
+        "label": "Tặng toàn bộ thù lao giảng dạy vào quỹ học bổng khoa",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sinh viên và thầy cô vô cùng kính trọng tấm lòng của bạn!",
+            "statModifiers": { "karma": 22, "socialStatus": 16, "happiness": 15 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_11_viral_livestream",
+    "category": "finance",
+    "title": "Phiên Livestream Bất Ngờ Viral 50.000 Mắt Xem!",
+    "minAge": 20,
+    "maxAge": 42,
+    "priority": 70,
+    "isOneTime": true,
+    "description": "Video chia sẻ câu chuyện chân thật của bạn bất ngờ lên xu hướng hàng đầu, hàng chục nghìn người ùa vào xem livestream.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_launch_flash_sale",
+        "label": "Bình tĩnh giữ tương tác tự nhiên và gắn giỏ hàng sản phẩm chất lượng",
+        "outcomes": [
+          {
+            "probability": 0.78,
+            "conditionFormula": "charisma >= 45",
+            "message": "Đơn hàng nổ ting ting không kịp thở! Phiên live mang về lợi nhuận ròng khủng!",
+            "statModifiers": { "cash": 85000000, "businessAcuity": 12, "charisma": 10, "happiness": 18 }
+          },
+          {
+            "probability": 0.22,
+            "message": "Lượng đơn tăng đột biến làm hơi quá tải khâu đóng gói nhưng vẫn thu lãi tốt.",
+            "statModifiers": { "cash": 25000000, "stress": 12, "practicalSkills": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_build_personal_brand",
+        "label": "Không vội bán hàng, tập trung xây dựng cộng đồng người theo dõi trung thành",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Lượt theo dõi tăng vọt hàng trăm nghìn, các nhãn hàng lớn bắt đầu chủ động mời hợp tác!",
+            "statModifiers": { "socialStatus": 18, "charisma": 12, "cash": 30000000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_12_new_years_eve_deadline",
+    "category": "career",
+    "title": "Trực Xử Lý Hệ Thống Đêm Giao Thừa",
+    "minAge": 23,
+    "maxAge": 45,
+    "priority": 54,
+    "isOneTime": false,
+    "description": "Ngoài phố pháo hoa chuẩn bị bắn rực trời, nhưng hệ thống thanh toán / vận hành bất ngờ báo động đỏ đúng 23 giờ 15 phút!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_fix_bug_hero",
+        "label": "Bật laptop xử lý sự cố dứt điểm trước thời khắc đếm ngược",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hệ thống thông suốt trở lại đúng 23:55! Sếp thưởng nóng đậm tay cho tinh thần trách nhiệm!",
+            "statModifiers": { "cash": 18000000, "practicalSkills": 10, "discipline": 8, "stress": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_delegate_backup",
+        "label": "Kích hoạt hệ thống dự phòng tự động theo quy trình đã chuẩn bị",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chuyển đổi mượt mà chỉ trong 2 phút để bạn kịp ra ban công ngắm pháo hoa cùng gia đình!",
+            "statModifiers": { "intelligence": 8, "happiness": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_13_tv_interview_feature",
+    "category": "culture",
+    "title": "Đài Truyền Hình Mời Phỏng Vấn Gương Mặt Trẻ",
+    "minAge": 26,
+    "maxAge": 52,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Chương trình kinh tế buổi tối liên hệ ghi hình phóng sự về hành trình vươn lên và góc nhìn nghề nghiệp của bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_share_practical_tips",
+        "label": "Chia sẻ chân thành những vấp ngã và bài học quản trị tài chính thực tế",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Phóng sự phát sóng nhận hàng ngàn bình luận tích cực, uy tín thương hiệu cá nhân tăng mạnh!",
+            "statModifiers": { "socialStatus": 18, "charisma": 10, "appearance": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_promote_viet_products",
+        "label": "Tranh thủ giới thiệu sản phẩm chất lượng của đội ngũ Việt ra công chúng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Lượng khách hàng tìm đến tăng vọt ngay sau buổi phát sóng!",
+            "statModifiers": { "cash": 40000000, "businessAcuity": 12, "socialStatus": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_14_colleague_medical_loan",
+    "category": "relationship",
+    "title": "Đồng Nghiệp Thân Hỏi Vay Nóng Lo Viện Phí",
+    "minAge": 24,
+    "maxAge": 55,
+    "priority": 58,
+    "isOneTime": true,
+    "description": "Một người đồng nghiệp từng giúp đỡ bạn nhiều bỗng gọi điện giọng run run cần vay gấp 15 triệu đồng đóng viện phí cho người nhà.",
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 20000000 }
+    ],
+    "options": [
+      {
+        "id": "opt_lend_support",
+        "label": "Chuyển khoản ngay 15 triệu giúp bạn qua cơn hoạn nạn",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "message": "Người nhà bạn ấy bình phục và họ trả đủ tiền kèm lòng biết ơn sâu sắc, sau này giới thiệu bạn thương vụ lớn!",
+            "statModifiers": { "cash": 10000000, "karma": 20, "happiness": 14, "socialStatus": 8 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Hoàn cảnh bạn ấy còn chật vật nên mới trả trước được một nửa, coi như làm việc thiện.",
+            "statModifiers": { "cash": -7500000, "karma": 18 }
+          }
+        ]
+      },
+      {
+        "id": "opt_gift_and_fundraise",
+        "label": "Gửi tặng hẳn 3 triệu không cần trả và đứng ra kêu gọi công đoàn hỗ trợ thêm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả phòng ban chung tay giúp gia đình đồng nghiệp vượt qua giai đoạn khó khăn!",
+            "statModifiers": { "cash": -3000000, "karma": 20, "socialStatus": 12, "happiness": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_15_office_back_pain",
+    "category": "career",
+    "title": "Căn Bệnh Văn Phòng: Đau Lưng & Mắt Mờ",
+    "minAge": 27,
+    "maxAge": 52,
+    "priority": 56,
+    "isOneTime": false,
+    "description": "Ngồi nhìn màn hình 11 tiếng mỗi ngày bắt đầu khiến cổ vai gáy của bạn cứng đơ và dạ dày biểu tình.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_ergonomic_setup",
+        "label": "Đầu tư ghế công thái học 8 triệu và tập giãn cơ mỗi 60 phút",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cột sống được giải phóng, năng suất làm việc và giấc ngủ cải thiện rõ rệt!",
+            "statModifiers": { "cash": -8000000, "health": 12, "stress": -10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_free_stretch_routine",
+        "label": "Tự đặt báo thức đi bộ leo cầu thang bộ và uống đủ 2 lít nước mỗi ngày",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thói quen tốt không tốn một xu giúp cơ thể dẻo dai trở lại!",
+            "statModifiers": { "health": 8, "discipline": 8, "stress": -6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_16_corporate_marathon",
+    "category": "culture",
+    "title": "Giải Chạy Bộ Thiện Nguyện Doanh Nghiệp",
+    "minAge": 22,
+    "maxAge": 55,
+    "priority": 50,
+    "isOneTime": false,
+    "description": "Cuối tuần công ty và đối tác tổ chức giải chạy bộ quanh Hồ Gươm / Thủ Thiêm, mỗi km hoàn thành sẽ quyên góp tiền trồng rừng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_run_21km",
+        "label": "Đăng ký cự ly 21km bứt phá giới hạn bản thân",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Về đích dưới nắng sớm trong tiếng reo hò! Ý chí và thể lực tăng vượt bậc!",
+            "statModifiers": { "health": 12, "discipline": 10, "karma": 8, "happiness": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_run_5km_connect",
+        "label": "Chạy nhẹ nhàng 5km trò chuyện cùng lãnh đạo và đối tác mới",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không khí thể thao cởi mở giúp bạn kết thân với nhiều nhân vật quan trọng!",
+            "statModifiers": { "health": 6, "charisma": 10, "socialStatus": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_17_landlord_double_rent",
+    "category": "finance",
+    "title": "Chủ Mặt Bằng Đòi Tăng Giá Thuê Gấp Đôi",
+    "minAge": 25,
+    "maxAge": 55,
+    "priority": 66,
+    "isOneTime": true,
+    "description": "Thấy công việc buôn bán của bạn ngày càng đông khách, chủ nhà bất ngờ đòi tăng tiền thuê mặt bằng gấp đôi vào tháng tới.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_negotiate_long_lease",
+        "label": "Đàm phán hợp đồng dài hạn 5 năm với mức tăng hợp lý 15%",
+        "outcomes": [
+          {
+            "probability": 0.75,
+            "conditionFormula": "charisma >= 50",
+            "message": "Lập luận sắc bén về tính ổn định dài hạn thuyết phục được chủ nhà ký phụ lục 5 năm!",
+            "statModifiers": { "businessAcuity": 12, "charisma": 8, "stress": -6 }
+          },
+          {
+            "probability": 0.25,
+            "message": "Bạn chấp nhận nhượng bộ nhẹ 25% để giữ vị trí kinh doanh đắc địa.",
+            "statModifiers": { "stress": 8, "businessAcuity": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_move_online_hub",
+        "label": "Chủ động dời sang mặt bằng ngõ rộng giá rẻ hơn và đẩy mạnh bán online",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chi phí cố định giảm mạnh giúp biên lợi nhuận ròng tăng cao hơn trước!",
+            "statModifiers": { "cash": 30000000, "businessAcuity": 14, "financialLiteracy": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_18_audit_fraud_catch",
+    "category": "finance",
+    "title": "Phát Hiện Dấu Hiệu Gian Lận Sổ Sách Nội Bộ",
+    "minAge": 28,
+    "maxAge": 58,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Khi kiểm tra báo cáo tài chính quý, bạn nhận ra con số chi phí nguyên vật liệu tăng bất thường không khớp hóa đơn thực tế.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_full_audit",
+        "label": "Thuê kiểm toán độc lập rà soát toàn bộ sổ sách và thu hồi thất thoát",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Ngăn chặn kịp thời lỗ hổng tài chính lớn và thiết lập hệ thống kiểm soát minh bạch!",
+            "statModifiers": { "cash": 45000000, "financialLiteracy": 14, "businessAcuity": 12, "discipline": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_software_erp",
+        "label": "Triển khai phần mềm ERP theo dõi thu chi thời gian thực",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mọi hóa đơn xuất nhập kho được số hóa minh bạch 100%!",
+            "statModifiers": { "practicalSkills": 12, "businessAcuity": 10, "financialLiteracy": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_19_server_crash_launch",
+    "category": "career",
+    "title": "Sập Hệ Thống Ngay Giờ Vàng Ra Mắt Sản Phẩm",
+    "minAge": 23,
+    "maxAge": 50,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Lượng người dùng truy cập tăng gấp 20 lần dự kiến khiến máy chủ quá tải đúng lúc chiến dịch quảng cáo vừa chạy!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_scale_cloud_fast",
+        "label": "Nâng cấp cụm server Cloud dự phòng ngay lập tức và gửi mã tri ân khách",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hệ thống hồi phục sau 12 phút và cơn sốt mua hàng bùng nổ kỷ lục!",
+            "statModifiers": { "cash": 50000000, "practicalSkills": 10, "businessAcuity": 10, "stress": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_turn_into_meme",
+        "label": "Đăng bài xin lỗi hài hước 'Vì được yêu thương quá mức nên server ngất xỉu'",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cộng đồng mạng thích thú chia sẻ rầm rộ biến sự cố thành chiến dịch PR miễn phí!",
+            "statModifiers": { "charisma": 14, "socialStatus": 12, "happiness": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_20_competitor_rumor",
+    "category": "career",
+    "title": "Đối Thủ Tung Tin Đồn Thất Thiệt",
+    "minAge": 26,
+    "maxAge": 58,
+    "priority": 66,
+    "isOneTime": true,
+    "description": "Trên mạng xã hội bỗng xuất hiện hàng loạt tài khoản ảo tung tin bịa đặt nhằm hạ bệ uy tín công việc và sản phẩm của bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_transparent_evidence",
+        "label": "Công bố đầy đủ giấy kiểm định chất lượng và mời khách hàng kiểm chứng trực tiếp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sự thật minh bạch dập tắt hoàn toàn tin đồn, khách hàng tin yêu gấp bội!",
+            "statModifiers": { "socialStatus": 16, "karma": 10, "businessAcuity": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_legal_notice",
+        "label": "Lập vi bằng chứng cứ gửi văn bản pháp lý yêu cầu gỡ bỏ tin sai sự thật",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Các trang tin phải đăng bài đính chính công khai, uy tín được bảo toàn trọn vẹn.",
+            "statModifiers": { "discipline": 10, "socialStatus": 12, "stress": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_21_franchise_coffee_deal",
+    "category": "finance",
+    "title": "Cơ Hội Mua Nhượng Quyền Thương Hiệu Lớn",
+    "minAge": 25,
+    "maxAge": 52,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Chuỗi đồ uống nổi tiếng mở suất nhượng quyền độc quyền tại khu đô thị mới sắp bàn giao 5.000 căn hộ.",
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 300000000 }
+    ],
+    "options": [
+      {
+        "id": "opt_buy_franchise",
+        "label": "Rót 300 triệu mở cửa hàng nhượng quyền đón cư dân mới",
+        "outcomes": [
+          {
+            "probability": 0.78,
+            "conditionFormula": "businessAcuity >= 35",
+            "message": "Cư dân dọn về đông nghịt! Cửa hàng hoàn vốn siêu tốc và sinh lời ròng cực mạnh!",
+            "statModifiers": { "cash": 450000000, "businessAcuity": 15, "happiness": 18 }
+          },
+          {
+            "probability": 0.22,
+            "message": "Tiến độ bàn giao chung cư chậm nửa năm nhưng sau đó bắt đầu có lãi ổn định.",
+            "statModifiers": { "cash": 40000000, "stress": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_build_own_brand",
+        "label": "Không phụ thuộc nhượng quyền — tự xây thương hiệu riêng tiết kiệm phí bản quyền",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn làm chủ hoàn toàn công thức và biên lợi nhuận 100%!",
+            "statModifiers": { "businessAcuity": 14, "practicalSkills": 10, "cash": 120000000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_22_hire_star_talent",
+    "category": "career",
+    "title": "Chiêu Mộ Nhân Tài Hạng S Đầu Ngành",
+    "minAge": 28,
+    "maxAge": 58,
+    "priority": 66,
+    "isOneTime": true,
+    "description": "Một chuyên gia kiệt xuất từng làm ở tập đoàn Fortune 500 vừa về nước đang cân nhắc gia nhập đội ngũ của bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_offer_esop_vision",
+        "label": "Chia sẻ tầm nhìn lớn và trao gói cổ phần thưởng theo hiệu quả",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhân tài gật đầu đồng hành! Năng suất cả đội ngũ tăng gấp ba chỉ sau hai quý!",
+            "statModifiers": { "cash": 120000000, "businessAcuity": 14, "socialStatus": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_collaborate_project",
+        "label": "Mời hợp tác cố vấn chiến lược theo từng dự án trọng điểm",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chi phí gọn nhẹ mà vẫn giải quyết triệt để các bài toán hóc búa nhất!",
+            "statModifiers": { "cash": 55000000, "intelligence": 8, "financialLiteracy": 8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_23_tax_safety_inspection",
+    "category": "finance",
+    "title": "Đoàn Kiểm Tra Thuế & PCCC Định Kỳ",
+    "minAge": 26,
+    "maxAge": 62,
+    "priority": 58,
+    "isOneTime": false,
+    "description": "Đoàn liên ngành đến kiểm tra định kỳ hệ thống hóa đơn chứng từ và trang thiết bị phòng cháy chữa cháy tại cơ sở.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_full_compliance",
+        "label": "Xuất trình hồ sơ hóa đơn chuẩn chỉnh và trang bị PCCC đầy đủ từ đầu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đoàn kiểm tra đánh giá đạt chuẩn tuyệt đối 10/10, hoạt động kinh doanh vững vàng!",
+            "statModifiers": { "discipline": 10, "socialStatus": 8, "stress": -6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_quick_upgrade_gear",
+        "label": "Bổ sung thêm bình chữa cháy và hoàn thiện sổ sách kế toán chuẩn mực",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mọi quy chuẩn an toàn được nâng lên mức cao nhất cho nhân viên và khách hàng.",
+            "statModifiers": { "practicalSkills": 8, "karma": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_24_young_entrepreneur_award",
+    "category": "career",
+    "title": "Đề Cử Giải Thưởng Doanh Nhân Tiêu Biểu",
+    "minAge": 28,
+    "maxAge": 45,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Những đóng góp kinh tế và việc làm bạn tạo ra giúp tên tuổi bạn lọt danh sách Top 10 Gương mặt Doanh nhân Trẻ xuất sắc.",
+    "conditions": [
+      { "field": "socialStatus", "operatorType": ">=", "numberValue": 45 }
+    ],
+    "options": [
+      {
+        "id": "opt_attend_gala",
+        "label": "Lên sân khấu nhận cúp vinh danh và phát biểu truyền cảm hứng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cúp vàng Doanh nhân Tiêu biểu giúp bạn mở ra cánh cửa hợp tác với các tập đoàn đầu ngành!",
+            "statModifiers": { "socialStatus": 20, "happiness": 20, "charisma": 10, "cash": 80000000 }
+          }
+        ]
+      },
+      {
+        "id": "opt_credit_team",
+        "label": "Mời cộng sự đồng hành cùng lên nhận giải tri ân tập thể",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đội ngũ gắn kết như một gia đình và cống hiến hết mình vì tương lai chung!",
+            "statModifiers": { "karma": 18, "socialStatus": 16, "businessAcuity": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_25_supply_chain_disruption",
+    "category": "finance",
+    "title": "Đứt Gãy Chuỗi Cung Ứng Nguyên Liệu Nhập Khẩu",
+    "minAge": 27,
+    "maxAge": 60,
+    "priority": 62,
+    "isOneTime": true,
+    "description": "Tuyến vận tải biển quốc tế tắc nghẽn khiến nguồn cung linh kiện và nguyên liệu đầu vào chậm trễ 2 tháng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_localize_suppliers",
+        "label": "Tìm kiếm và chuẩn hóa các nhà cung cấp nội địa Việt Nam chất lượng cao",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không chỉ vượt bão thành công mà chi phí vận chuyển giảm hẳn 25%!",
+            "statModifiers": { "businessAcuity": 14, "practicalSkills": 10, "cash": 60000000 }
+          }
+        ]
+      },
+      {
+        "id": "opt_air_freight_vip",
+        "label": "Chấp nhận thuê vận tải hàng không cho đơn hàng gấp để giữ chữ tín giao đúng hẹn",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Khách hàng lớn cảm phục uy tín của bạn và ký thêm hợp đồng dài hạn 3 năm!",
+            "statModifiers": { "socialStatus": 14, "karma": 8, "cash": 45000000 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p2_26_ai_automation_shift",
+    "category": "career",
+    "title": "Cách Mạng Tự Động Hóa Quy Trình Bằng AI",
+    "minAge": 25,
+    "maxAge": 58,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Công nghệ Trí tuệ Nhân tạo bùng nổ giúp rút ngắn 70% thời gian xử lý báo cáo, thiết kế và chăm sóc khách hàng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_adopt_ai_early",
+        "label": "Tiên phong học và triển khai trợ lý AI cho toàn bộ quy trình công việc",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hiệu suất công việc của bạn tăng gấp 4 lần đồng nghiệp, mở đường thu nhập vượt trội!",
+            "statModifiers": { "intelligence": 12, "practicalSkills": 14, "businessAcuity": 10, "cash": 75000000 }
+          }
+        ]
+      },
+      {
+        "id": "opt_train_colleagues",
+        "label": "Tổ chức buổi chia sẻ hướng dẫn mọi người dùng AI nâng cao tay nghề",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn trở thành chuyên gia đổi mới sáng tạo được toàn thể tổ chức săn đón!",
+            "statModifiers": { "socialStatus": 16, "charisma": 10, "intelligence": 8 }
+          }
+        ]
+      }
+    ]
+  }
+]

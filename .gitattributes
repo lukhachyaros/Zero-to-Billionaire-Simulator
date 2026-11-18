@@ -48,3 +48,6 @@
 *.tar.gz filter=lfs diff=lfs merge=lfs -text
 *.docx filter=lfs diff=lfs merge=lfs -text
 *.pdf filter=lfs diff=lfs merge=lfs -text
+
+# Keep documentation & README screenshots in standard Git (for instant GitHub & Pages rendering)
+docs/screenshots/** !filter !diff !merge -text

@@ -1,0 +1,942 @@
+[
+  {
+    "eventId": "p4_01_meet_inlaws_chicken",
+    "category": "relationship",
+    "title": "Về Ra Mắt Nhà Người Yêu — Thử Thách Chặt Gà!",
+    "minAge": 22,
+    "maxAge": 34,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Lần đầu về quê người yêu ăn giỗ ra mắt họ hàng, bác trai cười hiền đưa cho con dao chặt con gà luộc vàng óng trên thớt!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_chop_pro_style",
+        "label": "Bình tĩnh chặt từng miếng vuông vức đều tăm tắp xếp đĩa đẹp như nhà hàng",
+        "outcomes": [
+          {
+            "probability": 0.8,
+            "conditionFormula": "practicalSkills >= 35",
+            "message": "Cả họ nhà người yêu trầm trồ khen nức nở 'chỉ có 10 điểm không có nhưng'!",
+            "statModifiers": { "happiness": 18, "charisma": 10, "socialStatus": 10 }
+          },
+          {
+            "probability": 0.2,
+            "message": "Hơi nát nhẹ miếng cổ nhưng nhờ nhanh nhẹn dọn dẹp rửa bát nên vẫn ghi điểm tuyệt đối!",
+            "statModifiers": { "happiness": 10, "practicalSkills": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_humble_ask_help",
+        "label": "Cười duyên xin bác trai chỉ bảo bí quyết chặt gà truyền thống gia đình",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bác trai khoái chí chỉ từng đường dao và rót chén trà mời bạn ngồi trò chuyện thân mật!",
+            "statModifiers": { "charisma": 12, "happiness": 14, "karma": 5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_02_rush_hour_flood_jam",
+    "category": "culture",
+    "title": "Kẹt Xe 2 Tiếng Dưới Cơn Mưa Ngập Tan Tầm",
+    "minAge": 20,
+    "maxAge": 55,
+    "priority": 48,
+    "isOneTime": false,
+    "description": "5 giờ rưỡi chiều mưa trút nước, cả con phố biến thành sông với hàng dài xe cộ nhích từng centimet.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_podcast_relax",
+        "label": "Tạt vào quán cà phê đọc sách nghe podcast tài chính chờ đường thông thoáng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không bực dọc kẹt xe mà còn học thêm được nhiều kiến thức đầu tư mới!",
+            "statModifiers": { "financialLiteracy": 6, "intelligence": 4, "stress": -6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_help_stalled_bike",
+        "label": "Phụ đẩy giúp chiếc xe chết máy của người đi đường lên vỉa hè khô ráo",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Hành động đẹp giữa cơn mưa khiến người xa lạ cảm ơn rối rít.",
+            "statModifiers": { "karma": 12, "happiness": 10, "health": 2 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_03_cloud_hunting_trip",
+    "category": "culture",
+    "title": "Chuyến Phượt Săn Mây Tây Bắc Tuổi Trẻ",
+    "minAge": 20,
+    "maxAge": 34,
+    "priority": 60,
+    "isOneTime": true,
+    "description": "Cuối tuần nhóm bạn thân rủ nhau chạy cung đèo hùng vĩ săn biển mây bình minh giữa núi rừng Tây Bắc.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_sunrise_peaks",
+        "label": "Dậy từ 4 giờ sáng leo đỉnh đón biển mây bồng bềnh trước ánh nắng đầu ngày",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Khung cảnh kỳ vĩ xua tan mọi áp lực công việc suốt cả năm qua!",
+            "statModifiers": { "happiness": 20, "stress": -20, "health": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_local_homestay",
+        "label": "Giao lưu đốt lửa trại cùng bà con bản địa và tìm hiểu đặc sản vùng cao",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Những bức ảnh và tình bạn sâu đậm trở thành động lực lớn cho bạn!",
+            "statModifiers": { "charisma": 10, "karma": 6, "happiness": 14 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_04_spouse_salary_card",
+    "category": "relationship",
+    "title": "Thương Lượng Chuyện 'Nóc Nhà Giữ Quỹ'",
+    "minAge": 25,
+    "maxAge": 45,
+    "priority": 70,
+    "isOneTime": true,
+    "description": "Sau khi kết hôn, hai vợ chồng ngồi lại thống nhất cách quản lý thu chi và tài khoản chung của gia đình.",
+    "conditions": [
+      { "field": "hasFlag", "operatorType": "==", "stringValue": "is_married" }
+    ],
+    "options": [
+      {
+        "id": "opt_three_jars_budget",
+        "label": "Lập 3 quỹ minh bạch: Chi tiêu chung, Đầu tư sinh lời và Quỹ cá nhân riêng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả hai đều thoải mái tự do mà tài sản chung vẫn tích lũy cực nhanh!",
+            "statModifiers": { "financialLiteracy": 12, "happiness": 16, "stress": -10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_give_all_spouse",
+        "label": "Tin tưởng giao 'nóc nhà' làm Giám đốc Tài chính gia đình giữ thẻ lương",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bạn đời chăm lo chu toàn từng bữa cơm giấc ngủ, tiết kiệm giỏi đến bất ngờ!",
+            "statModifiers": { "happiness": 18, "discipline": 8, "karma": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_05_living_with_inlaws",
+    "category": "relationship",
+    "title": "Ở Chung Với Bố Mẹ Hay Thuê Riêng Tổ Ấm?",
+    "minAge": 26,
+    "maxAge": 40,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Hai vợ chồng bàn tính xem nên ở chung nhà phụng dưỡng bố mẹ hay ra ở riêng để có không gian tự do.",
+    "conditions": [
+      { "field": "hasFlag", "operatorType": "==", "stringValue": "is_married" }
+    ],
+    "options": [
+      {
+        "id": "opt_near_but_separate",
+        "label": "Ra ở riêng ngay gần nhà bố mẹ để vừa tự do vừa tiện sang thăm hỏi mỗi ngày",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Khoảng cách vàng giúp tình cảm hai bên gia đình lúc nào cũng hòa thuận đầm ấm!",
+            "statModifiers": { "happiness": 18, "parentRelationship": 12, "stress": -8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_stay_multigen",
+        "label": "Ở chung đại gia đình ba thế hệ, tiết kiệm được trọn vẹn chi phí thuê nhà",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bữa cơm gia đình rộn rã tiếng cười và bạn tích lũy vốn nhanh hơn hẳn!",
+            "statModifiers": { "cash": 35000000, "parentRelationship": 15, "karma": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_06_child_school_race",
+    "category": "relationship",
+    "title": "Cuộc Đua Chọn Trường Điểm Cho Con",
+    "minAge": 32,
+    "maxAge": 48,
+    "priority": 72,
+    "isOneTime": true,
+    "description": "Con bạn sắp vào tiểu học. Phụ huynh khắp nơi bàn tán sôi nổi chuyện chọn trường công chuẩn quốc gia hay trường song ngữ.",
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
+    ],
+    "options": [
+      {
+        "id": "opt_balanced_public",
+        "label": "Chọn trường chất lượng gần nhà để con không phải thức khuya dậy sớm chạy xe xa",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Con vui vẻ khỏe mạnh, mỗi chiều còn được bố mẹ dẫn đi chơi thể thao!",
+            "statModifiers": { "happiness": 16, "stress": -10, "karma": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_bilingual_prep",
+        "label": "Đầu tư lớp ngoại ngữ và kỹ năng mềm buổi tối đồng hành cùng con",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Con tiếp thu cực nhanh và tự tin giao tiếp song ngữ từ nhỏ!",
+            "statModifiers": { "happiness": 14, "socialStatus": 8, "intelligence": 4 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_07_10th_anniversary",
+    "category": "relationship",
+    "title": "Kỷ Niệm 10 Năm Ngày Cưới",
+    "minAge": 36,
+    "maxAge": 52,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Một thập kỷ bên nhau qua bao nắng mưa cuộc đời! Bạn muốn tạo bất ngờ gì cho người bạn đời?",
+    "conditions": [
+      { "field": "hasFlag", "operatorType": "==", "stringValue": "is_married" }
+    ],
+    "options": [
+      {
+        "id": "opt_romantic_dinner_letter",
+        "label": "Tự tay nấu bữa tối dưới ánh nến kèm bức thư viết tay và bó hoa tươi",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Người bạn đời rưng rưng hạnh phúc như ngày đầu mới yêu!",
+            "statModifiers": { "happiness": 24, "stress": -15, "karma": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_family_photoshoot",
+        "label": "Đưa cả gia đình đi chụp bộ ảnh kỷ niệm 10 năm bên nhau",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Khung ảnh đại gia đình rạng rỡ treo trang trọng ngay phòng khách!",
+            "statModifiers": { "happiness": 20, "socialStatus": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_08_caring_aging_parents",
+    "category": "relationship",
+    "title": "Túc Trực Chăm Sóc Bố Mẹ Lớn Tuổi",
+    "minAge": 36,
+    "maxAge": 62,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Bố mẹ tuổi cao sức yếu phải nhập viện theo dõi một tuần, đòi hỏi con cái sắp xếp công việc thay phiên chăm sóc.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_personal_care",
+        "label": "Sắp xếp công việc từ xa để trực tiếp túc trực động viên bố mẹ mỗi ngày",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhờ tình thương của con cháu, bố mẹ hồi phục nhanh chóng và xuất viện khỏe mạnh!",
+            "statModifiers": { "parentRelationship": 25, "karma": 20, "happiness": 15, "stress": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_vip_care_package",
+        "label": "Bố trí phòng chăm sóc tốt nhất kết hợp y tá riêng hỗ trợ gia đình",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Bố mẹ được điều trị tận tình chu đáo và hoàn toàn bình phục!",
+            "statModifiers": { "parentRelationship": 20, "karma": 14, "happiness": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_09_15_year_reunion",
+    "category": "culture",
+    "title": "Họp Lớp 15 Năm Ngày Ra Trường",
+    "minAge": 32,
+    "maxAge": 36,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Sau 15 năm bôn ba, đám bạn cũ tụ họp lại nhà hàng năm xưa. Ai nấy đều thay đổi nhiều so với thời áo trắng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_humble_reunion",
+        "label": "Vui vẻ ôn kỷ niệm ngây ngô thuở học trò và kết nối hỗ trợ công việc cho bạn bè",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Sự khiêm nhường và chân thành của bạn giúp buổi họp lớp ấm áp, kết nối được nhiều đối tác tin cậy!",
+            "statModifiers": { "charisma": 10, "happiness": 16, "socialStatus": 10, "karma": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_class_fund_sponsor",
+        "label": "Đứng ra góp quỹ tri ân thầy cô giáo cũ khó khăn của trường",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thầy cô rưng rưng xúc động trước nghĩa cử cao đẹp của cả lớp!",
+            "statModifiers": { "karma": 18, "socialStatus": 14, "happiness": 15 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_10_teen_child_esports",
+    "category": "relationship",
+    "title": "Con Đòi Nghỉ Học Đi Thi Đấu Game Chuyên Nghiệp",
+    "minAge": 42,
+    "maxAge": 58,
+    "priority": 68,
+    "isOneTime": true,
+    "description": "Đứa con đang học cấp 3 bất ngờ nói muốn bảo lưu kết quả học tập để theo đuổi giấc mơ tuyển thủ Esports.",
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
+    ],
+    "options": [
+      {
+        "id": "opt_propose_milestone_deal",
+        "label": "Lắng nghe tôn trọng và giao kèo: giữ học lực Khá trở lên mới được tham gia giải bán chuyên",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Con bạn mừng rỡ nỗ lực gấp đôi cả học tập lẫn luyện thi, học được trách nhiệm với lựa chọn!",
+            "statModifiers": { "happiness": 16, "discipline": 8, "charisma": 8, "karma": 8 }
+          }
+        ]
+      },
+      {
+        "id": "opt_guide_game_dev",
+        "label": "Định hướng con tìm hiểu sâu hơn về lập trình game và kinh doanh công nghệ số",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Con chuyển hướng đam mê thành kỹ năng lập trình xuất sắc đầy triển vọng!",
+            "statModifiers": { "happiness": 14, "intelligence": 6, "businessAcuity": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_11_rooftop_garden",
+    "category": "culture",
+    "title": "Cải Tạo Sân Thượng Trồng Rau Sạch & Hoa Hồng",
+    "minAge": 34,
+    "maxAge": 78,
+    "priority": 52,
+    "isOneTime": true,
+    "description": "Góc sân thượng đầy nắng đang bỏ trống, bạn nghĩ tới việc biến nơi đây thành khu vườn xanh mướt giữa lòng phố thị.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_grow_organic_veggies",
+        "label": "Tự đóng giàn trồng cà chua, rau muống, mướp hương hữu cơ cho cả nhà",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Mỗi sáng lên vườn tưới cây hít thở không khí trong lành giúp tinh thần thư thái lạ kỳ!",
+            "statModifiers": { "health": 10, "happiness": 14, "stress": -15, "practicalSkills": 6 }
+          }
+        ]
+      },
+      {
+        "id": "opt_koi_tea_corner",
+        "label": "Bố trí thêm bộ bàn trà gỗ và hồ cá nhỏ tiếp bạn hiền cuối tuần",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không gian chill tuyệt vời ngay tại nhà giúp cân bằng cuộc sống đỉnh cao!",
+            "statModifiers": { "happiness": 16, "stress": -16, "charisma": 5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_12_highland_scholarship",
+    "category": "culture",
+    "title": "Chương Trình 'Cơm Có Thịt' Cho Trẻ Em Vùng Cao",
+    "minAge": 28,
+    "maxAge": 82,
+    "priority": 66,
+    "isOneTime": false,
+    "description": "Hình ảnh những em nhỏ vùng núi cao đi bộ hàng cây số tới điểm trường giữa sương mù giá rét chạm tới trái tim bạn.",
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 30000000 }
+    ],
+    "options": [
+      {
+        "id": "opt_sponsor_25m",
+        "label": "Tài trợ 25 triệu đồng xây bếp ăn bán trú và tặng áo ấm mùa đông",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nụ cười rạng rỡ của các em nhỏ vùng cao lan tỏa nguồn năng lượng thiện lành sâu sắc!",
+            "statModifiers": { "cash": -25000000, "karma": 26, "happiness": 22, "socialStatus": 14, "stress": -10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_donate_books_5m",
+        "label": "Gửi tặng 5 triệu đồng cùng hàng trăm cuốn sách truyện thiếu nhi",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thư viện nhỏ nơi bản xa sáng đèn tri thức cho bao em thơ!",
+            "statModifiers": { "cash": -5000000, "karma": 14, "happiness": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_13_noisy_construction_next",
+    "category": "culture",
+    "title": "Hàng Xóm Xây Nhà Mới Khoan Cắt Suốt Nửa Năm",
+    "minAge": 25,
+    "maxAge": 75,
+    "priority": 44,
+    "isOneTime": false,
+    "description": "Từ 7 giờ sáng mỗi ngày tiếng máy khoan bê tông đinh tai nhức óc vang lên ngay sát vách tường nhà bạn.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_coworking_escape",
+        "label": "Chuyển sang làm việc tại quán cà phê yên tĩnh / co-working space đầy cảm hứng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không gian mới mẻ giúp bạn tập trung cao độ và tình cờ gặp gỡ đối tác hay!",
+            "statModifiers": { "charisma": 6, "businessAcuity": 5, "stress": -5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_agree_quiet_noon",
+        "label": "Trao đổi thiện chí với chủ nhà thống nhất nghỉ trưa 12h–13h30 không khoan đục",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chủ nhà vui vẻ tiếp thu và biếu gia đình bạn giỏ trái cây cảm ơn sự thông cảm!",
+            "statModifiers": { "charisma": 8, "karma": 5, "stress": -8 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_14_japan_sakura_vacation",
+    "category": "culture",
+    "title": "Chuyến Du Lịch Ngắm Hoa Anh Đào Nhật Bản",
+    "minAge": 26,
+    "maxAge": 78,
+    "priority": 60,
+    "isOneTime": true,
+    "description": "Bạn quyết định tự thưởng cho bản thân và gia đình một chuyến khám phá Tokyo - Kyoto đúng mùa hoa anh đào nở rộ.",
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 80000000 }
+    ],
+    "options": [
+      {
+        "id": "opt_full_family_tour",
+        "label": "Chi 60 triệu đồng trải nghiệm chuyến đi trọn vẹn ngắm núi Phú Sĩ và suối nước nóng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cả gia đình ngập tràn hạnh phúc, năng lượng và cảm hứng sáng tạo dồi dào trở lại!",
+            "statModifiers": { "cash": -60000000, "happiness": 26, "stress": -28, "health": 8, "parentRelationship": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_smart_budget_trip",
+        "label": "Săn vé sớm tự túc hành trình tối ưu chi phí chỉ 30 triệu mà vẫn đi đủ điểm đẹp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Chuyến đi tự túc đầy trải nghiệm văn hóa tuyệt vời với chi phí cực kỳ hợp lý!",
+            "statModifiers": { "cash": -30000000, "happiness": 20, "stress": -20, "practicalSkills": 6 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_15_annual_health_screening",
+    "category": "childhood",
+    "title": "Khám Sức Khỏe Tổng Quát Định Kỳ",
+    "minAge": 35,
+    "maxAge": 80,
+    "priority": 66,
+    "isOneTime": false,
+    "description": "Bác sĩ xem kết quả xét nghiệm máu và siêu âm định kỳ của bạn trong buổi kiểm tra sức khỏe hàng năm.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_strict_diet_sleep",
+        "label": "Tuân thủ thực đơn ít dầu mỡ, tập cardio đều đặn và ngủ trước 23h",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Các chỉ số sinh học đẹp như tuổi đôi mươi! Sức khỏe dẻo dai bền bỉ!",
+            "statModifiers": { "health": 12, "discipline": 8, "stress": -8, "appearance": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_yoga_swimming",
+        "label": "Duy trì bơi lội và yoga mỗi tuần 3 buổi giải tỏa căng thẳng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Xương khớp linh hoạt, tinh thần minh mẫn sảng khoái!",
+            "statModifiers": { "health": 10, "happiness": 10, "stress": -12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_16_child_introduces_fiance",
+    "category": "relationship",
+    "title": "Con Dẫn Người Thương Về Ra Mắt Xin Cưới",
+    "minAge": 48,
+    "maxAge": 68,
+    "priority": 78,
+    "isOneTime": true,
+    "description": "Đứa con trưởng thành của bạn rạng rỡ đưa người yêu về nhà ăn cơm và thưa chuyện trăm năm với bố mẹ.",
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
+    ],
+    "options": [
+      {
+        "id": "opt_bless_couple",
+        "label": "Vui vẻ chúc phúc và dạy con bí quyết giữ gìn hạnh phúc hôn nhân",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Đám cưới con diễn ra tưng bừng ấm áp, hai bên thông gia quý mến nhau hết mực!",
+            "statModifiers": { "happiness": 24, "karma": 12, "socialStatus": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_gift_wedding_gold",
+        "label": "Trao tặng đôi trẻ chút vốn làm ăn khởi nghiệp đầu đời",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Các con vô cùng cảm động và biết ơn tình yêu thương sâu nặng của bạn!",
+            "statModifiers": { "happiness": 22, "karma": 15, "socialStatus": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_17_first_grandchild_born",
+    "category": "relationship",
+    "title": "Lên Chức Ông Bà Đón Cháu Đầu Lòng!",
+    "minAge": 50,
+    "maxAge": 75,
+    "priority": 82,
+    "isOneTime": true,
+    "description": "Tiếng khóc chào đời của đứa cháu nội/ngoại đầu tiên vang lên ngoài phòng sinh! Niềm vui tuổi xế chiều vỡ òa.",
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
+    ],
+    "options": [
+      {
+        "id": "opt_spoil_grandchild",
+        "label": "Bế ẵm cháu cưng trong lòng và kể chuyện cổ tích năm xưa",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Có cháu bồng cháu bế, bạn thấy mình trẻ ra cả chục tuổi!",
+            "statModifiers": { "happiness": 30, "health": 8, "stress": -20, "karma": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_teach_grandchild",
+        "label": "Lập sẵn quỹ sách và tiết kiệm giáo dục nho nhỏ mừng đầy tháng cháu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Truyền thống hiếu học gia phong tiếp tục được truyền qua ba thế hệ!",
+            "statModifiers": { "happiness": 25, "karma": 14, "socialStatus": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_18_ancestral_temple_restore",
+    "category": "culture",
+    "title": "Chung Tay Trùng Tu Nhà Thờ Họ Quê Hương",
+    "minAge": 45,
+    "maxAge": 82,
+    "priority": 64,
+    "isOneTime": true,
+    "description": "Các bậc cao niên trong dòng họ bàn bạc tu sửa mái ngói và sân gạch Nhà thờ Tổ đã xuống cấp theo năm tháng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_contribute_ancestral",
+        "label": "Đóng góp công sức và tài chính trong khả năng cùng bà con dòng tộc",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Nhà thờ họ khang trang uy nghiêm, tên tuổi và lòng hiếu nghĩa của bạn được con cháu ghi nhớ!",
+            "statModifiers": { "karma": 22, "socialStatus": 16, "happiness": 16 }
+          }
+        ]
+      },
+      {
+        "id": "opt_compile_genealogy",
+        "label": "Phụ trách biên soạn số hóa cuốn Gia phả dòng họ lưu truyền hậu thế",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cuốn gia phả lưu giữ đầy đủ cội nguồn giúp thế hệ trẻ luôn hướng về quê hương!",
+            "statModifiers": { "karma": 18, "intelligence": 6, "socialStatus": 14 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_19_retirement_home_choice",
+    "category": "culture",
+    "title": "Chọn Chốn An Cư Tuổi Hưu",
+    "minAge": 60,
+    "maxAge": 72,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Sau nhiều năm tất bật phố thị, bạn cùng người thân chọn nhịp sống lý tưởng để tận hưởng tuổi vàng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_retire_da_nang",
+        "label": "Chọn thành phố biển Đà Nẵng nắng ấm trong lành, sáng đi dạo bờ biển",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không khí biển mặn mòi và nhịp sống hiền hòa giúp sức khỏe bạn cải thiện tuyệt vời!",
+            "statModifiers": { "health": 14, "happiness": 20, "stress": -22 }
+          }
+        ]
+      },
+      {
+        "id": "opt_retire_da_lat",
+        "label": "Chọn cao nguyên Đà Lạt sương mù thông reo trồng hoa và thưởng trà nóng",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Cuộc sống thi vị giữa đồi thông mang lại sự bình yên tuyệt đối trong tâm hồn.",
+            "statModifiers": { "happiness": 24, "stress": -25, "health": 10 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_20_childhood_friend_tea",
+    "category": "relationship",
+    "title": "Bạn Tri Kỷ Thời Thơ Ấu Ghé Thăm",
+    "minAge": 62,
+    "maxAge": 88,
+    "priority": 62,
+    "isOneTime": false,
+    "description": "Người bạn nối khố từ thuở cởi truồng tắm mưa bỗng ghé thăm nhà cùng gói trà sen và bao chuyện ngày xưa.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_tea_reminisce",
+        "label": "Pha ấm trà ngon ngồi ôn lại cả trời ký ức thanh xuân tươi đẹp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Tiếng cười giòn tan ở tuổi xế chiều sưởi ấm cả gian phòng!",
+            "statModifiers": { "happiness": 18, "stress": -15, "health": 5 }
+          }
+        ]
+      },
+      {
+        "id": "opt_chess_match",
+        "label": "Bày bàn cờ tướng đấu 3 ván phân tài cao thấp",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Những nước cờ hóc búa giúp trí óc luôn sắc sảo tinh anh!",
+            "statModifiers": { "intelligence": 6, "happiness": 14 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_21_sponsor_heart_surgery",
+    "category": "culture",
+    "title": "Quỹ Nhịp Tim Yêu Thương Cứu Trẻ Em Nghèo",
+    "minAge": 50,
+    "maxAge": 88,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Bệnh viện tim mạch kêu gọi tài trợ chi phí phẫu thuật cho những em nhỏ mắc bệnh tim bẩm sinh có hoàn cảnh khó khăn.",
+    "conditions": [
+      { "field": "cash", "operatorType": ">=", "numberValue": 200000000 }
+    ],
+    "options": [
+      {
+        "id": "opt_sponsor_5_surgeries",
+        "label": "Tài trợ trọn gói 150 triệu đồng cứu 5 ca phẫu thuật tim cho các bé",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Năm trái tim nhỏ đập khỏe mạnh trở lại! Phúc đức dòng tộc tỏa sáng rạng ngời!",
+            "statModifiers": { "cash": -150000000, "karma": 35, "happiness": 28, "socialStatus": 22 }
+          }
+        ]
+      },
+      {
+        "id": "opt_sponsor_1_surgery",
+        "label": "Ủng hộ 30 triệu đồng chung tay cùng chương trình",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Món quà vô giá mang lại phép màu sự sống cho gia đình em nhỏ!",
+            "statModifiers": { "cash": -30000000, "karma": 20, "happiness": 18 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_22_family_council_estate",
+    "category": "finance",
+    "title": "Họp Hội Đồng Gia Tộc Chuyển Giao Trách Nhiệm",
+    "minAge": 65,
+    "maxAge": 85,
+    "priority": 78,
+    "isOneTime": true,
+    "description": "Các con cháu đã vững vàng sự nghiệp, bạn tổ chức cuộc họp gia đình định hướng tầm nhìn phát triển gia sản bền vững qua nhiều thế hệ.",
+    "conditions": [
+      { "field": "childrenCount", "operatorType": ">=", "numberValue": 1 }
+    ],
+    "options": [
+      {
+        "id": "opt_family_charter",
+        "label": "Ban hành Hiến chương Gia tộc đề cao đoàn kết, liêm chính và hiếu học",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Các thế hệ con cháu đồng lòng nhất trí bảo vệ và nhân rộng cơ nghiệp!",
+            "statModifiers": { "karma": 18, "socialStatus": 16, "happiness": 20, "stress": -15 },
+            "unlockedFlags": ["family_trust_protected"]
+          }
+        ]
+      },
+      {
+        "id": "opt_mentor_heirs",
+        "label": "Truyền đạt toàn bộ bí quyết đầu tư và quan hệ đối tác cốt lõi cho người kế thừa",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Thế hệ kế cận sẵn sàng đưa gia tộc vươn tới đỉnh cao mới!",
+            "statModifiers": { "happiness": 18, "businessAcuity": 10 },
+            "unlockedFlags": ["heir_elite_trained"]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_23_longevity_80_red_banner",
+    "category": "culture",
+    "title": "Đại Lễ Thượng Thọ Tuổi 80",
+    "minAge": 80,
+    "maxAge": 82,
+    "priority": 90,
+    "isOneTime": true,
+    "description": "Khắp sân rộn rã tiếng cười con cháu chúc mừng Đại lễ Thượng Thọ Bát Tuần trong sắc lụa đỏ thắm.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_bless_descendants",
+        "label": "Phát bao lì xì đỏ cầu chúc bình an và truyền lời răn dạy cho cháu chắt",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Không khí đầm ấm kính trên nhường dưới khiến lòng bạn tràn ngập tự hào!",
+            "statModifiers": { "happiness": 26, "health": 8, "karma": 15 }
+          }
+        ]
+      },
+      {
+        "id": "opt_share_life_wisdom",
+        "label": "Kể lại hành trình từ hai bàn tay trắng thời trẻ để tiếp lửa cho con cháu",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Câu chuyện nghị lực sống của bạn trở thành huyền thoại truyền đời trong gia tộc!",
+            "statModifiers": { "socialStatus": 16, "happiness": 22 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_24_golden_years_sharp_mind",
+    "category": "childhood",
+    "title": "Bí Quyết Minh Mẫn Tuổi Xế Chiều",
+    "minAge": 72,
+    "maxAge": 95,
+    "priority": 60,
+    "isOneTime": false,
+    "description": "Mỗi sáng thức dậy khi sương mai còn đọng trên lá, bạn duy trì thói quen rèn luyện trí não và thể chất nhẹ nhàng.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_read_news_chess",
+        "label": "Đọc báo kinh tế, làm thơ và giải ô chữ giữ đầu óc tinh anh",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Trí nhớ minh mẫn sắc bén khiến bác sĩ cũng phải ngạc nhiên khâm phục!",
+            "statModifiers": { "intelligence": 6, "health": 5, "happiness": 10 }
+          }
+        ]
+      },
+      {
+        "id": "opt_garden_walk",
+        "label": "Tưới cây cảnh và đi bộ nhẹ nhàng tắm nắng sớm 30 phút",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Xương khớp dẻo dai, giấc ngủ sâu và tinh thần luôn lạc quan yêu đời!",
+            "statModifiers": { "health": 8, "stress": -10, "happiness": 12 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_25_pass_down_heirloom",
+    "category": "relationship",
+    "title": "Trao Kỷ Vật Gia Bảo Cho Thế Hệ Sau",
+    "minAge": 75,
+    "maxAge": 92,
+    "priority": 74,
+    "isOneTime": true,
+    "description": "Bạn mở chiếc hộp gỗ quý cất giữ cuốn sổ ghi chép đầu đời và chiếc đồng hồ kỷ niệm để trao lại cho thế hệ con cháu.",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_gift_diary_lessons",
+        "label": "Trao cuốn nhật ký bài học làm giàu chân chính và giữ chữ Tín",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Kho báu tinh thần vô giá được thế hệ trẻ nâng niu trân trọng!",
+            "statModifiers": { "karma": 20, "happiness": 22, "socialStatus": 12 }
+          }
+        ]
+      },
+      {
+        "id": "opt_host_family_feast",
+        "label": "Tổ chức bữa cơm đoàn viên ấm cúng tụ họp đầy đủ mọi thành viên",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Gia đình thuận hòa là di sản rực rỡ nhất của cả một đời người!",
+            "statModifiers": { "happiness": 25, "karma": 15, "health": 5 }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "eventId": "p4_26_four_generations_90",
+    "category": "culture",
+    "title": "Đại Thọ 90 Tuổi — Tứ Đại Đồng Đường",
+    "minAge": 88,
+    "maxAge": 96,
+    "priority": 92,
+    "isOneTime": true,
+    "description": "Cả bốn thế hệ con cháu chắt sum vầy chụp bức ảnh đại gia đình kỷ niệm cột mốc Đại thọ hiếm có!",
+    "conditions": [],
+    "options": [
+      {
+        "id": "opt_grand_photo_smile",
+        "label": "Mỉm cười viên mãn giữa vòng tay yêu thương của bốn thế hệ",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Một cuộc đời trọn vẹn, rực rỡ và đáng tự hào lưu danh mãi trong sử gia tộc!",
+            "statModifiers": { "happiness": 35, "karma": 25, "health": 10, "socialStatus": 20 }
+          }
+        ]
+      },
+      {
+        "id": "opt_wish_peace_all",
+        "label": "Chúc phúc cho thế hệ tương lai tiếp tục viết tiếp huyền thoại Tỷ phú Việt!",
+        "outcomes": [
+          {
+            "probability": 1.0,
+            "message": "Ngọn lửa khát vọng vươn lên rực sáng truyền qua nhiều thế hệ nối tiếp!",
+            "statModifiers": { "happiness": 30, "karma": 30, "stress": -20 }
+          }
+        ]
+      }
+    ]
+  }
+]

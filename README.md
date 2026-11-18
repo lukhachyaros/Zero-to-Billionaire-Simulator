@@ -3,6 +3,8 @@
 # 💎 ZERO TO BILLIONAIRE SIMULATOR
 ### *Từ Tay Trắng Đến Tỉ Phú — Life Sim Pixel 2D*
 
+[![Play Online Demo](https://img.shields.io/badge/🎮_CHƠI_NGAY_DEMO_ONLINE-GitHub_Pages-10b981?style=for-the-badge)](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/)
+[![Unity](https://img.shields.io/badge/Unity-2022.3%20%2F%20Unity%206-black?style=for-the-badge&logo=unity)](https://unity.com/)
 [![iOS](https://img.shields.io/badge/iOS-16.0%2B-black?style=for-the-badge&logo=apple)](https://developer.apple.com/ios/)
 [![Graphics](https://img.shields.io/badge/Graphics-Pixel%202D-orange?style=for-the-badge)](#)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
@@ -12,13 +14,20 @@
   <b>Một game mô phỏng cuộc đời rẽ nhánh với cảnh pixel 2D, nhân vật thay đổi theo lựa chọn và bối cảnh đời sống Việt Nam.</b>
 </p>
 
-[Tài liệu Kế hoạch Gốc](docs/ORIGINAL_PLAN.md) • [Kế hoạch Phát triển iOS](docs/IOS_DEVELOPMENT_PLAN.md) • [Bộ kịch bản mẫu](data/events/sample_events.json) • [Đóng góp sự kiện](.github/ISSUE_TEMPLATE/event_proposal.md)
+[🎮 Chơi Ngay Bản Web 3D Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) • [Tài liệu Kế hoạch Gốc](docs/ORIGINAL_PLAN.md) • [Kế hoạch Phát triển iOS](docs/IOS_DEVELOPMENT_PLAN.md) • [Kho Dữ liệu Game](data/) • [Đóng góp sự kiện](.github/ISSUE_TEMPLATE/event_proposal.md)
+
+<p align="center">
+  <a href="https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/">
+    <img src="docs/screenshots/demo-overview.png" alt="Zero to Billionaire Simulator — 3D Web Demo" width="760" />
+  </a>
+</p>
 
 ---
 
 </div>
 
 ## 📖 Mục lục
+- [Hình ảnh Demo Thực tế](#-hình-ảnh-demo-thực-tế)
 - [Giới thiệu dự án](#-giới-thiệu-dự-án)
 - [Điểm khác biệt cốt lõi](#-điểm-khác-biệt-cốt-lõi)
 - [Giao diện & Trải nghiệm iOS (Mobile-First)](#-giao-diện--trải-nghiệm-ios-mobile-first)
@@ -29,6 +38,22 @@
 - [Hướng dẫn Cài đặt & Chạy Dự án](#-hướng-dẫn-cài-đặt--chạy-dự-án)
 - [Hướng dẫn Viết Kịch bản / Sự kiện](#-hướng-dẫn-viết-kịch-bản--sự-kiện)
 - [Đóng góp & Giấy phép](#-đóng-góp--giấy-phép)
+
+---
+
+## 🖼️ Hình ảnh Demo Thực tế
+
+Trải nghiệm trực tiếp trên trình duyệt tại **[Zero to Billionaire Simulator (GitHub Pages)](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/)**:
+
+| 🏡 Không gian 3D & Hoạt động trong năm | 🎭 Sự kiện rẽ nhánh Đậm chất Việt Nam |
+| :---: | :---: |
+| ![Giao diện chính 3D Diorama](docs/screenshots/demo-overview.png) | ![Modal sự kiện Ngã rẽ tuổi 18](docs/screenshots/demo-events.png) |
+| **Phòng Trọ 3D Isometric & 6 Tab chức năng:** Xoay/phóng to phòng 3D theo cấp tài sản, theo dõi 4 chỉ số cốt lõi, hoạt động thường niên và dòng thời gian cuộc đời. | **140+ Kịch bản rẽ nhánh (0–96 tuổi):** Những quyết định bước ngoặt như kỳ thi THPT, khởi nghiệp, công sở, đầu tư tài chính và đời sống gia đình. |
+
+| 📒 Sổ Lịch Sử Dòng Tiền (Ra / Vào) | 👑 Bảng Xếp Hạng Phú Hào (Top 21) |
+| :---: | :---: |
+| ![Sổ lịch sử dòng tiền ra vào](docs/screenshots/demo-cashflow.png) | ![Bảng xếp hạng Phú hào](docs/screenshots/demo-leaderboard.png) |
+| **Minh bạch từng khoản thu/chi:** Bộ lọc *Tất cả / Tiền vào / Tiền ra*, hiển thị số dư sau giao dịch và chỉ tính sinh hoạt phí khi có thu nhập dương. | **Đua Top 20 Tỷ phú & Đại gia AI:** Theo dõi khoảng cách vượt hạng trực tiếp trên HUD, biến động tài sản hằng năm và lưu kỷ lục vào **Điện Danh Vọng**. |
 
 ---
 
@@ -120,9 +145,14 @@ flowchart TD
     G --> A
 ```
 
-* **Chỉ số cá nhân:** Sức khỏe, Trí tuệ, Ngoại hình, Hạnh phúc, Tâm lý, Kỷ luật, Quan hệ gia đình.
-* **Tài chính & Kinh tế:** Tiền mặt, Nợ vay ngân hàng, Thu nhập thụ động, Bất động sản, Cổ phiếu, Doanh nghiệp riêng.
-* **Hệ thống sự kiện Data-driven:** Lưu trữ độc lập dưới dạng JSON, cho phép cập nhật hàng ngàn tình huống mới qua Cloud mà không cần cập nhật lại ứng dụng trên App Store.
+* **Chỉ số cá nhân:** Sức khỏe, Trí tuệ, Ngoại hình, Hạnh phúc, Kỷ luật, Áp lực (Stress), Giao tiếp (Charisma), Hiểu biết Tài chính, Kỹ năng Thực chiến, Nhạy bén Kinh doanh, May mắn, Địa vị Xã hội, Phúc đức (Karma), Quan hệ gia đình.
+* **Kinh tế & Tài chính thực tế theo độ tuổi:** Trẻ sơ sinh (0–5 tuổi) bắt đầu với `0 đ` (không tự cầm tiền mặt), nhận tiền tiêu vặt học sinh theo hoàn cảnh (6–17 tuổi), nhận **Quỹ Hành trang Tuổi 18** & mở khóa **Quỹ Ủy Thác Thừa Kế**. Chi phí thuê nhà/sinh hoạt chỉ tính tỉ lệ khi có thu nhập dương (không trừ tiền vô lý khi đang học/thất nghiệp), áp dụng thuế TNCN lũy tiến & phí quản lý cơ ngơi thực tế kèm **📒 Sổ Lịch sử Dòng tiền Ra/Vào**, vay ngân hàng (8.5%/năm), 4 pha Chu kỳ Kinh tế Vĩ mô và 18 loại Tài sản.
+* **Đua Top Người Chơi Thực (Live) & Tỷ Phú AI (`live_leaderboard.js`, `LeaderboardSystem.cs`):** Tự đặt/đổi tên nhân vật, đồng bộ tài sản ròng & trạng thái online theo thời gian thực với cộng đồng người chơi, cạnh tranh 20 Tỷ phú AI và lưu kỷ lục vào **Điện Danh Vọng**.
+* **Cơ chế Chơi Lại & Gói Hỗ Trợ (`MonetizationSystem.cs`):** Lượt đời đầu miễn phí; từ đời thứ 2 có thể xem quảng cáo ngắn 5s nhận vé + buff may mắn hoặc mở Gói Khởi Đầu / VIP Vĩnh Viễn (chơi lại vô hạn + huy hiệu VIP).
+* **Sự nghiệp & Học vấn:** 4 Hoàn cảnh xuất thân (Mái ấm Tình thương, Bình dân, Công chức Trí thức, Trâm anh Thế phiệt) và 22 Ngành nghề có bộ lọc trực quan theo điều kiện hiện tại.
+* **Cỗ Máy Thời Gian & Lưu Sao Lưu Đa Thiết Bị:** Lưu tự động kèm SHA-256 Checksum (`SaveSystem.cs`), mã sao lưu `ZTB2:` & file tải về để khôi phục tiến trình, hỗ trợ quay ngược 5–8 năm trước để sửa quyết định sai lầm.
+* **Hệ thống sự kiện Data-driven:** **170 kịch bản** rẽ nhánh & lặp lại (0–96 tuổi, gồm 28 biến cố chi tiêu & thử thách thực tế) lưu trữ độc lập dưới dạng JSON (`data/`), tự động đồng bộ sang Unity `Resources/Data/` và bản Web 3D qua `tools/validate_game_data.py`.
+* **Bản Web 3D Three.js Chơi Ngay ([Chơi Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) / [web/index.html](web/index.html)):** Engine **Three.js WebGL PBR** nâng cấp sàn gỗ/cẩm thạch, cao ốc sáng đèn, thú cưng Corgi, mô hình siêu xe, 5 tab điều hướng gọn nhẹ dễ tiếp cận & âm thanh Web Audio.
 
 ---
 
@@ -142,22 +172,59 @@ flowchart TD
 ```
 Zero-to-Billionaire-Simulator/
 ├── .github/
-│   ├── workflows/             # CI/CD GitHub Actions kiểm tra tính hợp lệ dữ liệu
-│   └── ISSUE_TEMPLATE/        # Mẫu báo cáo lỗi & đóng góp kịch bản
+│   ├── workflows/                 # CI kiểm tra dữ liệu, mô phỏng & cú pháp JS/C# (ci.yml)
+│   └── ISSUE_TEMPLATE/            # Mẫu báo cáo lỗi & đóng góp kịch bản
 ├── data/
-│   └── events/                # Toàn bộ kịch bản sự kiện (JSON)
-│       └── sample_events.json # File sự kiện mẫu minh họa
-├── docs/
-│   ├── ORIGINAL_PLAN.md       # Kế hoạch phát triển game gốc
-│   └── IOS_DEVELOPMENT_PLAN.md # Kế hoạch chi tiết tối ưu hóa trên iOS
-├── web-demo/                  # Game pixel 2D, PWA và Capacitor
-│   ├── index.html             # Loading, start screen, HUD và story scene
-│   ├── main.js                # Game loop, sự kiện, chỉ số và hoạt cảnh
-│   └── style.css              # Luxury mobile UI
-├── .gitattributes             # Cấu hình Git LFS cho asset
-├── .gitignore                 # Bộ lọc hệ điều hành và build
-├── LICENSE                    # Giấy phép phần mềm mã nguồn mở MIT
-└── README.md                  # Tài liệu tổng quan dự án
+│   ├── backgrounds/               # 4 Hoàn cảnh xuất thân (starting_backgrounds.json)
+│   ├── careers/                   # 22 Ngành nghề & lộ trình thăng chức (careers.json)
+│   ├── economy/                   # 18 Tài sản (assets.json) & 20 Tỷ phú đối thủ (billionaire_leaderboard.json)
+│   └── events/                    # 170 kịch bản sự kiện JSON (0 - 96 tuổi)
+│       ├── life_events_full.json  # Sự kiện cột mốc cuộc đời
+│       ├── random_yearly_events.json # Sự kiện ngẫu nhiên hàng năm
+│       ├── pack_youth_school.json # 26 kịch bản Tuổi thơ & Học đường
+│       ├── pack_career_workplace.json # 26 kịch bản Công sở & Khởi nghiệp
+│       ├── pack_wealth_investments.json # 26 kịch bản Tài chính & Đầu tư
+│       ├── pack_family_society_elder.json # 26 kịch bản Gia đình, Xã hội & Tuổi già
+│       ├── pack_life_expenses_hardcore.json # 28 kịch bản Áp lực Chi tiêu, Thuế & Biến cố
+│       └── sample_events.json     # File sự kiện mẫu minh họa cho cộng đồng
+├── docs/                          # Tài liệu GDD, iOS Plan & 3D Art Pipeline
+│   ├── ORIGINAL_PLAN.md           # Kế hoạch phát triển game gốc
+│   ├── IOS_DEVELOPMENT_PLAN.md    # Kế hoạch chi tiết tối ưu hóa trên iOS
+│   └── screenshots/               # Ảnh chụp demo gameplay hiển thị trong README
+├── tools/
+│   └── validate_game_data.py      # Kiểm tra schema, mô phỏng 0-90 tuổi, DOM & đồng bộ dữ liệu
+├── web/                           # Phiên bản 3D Three.js chơi trực tiếp (Deploy GitHub Pages)
+│   ├── index.html                 # Giao diện Mobile-First Portrait 5 tab tối ưu dễ tiếp cận
+│   ├── styles.css                 # Hệ thống Dark-Glassmorphic UI & Safe Area
+│   ├── vendor/three.min.js        # Thư viện Three.js WebGL đóng gói cục bộ (offline-ready)
+│   ├── live_leaderboard.js        # Đồng bộ BXH Người Chơi Thực theo thời gian thực (MQTT WSS)
+│   ├── diorama3d.js               # Engine 3D WebGL PBR nâng cấp (sàn gỗ/marble, thú cưng, siêu xe)
+│   ├── audio.js                   # Âm thanh tổng hợp Web Audio & rung Haptic
+│   ├── game.js                    # Vòng lặp mô phỏng, cân bằng chi tiêu, quảng cáo/VIP & mã sao lưu
+│   └── game_data.js               # Bundle dữ liệu tự đồng bộ từ data/
+├── web-demo/                      # Prototype Pixel 2D độc lập (Vite, PWA & Capacitor)
+│   ├── index.html                 # Loading, start screen, HUD và story scene
+│   ├── main.js                    # Game loop, sự kiện, chỉ số và hoạt cảnh pixel
+│   └── style.css                  # Luxury mobile UI
+├── index.html                     # Bản Web 3D đồng bộ tại thư mục gốc (deploy trực tiếp từ nhánh main)
+├── .nojekyll                      # Tắt Jekyll processing trên GitHub Pages
+├── unity/                         # Dự án Unity Game Client (URP / iOS Metal)
+│   ├── Packages/manifest.json     # Khai báo URP, TextMeshPro, InputSystem, Test Framework
+│   └── Assets/
+│       ├── Editor/                # Công cụ dựng nhanh scene demo nhân vật
+│       ├── Plugins/iOS/           # Objective-C++ Taptic Bridge (.mm) & PrivacyInfo.xcprivacy
+│       ├── Resources/Data/        # Dữ liệu JSON đồng bộ tải nhanh lúc runtime
+│       ├── Scripts/
+│       │   ├── Core/              # GameManager, GameBootstrapper, Career, Economy, Relationship, SaveSystem
+│       │   ├── Events/            # EventEngine (hỗ trợ Formula & Chaining), GameEventModels
+│       │   ├── Models/            # ModularCharacter, ProceduralCharacterVisual & ProceduralRoomGenerator
+│       │   ├── UI/                # DioramaViewController, MobilePortraitUI, MainScreenUI, Luxury Components/Effects/Theme
+│       │   └── Mobile/iOS/        # IOSHapticFeedback & AdaptiveFrameRateManager (60/30 FPS)
+│       └── Tests/EditMode/        # Unit Test mô phỏng lõi C# (GameSimulationTests.cs)
+├── .gitattributes                 # Cấu hình Git LFS cho 3D, Texture, Audio
+├── .gitignore                     # Bộ lọc hoàn chỉnh cho Unity, iOS/Xcode & OS
+├── LICENSE                        # Giấy phép phần mềm mã nguồn mở MIT
+└── README.md                      # Tài liệu tổng quan dự án
 ```
 
 ---
@@ -166,25 +233,26 @@ Zero-to-Billionaire-Simulator/
 
 - [x] **Giai đoạn 0: Thiết lập & Lập kế hoạch**
   - [x] Phân tích GDD và kiến trúc kỹ thuật.
-  - [x] Thiết lập chuẩn Repository, Git LFS, CI Workflow.
-  - [x] Xây dựng kế hoạch tối ưu hóa chuyên sâu cho iOS/iPhone.
-- [ ] **Giai đoạn 1: Prototype Core Loop (Tháng 1 - 2)**
-  - [ ] Xây dựng Event Engine hoàn chỉnh (Data-driven JSON).
-  - [ ] Tạo 100 sự kiện đầu đời (0 - 18 tuổi).
-  - [ ] Xuất bản build TestFlight đầu tiên cho nội bộ thử nghiệm gameplay chữ.
-- [x] **Giai đoạn 2: Vertical Slice Pixel 2D Mobile (Tháng 3 - 4)**
-  - [x] Dựng scene pixel, nhân vật procedural và hoạt cảnh câu chuyện.
-  - [ ] Hệ thống nhân vật modular (trẻ sơ sinh, thiếu niên).
-  - [ ] Tích hợp Apple Taptic Engine và giao diện Safe Area dọc.
-- [ ] **Giai đoạn 3: Alpha Toàn bộ Vòng đời (Tháng 5 - 7)**
-  - [ ] Hoàn thiện vòng đời từ 18 - 80+ tuổi (30+ ngành nghề, mua bán nhà, lập gia đình).
-  - [ ] Hệ thống Gia phả, Di chúc và Thừa kế đời sau.
-  - [ ] Đạt mốc 500+ sự kiện đậm chất đời sống Việt Nam.
-- [ ] **Giai đoạn 4: Closed Beta & Soft Launch iOS (Tháng 8 - 9)**
+  - [x] Thiết lập chuẩn Repository, Git LFS, .gitignore Unity/iOS, CI Workflow.
+  - [x] Xây dựng kế hoạch tối ưu hóa chuyên sâu cho iOS/iPhone và tài liệu 3D Art Pipeline.
+- [x] **Giai đoạn 1: Prototype Core Loop & Hệ thống Dữ liệu**
+  - [x] Xây dựng Event Engine hoàn chỉnh (Data-driven JSON, hỗ trợ `conditionFormula` & `nextEventId`).
+  - [x] Hoàn thiện hệ thống Nghề nghiệp (22 nghề), Kinh tế Vĩ mô & Tài sản (18 loại), Quan hệ Gia phả & Thừa kế, Cỗ máy Thời gian và Lưu game SHA-256.
+  - [x] Xây dựng bộ kiểm định dữ liệu, mô phỏng không đầu 0–90 tuổi và Unit Test C# (`tools/validate_game_data.py`, `GameSimulationTests.cs`).
+- [x] **Giai đoạn 2: Vertical Slice (Web 3D + Pixel 2D Prototype + Unity Core)**
+  - [x] Ra mắt bản chơi thử ngay trên trình duyệt (`web/index.html`) với 3D Isometric Diorama 5 cấp độ phòng & âm thanh.
+  - [x] Dựng prototype Pixel 2D độc lập (`web-demo/`), nhân vật procedural và hoạt cảnh câu chuyện tương thích PWA/Capacitor.
+  - [x] Xây dựng `GameBootstrapper.cs`, `ProceduralRoomGenerator.cs`, `ModularCharacter.cs` và bộ Luxury UI Components trong Unity.
+  - [x] Tích hợp Native iOS Taptic Bridge (`IOSHapticBridge.mm`), `PrivacyInfo.xcprivacy` và `AdaptiveFrameRateManager` (60/30 FPS).
+  - [ ] Nạp bộ model 3D Blender/FBX hoàn chỉnh và xuất bản build TestFlight nội bộ.
+- [ ] **Giai đoạn 3: Mở rộng Nội dung & Alpha TestFlight**
+  - [ ] Mở rộng kho kịch bản đạt mốc 500+ sự kiện đậm chất đời sống Việt Nam.
+  - [ ] Kết nối đầy đủ các Prefab UI Unity cho 5 màn hình tab chi tiết.
+- [ ] **Giai đoạn 4: Closed Beta & Soft Launch iOS**
   - [ ] Mở rộng 300 tester trên Apple TestFlight.
   - [ ] Tích hợp StoreKit 2 IAP & Quảng cáo nhận thưởng.
   - [ ] Ra mắt chính thức trên Apple App Store Việt Nam.
-- [ ] **Giai đoạn 5: Multiplayer & Mở rộng Quốc tế (Tháng 10+)**
+- [ ] **Giai đoạn 5: Multiplayer & Mở rộng Quốc tế**
   - [ ] Tính năng xã hội bất đồng bộ (Bảng xếp hạng đại gia, ghé thăm cơ ngơi bạn bè).
   - [ ] Gói nội dung bản địa hóa các quốc gia khác (Thái Lan, Hàn Quốc, Nhật Bản...).
 
@@ -192,21 +260,46 @@ Zero-to-Billionaire-Simulator/
 
 ## 🚀 Hướng dẫn Cài đặt & Chạy Dự án
 
-### Yêu cầu tiên quyết
+### Cách 1: Chơi thử ngay trên Trình duyệt (Không cần Unity)
+1. **Mở trực tiếp:** Mở file [`web/index.html`](web/index.html) bằng Chrome, Safari hoặc Edge (hoạt động hoàn toàn offline), **hoặc** chạy máy chủ cục bộ:
+   ```bash
+   python -m http.server 8080
+   ```
+   Sau đó truy cập `http://localhost:8080/web/` (khuyến nghị thu nhỏ cửa sổ hoặc mở trên điện thoại để trải nghiệm khung dọc iPhone).
+2. **Kiểm tra & Đồng bộ dữ liệu sau khi sửa JSON trong `data/`:**
+   ```bash
+   python tools/validate_game_data.py --sync
+   ```
+
+### Cách 2: Mở & Chạy trên Unity (Phát triển iOS / Mobile)
+#### Yêu cầu tiên quyết
 * **Hệ điều hành:** macOS (khuyến nghị để build Xcode/iOS) hoặc Windows 10/11.
 * **Xcode:** Phiên bản 15.0+ (nếu build ra thiết bị iPhone/iPad).
 * **Git LFS:** Đã cài đặt `git lfs` trên máy tính (`git lfs install`).
 
-### Các bước khởi tạo
+#### Các bước khởi tạo
 1. **Clone repository (kèm LFS):**
    ```bash
    git clone https://github.com/lukhachyaros/Zero-to-Billionaire-Simulator.git
    cd Zero-to-Billionaire-Simulator
    git lfs pull
    ```
-### 🌐 Chạy demo pixel 2D trên web
+2. **Mở dự án trong Unity:**
+   * Mở **Unity Hub** -> Chọn **Add project from disk**.
+   * Chọn thư mục `unity/` trong repository.
+   * Chờ Unity hoàn tất nạp Package (`manifest.json`) và khởi tạo Shader cache.
+   * Mở một Scene bất kỳ và nhấn **Play** — `GameBootstrapper.cs` sẽ tự động dựng Camera Isometric, ánh sáng, phòng 3D Diorama, nhân vật Chibi và nạp toàn bộ dữ liệu từ `Resources/Data/`.
+3. **Chuyển nền tảng sang iOS:**
+   * Vào `File` -> `Build Settings`.
+   * Chọn nền tảng **iOS** -> Bấm **Switch Platform**.
+   * Trong phần `Player Settings`:
+     * Target minimum iOS version: `16.0`.
+     * Graphics API: `Metal`.
+     * Texture Compression: `ASTC`.
 
-Demo web độc lập nằm trong [web-demo/](web-demo/). Bản prototype hiện dùng pixel art 2D để ưu tiên vòng lặp mô phỏng và nội dung sự kiện:
+### Cách 3: Chạy Demo Pixel 2D trên Web (Vite + PWA + Capacitor)
+
+Demo web độc lập nằm trong [web-demo/](web-demo/). Bản prototype dùng pixel art 2D để ưu tiên vòng lặp mô phỏng và nội dung sự kiện:
 
 ```powershell
 cd web-demo
