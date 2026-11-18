@@ -17,11 +17,18 @@
 
 [🎮 Chơi Ngay Bản Web 3D Online](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/) • [Tài liệu Kế hoạch Gốc](docs/ORIGINAL_PLAN.md) • [Kế hoạch Phát triển iOS](docs/IOS_DEVELOPMENT_PLAN.md) • [Kho Dữ liệu Game](data/) • [Đóng góp sự kiện](.github/ISSUE_TEMPLATE/event_proposal.md)
 
+<p align="center">
+  <a href="https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/">
+    <img src="docs/screenshots/demo-overview.png" alt="Zero to Billionaire Simulator — 3D Web Demo" width="760" />
+  </a>
+</p>
+
 ---
 
 </div>
 
 ## 📖 Mục lục
+- [Hình ảnh Demo Thực tế](#-hình-ảnh-demo-thực-tế)
 - [Giới thiệu dự án](#-giới-thiệu-dự-án)
 - [Điểm khác biệt cốt lõi](#-điểm-khác-biệt-cốt-lõi)
 - [Giao diện & Trải nghiệm iOS (Mobile-First)](#-giao-diện--trải-nghiệm-ios-mobile-first)
@@ -32,6 +39,22 @@
 - [Hướng dẫn Cài đặt & Chạy Dự án](#-hướng-dẫn-cài-đặt--chạy-dự-án)
 - [Hướng dẫn Viết Kịch bản / Sự kiện](#-hướng-dẫn-viết-kịch-bản--sự-kiện)
 - [Đóng góp & Giấy phép](#-đóng-góp--giấy-phép)
+
+---
+
+## 🖼️ Hình ảnh Demo Thực tế
+
+Trải nghiệm trực tiếp trên trình duyệt tại **[Zero to Billionaire Simulator (GitHub Pages)](https://lukhachyaros.github.io/Zero-to-Billionaire-Simulator/)**:
+
+| 🏡 Không gian 3D & Hoạt động trong năm | 🎭 Sự kiện rẽ nhánh Đậm chất Việt Nam |
+| :---: | :---: |
+| ![Giao diện chính 3D Diorama](docs/screenshots/demo-overview.png) | ![Modal sự kiện Ngã rẽ tuổi 18](docs/screenshots/demo-events.png) |
+| **Phòng Trọ 3D Isometric & 6 Tab chức năng:** Xoay/phóng to phòng 3D theo cấp tài sản, theo dõi 4 chỉ số cốt lõi, hoạt động thường niên và dòng thời gian cuộc đời. | **140+ Kịch bản rẽ nhánh (0–96 tuổi):** Những quyết định bước ngoặt như kỳ thi THPT, khởi nghiệp, công sở, đầu tư tài chính và đời sống gia đình. |
+
+| 📒 Sổ Lịch Sử Dòng Tiền (Ra / Vào) | 👑 Bảng Xếp Hạng Phú Hào (Top 21) |
+| :---: | :---: |
+| ![Sổ lịch sử dòng tiền ra vào](docs/screenshots/demo-cashflow.png) | ![Bảng xếp hạng Phú hào](docs/screenshots/demo-leaderboard.png) |
+| **Minh bạch từng khoản thu/chi:** Bộ lọc *Tất cả / Tiền vào / Tiền ra*, hiển thị số dư sau giao dịch và chỉ tính sinh hoạt phí khi có thu nhập dương. | **Đua Top 20 Tỷ phú & Đại gia AI:** Theo dõi khoảng cách vượt hạng trực tiếp trên HUD, biến động tài sản hằng năm và lưu kỷ lục vào **Điện Danh Vọng**. |
 
 ---
 
@@ -167,6 +190,7 @@ Zero-to-Billionaire-Simulator/
 │       ├── pack_family_society_elder.json # 26 kịch bản Gia đình, Xã hội & Tuổi già
 │       └── sample_events.json     # File sự kiện mẫu minh họa cho cộng đồng
 ├── docs/                          # Tài liệu GDD, iOS Plan & 3D Art Pipeline
+│   └── screenshots/               # Ảnh chụp demo gameplay hiển thị trong README
 ├── tools/
 │   └── validate_game_data.py      # Kiểm tra schema, mô phỏng 0-90 tuổi, DOM & đồng bộ dữ liệu
 ├── web/                           # Phiên bản 3D Three.js chơi trực tiếp (Deploy GitHub Pages)
