@@ -10,17 +10,235 @@
   <meta name="apple-mobile-web-app-title" content="Zero to Billionaire" />
   <title>Zero to Billionaire Simulator — Life Sim 3D</title>
   <link rel="manifest" href="manifest.webmanifest?v=5" />
-  <link rel="apple-touch-icon" href="web/icons/apple-touch-icon.png?v=5" />
-  <link rel="apple-touch-icon" sizes="180x180" href="web/icons/apple-touch-icon.png?v=5" />
-  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="web/icons/apple-touch-icon.png?v=5" />
-  <link rel="icon" type="image/png" sizes="64x64" href="web/icons/favicon-64.png?v=5" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="192x192" href="web/icons/logo-192.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="web/icons/logo-512.png" />
+  <link rel="icon" type="image/png" sizes="64x64" href="web/icons/favicon-64.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="web/icons/logo-192.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="web/icons/logo-512.png" />
   <style>
-    html, body { background-color: #090e1c; margin: 0; padding: 0; }
+    html, body {
+      background-color: #070b18;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
     #game-loading-screen {
-      position: fixed; inset: 0; z-index: 9999;
-      background: radial-gradient(circle at 50% 28%, #1e3a8a 0%, #090e1c 58%, #040711 100%);
-      display: flex; align-items: center; justify-content: center;
-      color: #f8fafc; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      z-index: 99999;
+      background-color: #070b18;
+      background-image: radial-gradient(circle at 50% 28%, rgba(30, 58, 138, 0.55) 0%, rgba(9, 14, 28, 0.98) 58%, #040711 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: calc(24px + env(safe-area-inset-top, 0px)) 20px calc(28px + env(safe-area-inset-bottom, 0px));
+      box-sizing: border-box;
+      color: #f8fafc;
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.48s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.48s ease;
+    }
+    #game-loading-screen.fade-out {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .loading-bg-glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      top: 24%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.24) 0%, rgba(56, 189, 248, 0.12) 45%, transparent 72%);
+      filter: blur(20px);
+      pointer-events: none;
+      animation: loadingGlowBreath 3.2s ease-in-out infinite;
+    }
+    @keyframes loadingGlowBreath {
+      0%, 100% { transform: translate(-50%, -50%) scale(0.94); opacity: 0.75; }
+      50% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+    }
+    .loading-content {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      max-width: 360px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .loading-logo-stage {
+      position: relative;
+      width: 124px;
+      height: 124px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .loading-orbit-ring {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .loading-orbit-ring.outer {
+      inset: -6px;
+      border: 1.5px solid rgba(245, 158, 11, 0.3);
+      border-top-color: #fbbf24;
+      border-right-color: rgba(16, 185, 129, 0.7);
+      animation: orbitSpin 4.2s linear infinite;
+    }
+    .loading-orbit-ring.inner {
+      inset: 4px;
+      border: 1px dashed rgba(96, 165, 250, 0.38);
+      animation: orbitSpinReverse 6.5s linear infinite;
+    }
+    @keyframes orbitSpin { to { transform: rotate(360deg); } }
+    @keyframes orbitSpinReverse { to { transform: rotate(-360deg); } }
+    .loading-logo-img {
+      width: 98px;
+      height: 98px;
+      border-radius: 22px;
+      object-fit: cover;
+      background: radial-gradient(circle, #1e3a8a 0%, #0b132b 100%);
+      border: 1.5px solid rgba(251, 191, 36, 0.55);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.75), 0 0 24px rgba(245, 158, 11, 0.32);
+      animation: logoFloat 2.8s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+    .loading-eyebrow {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 99px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.38);
+      color: #fde68a;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      margin-bottom: 7px;
+    }
+    .loading-title {
+      margin: 0;
+      font-size: 21px;
+      font-weight: 900;
+      letter-spacing: 0.8px;
+      background: linear-gradient(135deg, #fffbeb 0%, #fde68a 45%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .loading-subtitle {
+      margin: 3px 0 16px;
+      font-size: 12.5px;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+    .loading-progress-card {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.88);
+      border: 1px solid rgba(148, 163, 184, 0.24);
+      border-radius: 16px;
+      padding: 12px 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.5);
+      box-sizing: border-box;
+    }
+    .loading-status-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 11.5px;
+      color: #e2e8f0;
+      text-align: left;
+    }
+    #loading-step-text {
+      min-width: 0;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    #loading-pct {
+      color: #fbbf24;
+      font-size: 13px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      flex-shrink: 0;
+    }
+    .loading-bar-track {
+      width: 100%;
+      height: 9px;
+      border-radius: 99px;
+      background: rgba(30, 41, 59, 0.95);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      overflow: hidden;
+    }
+    .loading-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, #f59e0b 0%, #fbbf24 45%, #10b981 100%);
+      box-shadow: 0 0 12px rgba(245, 158, 11, 0.55);
+      transition: width 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+    }
+    .loading-stages-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 4px;
+      margin-top: 10px;
+    }
+    .load-stage-pill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 6px;
+      border-radius: 99px;
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(148, 163, 184, 0.18);
+      color: #64748b;
+      transition: all 0.2s ease;
+    }
+    .load-stage-pill.active {
+      color: #fde68a;
+      border-color: rgba(245, 158, 11, 0.55);
+      background: rgba(245, 158, 11, 0.18);
+    }
+    .load-stage-pill.done {
+      color: #6ee7b7;
+      border-color: rgba(16, 185, 129, 0.45);
+      background: rgba(16, 185, 129, 0.15);
+    }
+    .loading-tip-box {
+      margin-top: 12px;
+      padding: 8px 11px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(96, 165, 250, 0.22);
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .loading-tip-box p {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.45;
+      color: #cbd5e1;
     }
   </style>
   <link rel="stylesheet" href="web/styles.css?v=5" />
@@ -33,7 +251,7 @@
       <div class="loading-logo-stage">
         <div class="loading-orbit-ring outer"></div>
         <div class="loading-orbit-ring inner"></div>
-        <img src="web/icons/logo-512.png?v=5" alt="Zero to Billionaire Logo" class="loading-logo-img" id="loading-logo-img" />
+        <img src="web/icons/logo-512.png?v=5" alt="Zero to Billionaire Logo" width="98" height="98" class="loading-logo-img" id="loading-logo-img" />
       </div>
 
       <div class="loading-eyebrow">💎 3D ISOMETRIC LIFE SIM</div>
@@ -357,6 +575,7 @@
             <button type="button" class="btn-sm btn-green" style="flex:1; padding:10px; font-size:13px;" id="btn-start-new-life">🚀 Bắt đầu Cuộc đời</button>
             <button type="button" class="btn-sm btn-ghost" id="btn-close-new-life">Đóng</button>
           </div>
+          <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:8px; padding:8px; border-color:rgba(245,158,11,0.4); color:#fde68a;" id="btn-newlife-open-load">📂 Tải Lại Bản Lưu Đã Có (Load Game)</button>
         </div>
       </div>
 
@@ -392,7 +611,7 @@
                 <strong>🎬 Xem Quảng Cáo Tài Trợ (5 giây)</strong>
                 <span class="pack-price free">MIỄN PHÍ</span>
               </div>
-              <div class="pack-perks">+1 Lượt chơi lại ngay • Tặng +5 May mắn &amp; +1 Triệu đ Quỹ Tuổi 18</div>
+              <div class="pack-perks">+1 Lượt chơi lại ngay • Tặng +5 May mắn &amp; +3 Triệu đ Quỹ Tuổi 18</div>
               <button type="button" class="btn-sm btn-primary" style="width:100%; margin-top:7px;" id="btn-watch-ad-replay">▶️ Xem Quảng Cáo Để Chơi Lại</button>
             </div>
 
@@ -401,7 +620,7 @@
                 <strong>🎁 Gói Khởi Đầu Thuận Lợi</strong>
                 <span class="pack-price">19.000đ</span>
               </div>
-              <div class="pack-perks">3 Vé Chơi Lại không quảng cáo • Hỗ trợ 3 đời: +12 May mắn, +10 Sức khỏe, +4 Triệu đ Quỹ 18t (Tối đa 5 lần lùi tuổi miễn phí/đời)</div>
+              <div class="pack-perks">3 Vé Chơi Lại không quảng cáo • Hỗ trợ 3 đời: +12 May mắn, +10 Sức khỏe, +25 Triệu đ Quỹ 18t (Tối đa 5 lần lùi tuổi miễn phí/đời)</div>
               <button type="button" class="btn-sm btn-gold" style="width:100%; margin-top:7px;" id="btn-buy-starter-pack">💳 Mở Gói Khởi Đầu (19.000đ)</button>
             </div>
 
@@ -410,7 +629,7 @@
                 <strong>👑 Gói Tỷ Phú VIP Vĩnh Viễn</strong>
                 <span class="pack-price">49.000đ</span>
               </div>
-              <div class="pack-perks">Chơi lại VÔ HẠN không quảng cáo • Huy hiệu 👑 VIP trên BXH Thực • +15 Trí tuệ &amp; May mắn, +8 Triệu đ Quỹ 18t &amp; Giảm 20% phí tài sản khi lùi tuổi vượt mốc 5 lần</div>
+              <div class="pack-perks">Chơi lại VÔ HẠN không quảng cáo • Huy hiệu 👑 VIP trên BXH Thực • +15 Trí tuệ &amp; May mắn, +50 Triệu đ Quỹ 18t &amp; Giảm 20% phí tài sản khi lùi tuổi vượt mốc 5 lần</div>
               <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:7px;" id="btn-buy-vip-pack">👑 Nâng Cấp VIP Vĩnh Viễn (49.000đ)</button>
             </div>
           </div>
@@ -452,25 +671,88 @@
         </div>
       </div>
 
-      <!-- Modal Quản lý Lưu & Sao Lưu Tiến Trình -->
+      <!-- Modal Quản lý Lưu & Tải Tiến Trình (Save & Load Game) -->
       <div class="sheet-backdrop modal-center" id="save-manage-modal">
-        <div class="modal-card">
-          <h2 style="margin:0 0 6px; font-size:16.5px;">💾 Lưu &amp; Sao Lưu Tiến Trình</h2>
-          <div class="modal-sub" id="save-status-detail">Tiến trình được tự động lưu trên trình duyệt của bạn.</div>
-          <div class="save-actions-grid">
-            <button type="button" class="btn-sm btn-primary" id="btn-manual-save">💾 Lưu Ngay</button>
-            <button type="button" class="btn-sm btn-ghost" id="btn-open-profile-stats">📊 Xem 14 Chỉ Số</button>
-            <button type="button" class="btn-sm btn-gold" id="btn-copy-save-code">📋 Chép Mã Sao Lưu</button>
-            <button type="button" class="btn-sm btn-ghost" id="btn-download-save-file">⬇️ Tải File .json</button>
+        <div class="modal-card save-load-dialog">
+          <div class="save-modal-header">
+            <h2 style="margin:0; font-size:17px; font-weight:800; color:#fbbf24;">💾 Quản Lý Lưu &amp; Tải Game</h2>
+            <button type="button" class="icon-close-btn" id="btn-close-save-modal-x" title="Đóng">✕</button>
           </div>
-          <label class="input-label" style="margin-top:10px;" for="input-save-code">📥 Khôi phục tiến trình bằng Mã Sao Lưu (ZTB2:...):</label>
-          <textarea class="input-field save-code-box" id="input-save-code" rows="2" placeholder="Dán mã sao lưu ZTB2:... vào đây để khôi phục..."></textarea>
-          <div style="display:flex; gap:8px; margin-top:8px;">
-            <button type="button" class="btn-sm btn-green" style="flex:1;" id="btn-import-save-code">📥 Khôi Phục Mã</button>
-            <button type="button" class="btn-sm btn-gold" id="btn-new-life-profile">🔄 Đời Mới</button>
-            <button type="button" class="btn-sm btn-danger" id="btn-wipe-save">🗑️ Xóa Save</button>
+          <div class="modal-sub" id="save-status-detail" style="margin-bottom:8px;">Quản lý dữ liệu lưu của bạn trên máy và đồng bộ đám mây/file.</div>
+
+          <!-- Tab chuyển đổi Tải Game vs Lưu Game -->
+          <div class="save-tab-bar">
+            <button type="button" class="save-tab-btn active" id="tab-btn-load-game">📂 Tải Game (Load)</button>
+            <button type="button" class="save-tab-btn" id="tab-btn-save-game">💾 Lưu Game (Save)</button>
           </div>
-          <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:10px; padding:8px;" id="btn-close-save-modal">Đóng</button>
+
+          <!-- TAB 1: TẢI TIẾN TRÌNH (LOAD GAME) -->
+          <div class="save-tab-panel" id="panel-load-game">
+            <!-- Bản Lưu Tự Động Gần Nhất -->
+            <div class="save-slot-card auto-save-card" id="slot-card-autosave">
+              <div class="save-slot-head">
+                <span class="slot-badge auto">🟢 BẢN LƯU TỰ ĐỘNG GẦN NHẤT</span>
+                <span class="slot-time" id="autosave-time-label">--:--</span>
+              </div>
+              <div class="save-slot-body" id="autosave-slot-body">
+                Đang nạp thông tin...
+              </div>
+              <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:8px; padding:9px; font-weight:800;" id="btn-load-autosave">▶️ Tải Lại Tiến Trình Này (Load)</button>
+            </div>
+
+            <!-- 3 Slot Lưu Thủ Công -->
+            <div class="section-title" style="margin-top:10px;"><span>Các Slot Lưu Riêng Biệt (1 - 3)</span></div>
+            <div class="save-slots-stack" id="save-slots-list">
+              <!-- Render động bởi renderSaveManageModal() -->
+            </div>
+
+            <!-- Nạp File .JSON Từ Máy Hoặc Nhập Mã -->
+            <div class="section-title" style="margin-top:12px;"><span>Nạp File Từ Máy Hoặc Nhập Mã</span></div>
+            <input type="file" id="file-import-save" accept=".json,.txt" style="display:none;" />
+            <button type="button" class="btn-sm btn-primary" style="width:100%; padding:9px; font-weight:700; margin-bottom:8px;" id="btn-trigger-file-import">📁 Chọn File Sao Lưu .JSON Từ Thiết Bị</button>
+
+            <label class="input-label" for="input-save-code">Hoặc dán Mã Sao Lưu (ZTB2:...):</label>
+            <textarea class="input-field save-code-box" id="input-save-code" rows="2" placeholder="Dán mã sao lưu ZTB2:... vào đây để khôi phục..."></textarea>
+            <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:6px; padding:8px;" id="btn-import-save-code">📥 Khôi Phục Từ Mã</button>
+          </div>
+
+          <!-- TAB 2: LƯU TIẾN TRÌNH (SAVE GAME) -->
+          <div class="save-tab-panel hidden" id="panel-save-game">
+            <div class="save-slot-card current-life-card">
+              <div class="save-slot-head">
+                <span class="slot-badge current">✨ TIẾN TRÌNH ĐANG CHƠI</span>
+                <span class="slot-time" id="current-save-time-label">Hiện tại</span>
+              </div>
+              <div class="save-slot-body" id="current-life-summary-body">
+                <!-- Current life details -->
+              </div>
+              <div style="display:flex; gap:8px; margin-top:8px;">
+                <button type="button" class="btn-sm btn-gold" style="flex:1; padding:9px; font-weight:800;" id="btn-manual-save">💾 Lưu Đè Vào Auto-Save</button>
+                <button type="button" class="btn-sm btn-ghost" id="btn-open-profile-stats">📊 14 Chỉ Số</button>
+              </div>
+            </div>
+
+            <div class="section-title" style="margin-top:10px;"><span>Lưu Vào Các Slot Riêng Biệt</span></div>
+            <div class="save-slot-buttons-grid">
+              <button type="button" class="btn-sm btn-ghost" id="btn-save-to-slot-1">💾 Slot 1</button>
+              <button type="button" class="btn-sm btn-ghost" id="btn-save-to-slot-2">💾 Slot 2</button>
+              <button type="button" class="btn-sm btn-ghost" id="btn-save-to-slot-3">💾 Slot 3</button>
+            </div>
+
+            <div class="section-title" style="margin-top:12px;"><span>Xuất File Bản Lưu Sang Máy Khác</span></div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn-sm btn-gold" style="flex:1; padding:9px;" id="btn-download-save-file">⬇️ Tải File .json</button>
+              <button type="button" class="btn-sm btn-ghost" style="flex:1; padding:9px;" id="btn-copy-save-code">📋 Chép Mã ZTB2</button>
+            </div>
+
+            <div class="section-title" style="margin-top:12px;"><span>Vùng Nguy Hiểm</span></div>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn-sm btn-ghost" style="flex:1;" id="btn-new-life-profile">🔄 Đời Mới</button>
+              <button type="button" class="btn-sm btn-danger" style="flex:1;" id="btn-wipe-save">🗑️ Xóa Hết Save</button>
+            </div>
+          </div>
+
+          <button type="button" class="btn-sm btn-ghost" style="width:100%; margin-top:12px; padding:8px;" id="btn-close-save-modal">Đóng</button>
         </div>
       </div>
 
@@ -501,11 +783,11 @@
     </main>
   </div>
 
-  <script src="web/game_data.js?v=5"></script>
-  <script src="web/live_leaderboard.js?v=5"></script>
-  <script src="web/audio.js?v=5"></script>
-  <script src="web/vendor/three.min.js?v=5"></script>
-  <script src="web/diorama3d.js?v=5"></script>
-  <script src="web/game.js?v=5"></script>
+  <script src="web/game_data.js?v=4"></script>
+  <script src="web/live_leaderboard.js?v=4"></script>
+  <script src="web/audio.js?v=4"></script>
+  <script src="web/vendor/three.min.js?v=4"></script>
+  <script src="web/diorama3d.js?v=4"></script>
+  <script src="web/game.js?v=4"></script>
 </body>
 </html>

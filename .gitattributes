@@ -52,7 +52,9 @@
 # Keep documentation, web icons & PWA assets in standard Git (required for GitHub Pages branch serving!)
 docs/screenshots/** !filter !diff !merge -text
 apple-touch-icon.png !filter !diff !merge -text
+apple-touch-icon-precomposed.png !filter !diff !merge -text
 web/apple-touch-icon.png !filter !diff !merge -text
+web/apple-touch-icon-precomposed.png !filter !diff !merge -text
 web/icons/** !filter !diff !merge -text
 web-demo/public/icons/** !filter !diff !merge -text
 web-demo/dist/icons/** !filter !diff !merge -text

@@ -1,6 +1,7 @@
 // Zero to Billionaire Simulator — Interactive Web Client Controller
 (function () {
   const SAVE_KEY = "ztb_web_save_v2";
+  const SAVE_SLOT_PREFIX = "ztb_web_save_slot_";
   const HALL_OF_FAME_KEY = "ztb_hall_of_fame_v1";
   const MONETIZATION_KEY = "ztb_monetization_v1";
   const USD_BILLION_VND = 25_000_000_000_000; // 25.000 Tỷ VNĐ (~ $1B)
@@ -296,6 +297,9 @@
     }
 
     async init() {
+      const startTime = performance.now();
+      const MIN_LOADING_TIME_MS = 2200;
+
       const LOADING_TIPS = [
         "💡 Mẹo: Tích lũy quỹ dự phòng tiền mặt trước chu kỳ Suy thoái để tránh bị xiết nợ & đóng băng tín dụng!",
         "💡 Mẹo: Bạn có tối đa 5 lượt lùi tuổi miễn phí mỗi đời — từ lần thứ 6 sẽ phải đánh đổi ít nhất 25% tài sản!",
@@ -307,9 +311,9 @@
       if (tipEl) {
         tipEl.textContent = LOADING_TIPS[randInt(0, LOADING_TIPS.length - 1)];
       }
-      this.updateLoadingUI(8, "Đang nạp cấu trúc dữ liệu & sự kiện...", 0);
+      this.updateLoadingUI(12, "Đang nạp cấu trúc dữ liệu, sự kiện & âm thanh...", 0);
 
-      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 7000);
+      const safetyTimer = setTimeout(() => this.dismissLoadingScreen(), 8000);
 
       if (typeof navigator !== "undefined" && "serviceWorker" in navigator) {
         try {
@@ -362,7 +366,10 @@
       this.renderAll();
       this.updateLoadingUI(100, "Hoàn tất! Chào mừng đến với thế giới Tỷ Phú!", 4);
 
-      await new Promise((r) => setTimeout(r, 340));
+      const elapsed = performance.now() - startTime;
+      const remaining = Math.max(380, MIN_LOADING_TIME_MS - elapsed);
+      await new Promise((r) => setTimeout(r, remaining));
+
       clearTimeout(safetyTimer);
       this.dismissLoadingScreen();
 
@@ -471,13 +478,57 @@
       el("btn-confirm-rename").addEventListener("click", () => this.confirmRenameModal());
       el("btn-cancel-rename").addEventListener("click", () => el("rename-modal").classList.remove("open"));
 
-      // Save & Backup Modal
+      // Save & Load Modal Tabs & Actions
+      const tabLoad = el("tab-btn-load-game");
+      if (tabLoad) tabLoad.addEventListener("click", () => this.switchSaveTab("load"));
+      const tabSave = el("tab-btn-save-game");
+      if (tabSave) tabSave.addEventListener("click", () => this.switchSaveTab("save"));
+
+      const btnCloseX = el("btn-close-save-modal-x");
+      if (btnCloseX) btnCloseX.addEventListener("click", () => el("save-manage-modal").classList.remove("open"));
+
+      const btnLoadAuto = el("btn-load-autosave");
+      if (btnLoadAuto) btnLoadAuto.addEventListener("click", () => this.loadAutoSave());
+
+      const btnTriggerFile = el("btn-trigger-file-import");
+      const fileInput = el("file-import-save");
+      if (btnTriggerFile && fileInput) {
+        btnTriggerFile.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (file) this.handleSaveFileUpload(file);
+          e.target.value = "";
+        });
+      }
+
+      const btnSlot1 = el("btn-save-to-slot-1");
+      if (btnSlot1) btnSlot1.addEventListener("click", () => this.saveToSlot(1));
+      const btnSlot2 = el("btn-save-to-slot-2");
+      if (btnSlot2) btnSlot2.addEventListener("click", () => this.saveToSlot(2));
+      const btnSlot3 = el("btn-save-to-slot-3");
+      if (btnSlot3) btnSlot3.addEventListener("click", () => this.saveToSlot(3));
+
+      const btnNewLifeLoad = el("btn-newlife-open-load");
+      if (btnNewLifeLoad) {
+        btnNewLifeLoad.addEventListener("click", () => {
+          el("new-life-modal").classList.remove("open");
+          this.openSaveManageModal("load");
+        });
+      }
+
+      const autoInd = el("autosave-indicator");
+      if (autoInd) {
+        autoInd.style.cursor = "pointer";
+        autoInd.title = "Nhấp để mở Quản lý Lưu & Tải Game";
+        autoInd.addEventListener("click", () => this.openSaveManageModal("save"));
+      }
+
       el("btn-manual-save").addEventListener("click", () => {
         this.saveToStorage();
         this.publishPlayerToLiveBoard(true);
         if (window.ZTBAudio) window.ZTBAudio.coin();
-        this.showToast("💾 Đã lưu tiến trình an toàn!");
-        this.openSaveManageModal();
+        this.showToast("💾 Đã lưu tiến trình an toàn vào Auto-Save!");
+        this.renderSaveManageModal();
       });
       el("btn-open-profile-stats").addEventListener("click", () => {
         el("save-manage-modal").classList.remove("open");
@@ -491,10 +542,15 @@
         this.requestNewLifeFlow();
       });
       el("btn-wipe-save").addEventListener("click", () => {
-        localStorage.removeItem(SAVE_KEY);
-        el("save-manage-modal").classList.remove("open");
-        this.showToast("🗑️ Đã xóa dữ liệu lưu cũ!");
-        this.requestNewLifeFlow();
+        if (confirm("⚠️ Bạn có chắc chắn muốn xóa toàn bộ bản lưu và bắt đầu lại từ đầu?")) {
+          localStorage.removeItem(SAVE_KEY);
+          for (let i = 1; i <= 3; i++) {
+            localStorage.removeItem(`${SAVE_SLOT_PREFIX}${i}`);
+          }
+          el("save-manage-modal").classList.remove("open");
+          this.showToast("🗑️ Đã xóa toàn bộ dữ liệu lưu!");
+          this.requestNewLifeFlow();
+        }
       });
       el("btn-close-save-modal").addEventListener("click", () => el("save-manage-modal").classList.remove("open"));
 
@@ -720,13 +776,265 @@
       this.showToast(`✍️ Đã đổi tên thành ${val}!`);
     }
 
-    openSaveManageModal() {
-      const net = formatVND(this.getNetWorth());
-      el("save-status-detail").innerHTML = `
-        Nhân vật hiện tại: <strong>${escapeHtml(this.stats.characterName)}</strong> (${this.stats.age} tuổi • ${net})<br/>
-        Trạng thái lưu: <strong style="color:#34d399;">${escapeHtml(this.lastSavedLabel)}</strong>
-      `;
+    switchSaveTab(tabName) {
+      const tabLoad = el("tab-btn-load-game");
+      const tabSave = el("tab-btn-save-game");
+      const panelLoad = el("panel-load-game");
+      const panelSave = el("panel-save-game");
+
+      if (tabName === "save") {
+        if (tabSave) tabSave.classList.add("active");
+        if (tabLoad) tabLoad.classList.remove("active");
+        if (panelSave) panelSave.classList.remove("hidden");
+        if (panelLoad) panelLoad.classList.add("hidden");
+      } else {
+        if (tabLoad) tabLoad.classList.add("active");
+        if (tabSave) tabSave.classList.remove("active");
+        if (panelLoad) panelLoad.classList.remove("hidden");
+        if (panelSave) panelSave.classList.add("hidden");
+      }
+    }
+
+    openSaveManageModal(initialTab = "load") {
+      this.switchSaveTab(initialTab);
+      this.renderSaveManageModal();
       el("save-manage-modal").classList.add("open");
+    }
+
+    getSaveSlot(slotNum) {
+      try {
+        const raw = localStorage.getItem(`${SAVE_SLOT_PREFIX}${slotNum}`);
+        if (!raw) return null;
+        return JSON.parse(raw);
+      } catch (_) {
+        return null;
+      }
+    }
+
+    saveToSlot(slotNum) {
+      try {
+        const slotData = {
+          slotNum,
+          savedAt: new Date().toISOString(),
+          name: this.stats.characterName,
+          age: this.stats.age,
+          gender: this.stats.gender,
+          job: this.stats.currentJob || "Trẻ nhỏ",
+          netWorth: this.getNetWorth(),
+          cash: this.stats.cash,
+          generation: this.stats.generation,
+          snapshot: JSON.parse(this.captureSnapshot())
+        };
+        localStorage.setItem(`${SAVE_SLOT_PREFIX}${slotNum}`, JSON.stringify(slotData));
+        if (window.ZTBAudio) window.ZTBAudio.coin();
+        this.showToast(`💾 Đã lưu tiến trình vào Slot ${slotNum}!`);
+        this.renderSaveManageModal();
+      } catch (_) {
+        this.showToast(`❌ Lỗi khi lưu vào Slot ${slotNum}!`);
+      }
+    }
+
+    loadFromSlot(slotNum) {
+      const slotData = this.getSaveSlot(slotNum);
+      if (!slotData || !slotData.snapshot) {
+        this.showToast(`Slot ${slotNum} trống!`);
+        return;
+      }
+      try {
+        this.restoreSnapshot(JSON.stringify(slotData.snapshot));
+        this.saveToStorage();
+        this.publishPlayerToLiveBoard(true);
+        el("save-manage-modal").classList.remove("open");
+        this.renderAll();
+        if (window.ZTBAudio) window.ZTBAudio.success();
+        this.showToast(`📂 Đã tải thành công Slot ${slotNum}: ${slotData.name} (${slotData.age}t)!`);
+      } catch (_) {
+        this.showToast(`❌ Không thể tải dữ liệu Slot ${slotNum}!`);
+      }
+    }
+
+    deleteSlot(slotNum) {
+      if (confirm(`Bạn có chắc chắn muốn xóa bản lưu ở Slot ${slotNum}?`)) {
+        localStorage.removeItem(`${SAVE_SLOT_PREFIX}${slotNum}`);
+        this.showToast(`🗑️ Đã xóa Slot ${slotNum}!`);
+        this.renderSaveManageModal();
+      }
+    }
+
+    loadAutoSave() {
+      const loaded = this.loadFromStorage();
+      if (loaded) {
+        this.publishPlayerToLiveBoard(true);
+        el("save-manage-modal").classList.remove("open");
+        this.renderAll();
+        if (window.ZTBAudio) window.ZTBAudio.success();
+        this.showToast(`📂 Đã tải bản lưu tự động của ${this.stats.characterName}!`);
+      } else {
+        this.showToast("Không tìm thấy bản lưu tự động!");
+      }
+    }
+
+    renderSaveManageModal() {
+      // 1. Render Auto-Save Slot
+      const autoBody = el("autosave-slot-body");
+      const autoTime = el("autosave-time-label");
+      const btnLoadAuto = el("btn-load-autosave");
+      const rawAuto = localStorage.getItem(SAVE_KEY);
+
+      if (rawAuto) {
+        try {
+          const snap = JSON.parse(rawAuto);
+          const st = snap.stats || {};
+          const net = (st.cash || 0) + (st.savings || 0) + (st.crypto || 0) + (st.businessCapital || 0) + (st.gold || 0) * (st.goldPrice || 85000000);
+          if (autoBody) {
+            autoBody.innerHTML = `
+              🧑 <strong>${escapeHtml(st.characterName || "Nhân vật")}</strong> (${st.age || 0} tuổi • Đời ${st.generation || 1})<br/>
+              💼 ${escapeHtml(st.currentJob || "Trẻ nhỏ")} • 💰 Tài sản: <strong style="color:#34d399;">${formatVND(net)}</strong>
+            `;
+          }
+          if (autoTime) autoTime.textContent = this.lastSavedLabel || "Gần đây";
+          if (btnLoadAuto) {
+            btnLoadAuto.disabled = false;
+            btnLoadAuto.style.opacity = "1";
+          }
+        } catch (_) {
+          if (autoBody) autoBody.textContent = "Bản lưu tự động bị lỗi định dạng.";
+          if (btnLoadAuto) btnLoadAuto.disabled = true;
+        }
+      } else {
+        if (autoBody) autoBody.textContent = "Chưa có bản lưu tự động nào.";
+        if (autoTime) autoTime.textContent = "--:--";
+        if (btnLoadAuto) {
+          btnLoadAuto.disabled = true;
+          btnLoadAuto.style.opacity = "0.5";
+        }
+      }
+
+      // 2. Render 3 Manual Save Slots
+      const slotsList = el("save-slots-list");
+      if (slotsList) {
+        slotsList.innerHTML = "";
+        for (let i = 1; i <= 3; i++) {
+          const slot = this.getSaveSlot(i);
+          const div = document.createElement("div");
+          if (slot && slot.snapshot) {
+            const d = new Date(slot.savedAt);
+            const dateStr = !isNaN(d) ? `${d.toLocaleDateString("vi-VN")} ${d.toLocaleTimeString("vi-VN", {hour:'2-digit', minute:'2-digit'})}` : "Đã lưu";
+            div.className = "save-slot-card";
+            div.innerHTML = `
+              <div class="save-slot-head">
+                <span class="slot-badge manual">📁 SLOT ${i}</span>
+                <span class="slot-time">${escapeHtml(dateStr)}</span>
+              </div>
+              <div class="save-slot-body">
+                🧑 <strong>${escapeHtml(slot.name)}</strong> (${slot.age} tuổi • Đời ${slot.generation || 1})<br/>
+                💼 ${escapeHtml(slot.job)} • 💰 <strong style="color:#34d399;">${formatVND(slot.netWorth)}</strong>
+              </div>
+              <div style="display:flex; gap:6px; margin-top:8px;">
+                <button type="button" class="btn-sm btn-green btn-load-slot" data-slot="${i}" style="flex:1; padding:7px; font-weight:700;">▶️ Tải Slot ${i}</button>
+                <button type="button" class="btn-sm btn-ghost btn-save-slot" data-slot="${i}" style="padding:7px 9px;">💾 Lưu Đè</button>
+                <button type="button" class="btn-sm btn-danger btn-delete-slot" data-slot="${i}" style="padding:7px 9px;">🗑️</button>
+              </div>
+            `;
+          } else {
+            div.className = "save-slot-card";
+            div.style.opacity = "0.8";
+            div.style.borderStyle = "dashed";
+            div.innerHTML = `
+              <div class="save-slot-head">
+                <span class="slot-badge" style="background:rgba(100,116,139,0.3); color:#94a3b8;">📁 SLOT ${i}</span>
+                <span class="slot-time">Trống</span>
+              </div>
+              <div class="save-slot-body" style="color:#94a3b8; font-size:11.5px;">
+                Chưa có dữ liệu tiến trình nào được lưu ở Slot ${i}.
+              </div>
+              <button type="button" class="btn-sm btn-ghost btn-save-slot" data-slot="${i}" style="width:100%; margin-top:6px; padding:7px; font-size:12px;">💾 Lưu Tiến Trình Hiện Tại Vào Slot ${i}</button>
+            `;
+          }
+          slotsList.appendChild(div);
+        }
+
+        // Attach listeners for dynamic slot buttons
+        slotsList.querySelectorAll(".btn-load-slot").forEach((b) => {
+          b.addEventListener("click", () => {
+            const slotNum = parseInt(b.getAttribute("data-slot") || "1", 10);
+            this.loadFromSlot(slotNum);
+          });
+        });
+        slotsList.querySelectorAll(".btn-save-slot").forEach((b) => {
+          b.addEventListener("click", () => {
+            const slotNum = parseInt(b.getAttribute("data-slot") || "1", 10);
+            this.saveToSlot(slotNum);
+          });
+        });
+        slotsList.querySelectorAll(".btn-delete-slot").forEach((b) => {
+          b.addEventListener("click", () => {
+            const slotNum = parseInt(b.getAttribute("data-slot") || "1", 10);
+            this.deleteSlot(slotNum);
+          });
+        });
+      }
+
+      // 3. Render Current Life Summary in Save Tab
+      const currentBody = el("current-life-summary-body");
+      const currentTime = el("current-save-time-label");
+      if (currentBody) {
+        currentBody.innerHTML = `
+          🧑 <strong>${escapeHtml(this.stats.characterName)}</strong> (${this.stats.age} tuổi • Đời ${this.stats.generation})<br/>
+          💼 ${escapeHtml(this.stats.currentJob)} • 💰 Tổng tài sản: <strong style="color:#fbbf24;">${formatVND(this.getNetWorth())}</strong>
+        `;
+      }
+      if (currentTime) currentTime.textContent = this.lastSavedLabel || "Hiện tại";
+
+      // 4. Update Header Subtitle Status
+      const statusDetail = el("save-status-detail");
+      if (statusDetail) {
+        statusDetail.innerHTML = `
+          Đang chơi: <strong>${escapeHtml(this.stats.characterName)}</strong> (${this.stats.age}t) • Trạng thái: <strong style="color:#34d399;">${escapeHtml(this.lastSavedLabel || "Đã lưu")}</strong>
+        `;
+      }
+    }
+
+    handleSaveFileUpload(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const text = (e.target.result || "").trim();
+          let bundle;
+          if (text.startsWith("ZTB2:")) {
+            const json = decodeURIComponent(escape(atob(text.slice(5))));
+            bundle = JSON.parse(json);
+          } else {
+            bundle = JSON.parse(text);
+          }
+          const snap = bundle.snapshot || bundle;
+          if (!snap || !snap.stats) {
+            throw new Error("Invalid save file payload");
+          }
+          if (bundle.uid && window.ZTBLiveBoard) {
+            window.ZTBLiveBoard.setPlayerId(bundle.uid);
+          }
+          if (bundle.monetization) {
+            this.monetization = Object.assign(this.loadMonetization(), bundle.monetization);
+            this.saveMonetization();
+          }
+          if (Array.isArray(bundle.hof)) {
+            localStorage.setItem(HALL_OF_FAME_KEY, JSON.stringify(bundle.hof.slice(0, 10)));
+          }
+          this.restoreSnapshot(JSON.stringify(snap));
+          this.saveToStorage();
+          this.publishPlayerToLiveBoard(true);
+          el("save-manage-modal").classList.remove("open");
+          this.renderAll();
+          if (window.ZTBAudio) window.ZTBAudio.success();
+          this.showToast(`✅ Đã nạp thành công file save của ${this.stats.characterName}!`);
+        } catch (err) {
+          console.warn("[ZTBSim] File upload error:", err);
+          this.showToast("❌ File sao lưu không hợp lệ hoặc bị hỏng định dạng!");
+        }
+      };
+      reader.readAsText(file, "utf-8");
     }
 
     buildBackupCode() {
@@ -760,30 +1068,51 @@
 
     downloadSaveJson() {
       try {
-        const code = this.buildBackupCode();
-        const blob = new Blob([code], { type: "text/plain;charset=utf-8" });
+        const bundle = {
+          v: 2,
+          savedAt: new Date().toISOString(),
+          characterName: this.stats.characterName,
+          age: this.stats.age,
+          netWorth: this.getNetWorth(),
+          uid: window.ZTBLiveBoard ? window.ZTBLiveBoard.getPlayerId() : "",
+          monetization: this.monetization,
+          hof: this.loadHallOfFame(),
+          snapshot: JSON.parse(this.captureSnapshot())
+        };
+        const json = JSON.stringify(bundle, null, 2);
+        const blob = new Blob([json], { type: "application/json;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `ztb_save_${this.stats.age}t.txt`;
+        const safeName = (this.stats.characterName || "player").replace(/[^a-zA-Z0-9]/g, "_");
+        a.download = `ztb_save_${safeName}_${this.stats.age}t.json`;
         document.body.appendChild(a);
         a.click();
         a.remove();
         URL.revokeObjectURL(url);
-        this.showToast("⬇️ Đã tải file sao lưu tiến trình!");
-      } catch (_) {}
+        if (window.ZTBAudio) window.ZTBAudio.coin();
+        this.showToast("⬇️ Đã tải xuống file .json sao lưu tiến trình!");
+      } catch (_) {
+        this.showToast("Không thể tải file sao lưu.");
+      }
     }
 
     importSaveCodeFromUI() {
       const raw = el("input-save-code").value.trim();
-      if (!raw.startsWith("ZTB2:")) {
-        this.showToast("⚠️ Mã sao lưu phải bắt đầu bằng ZTB2:");
+      if (!raw) {
+        this.showToast("⚠️ Vui lòng dán mã sao lưu hoặc nội dung JSON vào ô!");
         return;
       }
       try {
-        const json = decodeURIComponent(escape(atob(raw.slice(5))));
-        const bundle = JSON.parse(json);
-        if (!bundle || !bundle.snapshot || !bundle.snapshot.stats) {
+        let bundle;
+        if (raw.startsWith("ZTB2:")) {
+          const json = decodeURIComponent(escape(atob(raw.slice(5))));
+          bundle = JSON.parse(json);
+        } else {
+          bundle = JSON.parse(raw);
+        }
+        const snap = bundle.snapshot || bundle;
+        if (!snap || !snap.stats) {
           throw new Error("Invalid backup payload");
         }
         if (bundle.uid && window.ZTBLiveBoard) {
@@ -796,11 +1125,12 @@
         if (Array.isArray(bundle.hof)) {
           localStorage.setItem(HALL_OF_FAME_KEY, JSON.stringify(bundle.hof.slice(0, 10)));
         }
-        this.restoreSnapshot(JSON.stringify(bundle.snapshot));
+        this.restoreSnapshot(JSON.stringify(snap));
         this.saveToStorage();
         this.publishPlayerToLiveBoard(true);
         el("save-manage-modal").classList.remove("open");
         this.renderAll();
+        if (window.ZTBAudio) window.ZTBAudio.success();
         this.showToast(`✅ Đã khôi phục tiến trình của ${this.stats.characterName}!`);
       } catch (_) {
         this.showToast("❌ Mã sao lưu không hợp lệ hoặc bị hỏng!");

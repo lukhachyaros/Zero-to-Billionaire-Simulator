@@ -2,7 +2,7 @@
   "name": "Zero to Billionaire",
   "short_name": "Tỷ Phú 3D",
   "description": "Từ Tay Trắng Đến Tỷ Phú — Mô phỏng cuộc đời 3D Việt Nam",
-  "start_url": "./?v=4",
+  "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -10,22 +10,22 @@
   "theme_color": "#090e1c",
   "icons": [
     {
-      "src": "./icons/apple-touch-icon.png?v=4",
+      "src": "./icons/apple-touch-icon.png",
       "sizes": "180x180",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "./icons/logo-192.png?v=4",
+      "src": "./icons/logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "./icons/logo-512.png?v=4",
+      "src": "./icons/logo-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
