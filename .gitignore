@@ -82,6 +82,7 @@ Thumbs.db
 # Node / Tooling & Artifacts
 # ==========================================
 node_modules/
+**/node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -89,3 +90,8 @@ yarn-error.log*
 .env.local
 .env.*.local
 *.log
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+server/data/
+**/__pycache__/

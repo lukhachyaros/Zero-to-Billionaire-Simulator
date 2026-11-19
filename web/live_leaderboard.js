@@ -158,7 +158,9 @@
         if (Array.isArray(arr)) {
           arr.forEach((item) => {
             const clean = sanitizeEntry(item);
-            if (clean) this.players[clean.uid] = clean;
+            if (clean && (clean.uid === this.uid || clean.netWorth > 0 || clean.age > 0)) {
+              this.players[clean.uid] = clean;
+            }
           });
         }
       } catch (_) {}
@@ -167,6 +169,7 @@
     saveCache() {
       try {
         const arr = Object.values(this.players)
+          .filter((p) => p.uid === this.uid || p.netWorth > 0 || p.age > 0)
           .sort((a, b) => b.netWorth - a.netWorth)
           .slice(0, 80);
         localStorage.setItem(CACHE_KEY, JSON.stringify(arr));
@@ -545,7 +548,7 @@
 
     getLeaderboardSnapshot() {
       const now = Date.now();
-      const entries = Object.values(this.players).map((p) => {
+      const rawEntries = Object.values(this.players).map((p) => {
         const isMe = p.uid === this.uid;
         const seenAt = this.lastSeenLocal[p.uid] || 0;
         const freshLocal = seenAt > 0 && (now - seenAt) < 65_000;
@@ -567,6 +570,60 @@
         };
       });
 
+      // Filter out unplayed dummy entries (netWorth <= 0 && age === 0 && !isPlayer)
+      const validEntries = rawEntries.filter((e) => {
+        if (!e.isPlayer && e.netWorth <= 0 && e.age === 0) return false;
+        return true;
+      });
+
+      // Deduplicate entries by normalized player name (name.trim().toLowerCase())
+      // Prioritize the current player's own record (isPlayer).
+      // For duplicate names, retain entry with highest netWorth and most recent timestamp ts.
+      const dedupedMap = new Map();
+      for (const entry of validEntries) {
+        const normKey = (entry.name || "").trim().toLowerCase();
+        if (!normKey) continue;
+        if (!dedupedMap.has(normKey)) {
+          dedupedMap.set(normKey, entry);
+          continue;
+        }
+
+        const existing = dedupedMap.get(normKey);
+
+        // 1. Prioritize current player's own record
+        if (entry.isPlayer && !existing.isPlayer) {
+          entry.isOnline = entry.isOnline || existing.isOnline;
+          dedupedMap.set(normKey, entry);
+          continue;
+        }
+        if (existing.isPlayer && !entry.isPlayer) {
+          existing.isOnline = existing.isOnline || entry.isOnline;
+          continue;
+        }
+
+        // 2. Tie-break: highest netWorth, then peakNetWorth, then most recent ts
+        let pickNew = false;
+        if (entry.netWorth > existing.netWorth) {
+          pickNew = true;
+        } else if (entry.netWorth === existing.netWorth) {
+          if (entry.peakNetWorth > existing.peakNetWorth) {
+            pickNew = true;
+          } else if (entry.peakNetWorth === existing.peakNetWorth) {
+            if (entry.ts > existing.ts) {
+              pickNew = true;
+            }
+          }
+        }
+
+        if (pickNew) {
+          entry.isOnline = entry.isOnline || existing.isOnline;
+          dedupedMap.set(normKey, entry);
+        } else {
+          existing.isOnline = existing.isOnline || entry.isOnline;
+        }
+      }
+
+      const entries = Array.from(dedupedMap.values());
       entries.sort((a, b) => {
         if (b.netWorth !== a.netWorth) return b.netWorth - a.netWorth;
         return b.peakNetWorth - a.peakNetWorth;

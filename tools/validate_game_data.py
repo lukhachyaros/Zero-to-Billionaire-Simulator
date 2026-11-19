@@ -398,6 +398,7 @@ def validate_web_client(errors: list[str]) -> int:
         "audio.js",
         "vendor/three.min.js",
         "diorama3d.js",
+        "api_client.js",
         "game.js",
         "game_data.js",
     ]
@@ -616,7 +617,7 @@ def sync_outputs(events_by_name: dict, careers: list, assets: list, backgrounds:
         html = html.replace('href="icons/', 'href="web/icons/')
         html = html.replace('src="icons/', 'src="web/icons/')
         html = re.sub(
-            r'src="((?:game_data\.js|live_leaderboard\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|game\.js)(?:\?[^"]*)?)"',
+            r'src="((?:game_data\.js|live_leaderboard\.js|audio\.js|vendor/three\.min\.js|diorama3d\.js|api_client\.js|game\.js)(?:\?[^"]*)?)"',
             r'src="web/\1"',
             html,
         )

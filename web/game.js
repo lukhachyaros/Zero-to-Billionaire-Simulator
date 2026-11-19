@@ -222,7 +222,7 @@
         generation: 1,
         backgroundId: "bg_working_class",
         backgroundName: "Gia Đình Lao Động Bình Dân",
-        characterName: "Nguyễn Gia Huy",
+        characterName: "Người chơi",
         gender: "Nam",
         age: 0,
         isAlive: true,
@@ -325,9 +325,15 @@
 
       this.bindStaticUI();
 
-      window.addEventListener("beforeunload", () => this.saveToStorage());
+      window.addEventListener("beforeunload", () => {
+        this.saveToStorage();
+        if (window.apiClient) window.apiClient.saveToCloud(true);
+      });
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "hidden") this.saveToStorage();
+        if (document.visibilityState === "hidden") {
+          this.saveToStorage();
+          if (window.apiClient) window.apiClient.saveToCloud(true);
+        }
       });
 
       if (window.ZTBLiveBoard) {
@@ -343,7 +349,7 @@
 
       const loaded = this.loadFromStorage();
       if (!loaded) {
-        this.startNewLife("Nguyễn Gia Huy", "Nam", this.selectedBackgroundId, true);
+        // First run: defer life creation and publication until player confirms name in modal
       } else if ((this.monetization.totalLivesStarted || 0) === 0) {
         this.monetization.totalLivesStarted = 1;
         this.saveMonetization();
@@ -362,7 +368,9 @@
         window.Diorama3D.init("diorama-canvas");
       }
 
-      this.publishPlayerToLiveBoard(true);
+      if (loaded) {
+        this.publishPlayerToLiveBoard(true);
+      }
       this.renderAll();
       this.updateLoadingUI(100, "Hoàn tất! Chào mừng đến với thế giới Tỷ Phú!", 4);
 
@@ -379,12 +387,15 @@
           this.openGameOverModal();
         }
       } else {
-        this.openNewLifeModal(true);
+        this.openNewLifeModal(true, true);
       }
     }
 
     publishPlayerToLiveBoard(immediate = false) {
       if (!window.ZTBLiveBoard) return;
+      if (!this.stats || !this.stats.characterName || this.stats.characterName === "Người chơi") {
+        if (!localStorage.getItem(SAVE_KEY)) return;
+      }
       window.ZTBLiveBoard.publishPlayerState({
         name: this.stats.characterName,
         age: this.stats.age,
@@ -537,6 +548,72 @@
       el("btn-copy-save-code").addEventListener("click", () => this.exportSaveCodeToUI());
       el("btn-download-save-file").addEventListener("click", () => this.downloadSaveJson());
       el("btn-import-save-code").addEventListener("click", () => this.importSaveCodeFromUI());
+      const btnCopySyncCode = el("btn-copy-sync-code");
+      if (btnCopySyncCode) {
+        btnCopySyncCode.addEventListener("click", () => {
+          const code = window.apiClient ? window.apiClient.getSyncCode() : "";
+          if (!code) {
+            this.showToast("⚠️ Đang kết nối máy chủ để lấy mã...");
+            if (window.apiClient) window.apiClient.ensureAuth();
+            return;
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).then(() => {
+              this.showToast("📋 Đã sao chép Mã Đồng Bộ: " + code);
+            }).catch(() => {
+              this.showToast("📋 Mã Đồng Bộ: " + code);
+            });
+          } else {
+            this.showToast("📋 Mã Đồng Bộ: " + code);
+          }
+        });
+      }
+      const btnSyncDevice = el("btn-sync-device");
+      if (btnSyncDevice) {
+        btnSyncDevice.addEventListener("click", async () => {
+          const inputEl = el("input-sync-code");
+          const errEl = el("sync-device-error");
+          const code = inputEl ? inputEl.value.trim().toUpperCase() : "";
+          if (errEl) {
+            errEl.classList.add("hidden");
+            errEl.textContent = "";
+          }
+          if (!code) {
+            if (errEl) {
+              errEl.textContent = "Vui lòng nhập mã đồng bộ (VD: ZTB-XXXX-XXXX)";
+              errEl.classList.remove("hidden");
+            }
+            return;
+          }
+          btnSyncDevice.disabled = true;
+          btnSyncDevice.textContent = "⏳ Đang đồng bộ...";
+          try {
+            if (!window.apiClient) {
+              throw new Error("Dịch vụ đồng bộ đám mây chưa sẵn sàng");
+            }
+            const res = await window.apiClient.syncDevice(code);
+            if (res && res.success) {
+              if (inputEl) inputEl.value = "";
+              this.showToast("🎉 Đồng bộ thiết bị thành công!");
+              this.renderSaveManageModal();
+            } else {
+              const errMsg = (res && res.error) || "Không thể đồng bộ với mã đã nhập";
+              if (errEl) {
+                errEl.textContent = "❌ " + errMsg;
+                errEl.classList.remove("hidden");
+              }
+            }
+          } catch (err) {
+            if (errEl) {
+              errEl.textContent = "❌ " + (err.message || "Lỗi kết nối");
+              errEl.classList.remove("hidden");
+            }
+          } finally {
+            btnSyncDevice.disabled = false;
+            btnSyncDevice.textContent = "🔄 Đồng Bộ Ngay";
+          }
+        });
+      }
       el("btn-new-life-profile").addEventListener("click", () => {
         el("save-manage-modal").classList.remove("open");
         this.requestNewLifeFlow();
@@ -552,7 +629,12 @@
           this.requestNewLifeFlow();
         }
       });
-      el("btn-close-save-modal").addEventListener("click", () => el("save-manage-modal").classList.remove("open"));
+      el("btn-close-save-modal").addEventListener("click", () => {
+        el("save-manage-modal").classList.remove("open");
+        if (this.isFirstRunMandatory && !localStorage.getItem(SAVE_KEY)) {
+          this.openNewLifeModal(true, true);
+        }
+      });
 
       // New Life Modal (preserving user custom input!)
       el("input-char-name").addEventListener("input", () => {
@@ -561,24 +643,33 @@
       el("btn-random-name").addEventListener("click", () => {
         if (window.ZTBAudio) window.ZTBAudio.tap();
         el("input-char-name").value = generateVietnameseName(this.selectedGender);
-        this.customNameDirty = true;
+        this.customNameDirty = false;
       });
       el("btn-gender-male").addEventListener("click", () => {
         this.selectedGender = "Nam";
         el("btn-gender-male").classList.add("active");
         el("btn-gender-female").classList.remove("active");
-        el("input-char-name").placeholder = `Nhập tên nhân vật nam (VD: ${generateVietnameseName("Nam")})...`;
+        const sampleName = generateVietnameseName("Nam");
+        el("input-char-name").placeholder = `Nhập tên nhân vật nam (VD: ${sampleName})...`;
+        if (!this.customNameDirty) {
+          el("input-char-name").value = sampleName;
+        }
       });
       el("btn-gender-female").addEventListener("click", () => {
         this.selectedGender = "Nữ";
         el("btn-gender-female").classList.add("active");
         el("btn-gender-male").classList.remove("active");
-        el("input-char-name").placeholder = `Nhập tên nhân vật nữ (VD: ${generateVietnameseName("Nữ")})...`;
+        const sampleName = generateVietnameseName("Nữ");
+        el("input-char-name").placeholder = `Nhập tên nhân vật nữ (VD: ${sampleName})...`;
+        if (!this.customNameDirty) {
+          el("input-char-name").value = sampleName;
+        }
       });
 
       el("btn-start-new-life").addEventListener("click", () => {
         const raw = el("input-char-name").value.trim();
         const chosenName = raw || generateVietnameseName(this.selectedGender);
+        this.isFirstRunMandatory = false;
         el("new-life-modal").classList.remove("open");
 
         if ((this.monetization.totalLivesStarted || 0) >= 1 && !this.monetization.vipForever) {
@@ -594,6 +685,9 @@
       });
 
       el("btn-close-new-life").addEventListener("click", () => {
+        if (this.isFirstRunMandatory && !localStorage.getItem(SAVE_KEY)) {
+          return;
+        }
         el("new-life-modal").classList.remove("open");
       });
 
@@ -993,6 +1087,17 @@
           Đang chơi: <strong>${escapeHtml(this.stats.characterName)}</strong> (${this.stats.age}t) • Trạng thái: <strong style="color:#34d399;">${escapeHtml(this.lastSavedLabel || "Đã lưu")}</strong>
         `;
       }
+
+      // 5. Update Cloud Sync Display
+      const displaySyncCodeEl = el("display-sync-code");
+      if (displaySyncCodeEl && window.apiClient) {
+        displaySyncCodeEl.textContent = window.apiClient.getSyncCode() || "ZTB-XXXX-XXXX";
+      }
+      const syncErrEl = el("sync-device-error");
+      if (syncErrEl) {
+        syncErrEl.classList.add("hidden");
+        syncErrEl.textContent = "";
+      }
     }
 
     handleSaveFileUpload(file) {
@@ -1267,11 +1372,25 @@
       });
     }
 
-    openNewLifeModal(isFirstFree = false) {
+    openNewLifeModal(isFirstFree = false, isMandatory = null) {
+      const mandatory = isMandatory !== null ? isMandatory : (!localStorage.getItem(SAVE_KEY));
+      this.isFirstRunMandatory = mandatory;
       this.customNameDirty = false;
       const input = el("input-char-name");
-      input.value = "";
-      input.placeholder = `Nhập họ tên bạn muốn (VD: ${generateVietnameseName(this.selectedGender)})...`;
+      const defaultName = generateVietnameseName(this.selectedGender);
+      input.value = defaultName;
+      input.placeholder = `Nhập họ tên bạn muốn (VD: ${defaultName})...`;
+
+      const closeBtn = el("btn-close-new-life");
+      if (closeBtn) {
+        if (mandatory) {
+          closeBtn.style.display = "none";
+          closeBtn.disabled = true;
+        } else {
+          closeBtn.style.display = "";
+          closeBtn.disabled = false;
+        }
+      }
 
       const banner = el("new-life-booster-banner");
       const m = this.monetization;
@@ -1390,6 +1509,7 @@
         this.triggerYearEvent();
       }
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(true);
       this.renderAll();
     }
@@ -1605,6 +1725,7 @@
       );
       this.showToast(`⏳ Đã trừ ${formatVND(quote.cost)} tài sản để lùi về ${this.stats.age} tuổi!`);
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(true);
       this.renderAll();
     }
@@ -1653,6 +1774,7 @@
         if (window.ZTBAudio) window.ZTBAudio.warning();
         if (window.Diorama3D) window.Diorama3D.triggerCelebration("sad");
         this.saveToStorage();
+        if (window.apiClient) window.apiClient.scheduleCloudSync();
         this.publishPlayerToLiveBoard(true);
         this.renderAll();
         this.openGameOverModal();
@@ -1661,8 +1783,13 @@
 
       this.triggerYearEvent();
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(false);
       this.renderAll();
+    }
+
+    advanceYear() {
+      return this.ageUp();
     }
 
     processAnnualCareer() {
@@ -1740,6 +1867,7 @@
           this.stats.socialStatus += 10;
           this.addLog(`🚀 Thăng chức lên ${nextJob.title} (${formatVND(this.stats.monthlyIncome)}/tháng)!`, "milestone");
           this.showToast(`🚀 Thăng chức: ${nextJob.title}!`);
+          if (window.apiClient) window.apiClient.scheduleCloudSync();
         }
       }
 
@@ -2484,6 +2612,7 @@
         if (window.ZTBAudio) window.ZTBAudio.warning();
       }
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(false);
       this.renderAll();
     }
@@ -2497,6 +2626,7 @@
       this.stats.yearsInCurrentJob = 0;
       this.showToast("📄 Đã nộp đơn xin nghỉ việc.");
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(false);
       this.renderAll();
     }
@@ -2558,6 +2688,7 @@
       if (window.ZTBAudio) window.ZTBAudio.coin();
       if (window.Diorama3D) window.Diorama3D.triggerCelebration("coin");
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(false);
       this.renderAll();
     }
@@ -2585,6 +2716,7 @@
       this.showToast(`💰 Đã bán thu ${formatVND(proceeds)} (${pnl})`);
       if (window.ZTBAudio) window.ZTBAudio.coin();
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(false);
       this.renderAll();
     }
@@ -2827,8 +2959,13 @@
       if (window.ZTBAudio) window.ZTBAudio.success();
       if (window.Diorama3D) window.Diorama3D.triggerCelebration("coin");
       this.saveToStorage();
+      if (window.apiClient) window.apiClient.scheduleCloudSync();
       this.publishPlayerToLiveBoard(true);
       this.renderAll();
+    }
+
+    passToHeir(child) {
+      return this.inheritWithChild(child);
     }
 
     openGameOverModal() {
@@ -3849,6 +3986,7 @@
         this.lastSavedLabel = `Đã lưu ${hh}:${mm}`;
         const ind = el("autosave-indicator");
         if (ind) ind.textContent = `✓ ${this.lastSavedLabel}`;
+        if (window.apiClient) window.apiClient.scheduleCloudSync();
       } catch (_) {}
     }
 

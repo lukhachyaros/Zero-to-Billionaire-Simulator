@@ -331,7 +331,7 @@
         <div class="hud-row-top">
           <div class="hud-identity">
             <div class="hud-name-line">
-              <div id="hud-name">Nguyễn Gia Huy</div>
+              <div id="hud-name">Người chơi</div>
               <button type="button" class="inline-edit-btn" id="btn-rename-char" title="Đặt lại tên nhân vật">✏️</button>
               <span class="vip-tag hidden" id="hud-vip-badge">👑 VIP</span>
             </div>
@@ -713,6 +713,17 @@
             <label class="input-label" for="input-save-code">Hoặc dán Mã Sao Lưu (ZTB2:...):</label>
             <textarea class="input-field save-code-box" id="input-save-code" rows="2" placeholder="Dán mã sao lưu ZTB2:... vào đây để khôi phục..."></textarea>
             <button type="button" class="btn-sm btn-green" style="width:100%; margin-top:6px; padding:8px;" id="btn-import-save-code">📥 Khôi Phục Từ Mã</button>
+
+            <!-- Đồng Bộ Từ Thiết Bị Khác (Mã Đồng Bộ) -->
+            <div class="section-title" style="margin-top:12px;"><span>Đồng Bộ Từ Thiết Bị Khác (Mã Đồng Bộ)</span></div>
+            <div class="save-slot-card" style="border-color:rgba(59,130,246,0.35); background:rgba(30,58,138,0.15);">
+              <div style="font-size:11.5px; color:#cbd5e1; margin-bottom:6px;">Nhập mã <strong>ZTB-XXXX-XXXX</strong> từ thiết bị khác để tải tiến trình:</div>
+              <div style="display:flex; gap:6px;">
+                <input type="text" class="input-field" id="input-sync-code" placeholder="Nhập mã ZTB-XXXX-XXXX..." maxlength="14" style="flex:1; text-transform:uppercase; font-family:monospace; letter-spacing:1px;" />
+                <button type="button" class="btn-sm btn-primary" id="btn-sync-device" style="white-space:nowrap; padding:0 14px; font-weight:700;">🔄 Đồng Bộ Ngay</button>
+              </div>
+              <div id="sync-device-error" class="modal-sub hidden" style="color:#f87171; margin-top:6px; font-size:11px;"></div>
+            </div>
           </div>
 
           <!-- TAB 2: LƯU TIẾN TRÌNH (SAVE GAME) -->
@@ -728,6 +739,21 @@
               <div style="display:flex; gap:8px; margin-top:8px;">
                 <button type="button" class="btn-sm btn-gold" style="flex:1; padding:9px; font-weight:800;" id="btn-manual-save">💾 Lưu Đè Vào Auto-Save</button>
                 <button type="button" class="btn-sm btn-ghost" id="btn-open-profile-stats">📊 14 Chỉ Số</button>
+              </div>
+            </div>
+
+            <!-- Đồng Bộ Đám Mây & Mã Thiết Bị -->
+            <div class="save-slot-card" style="margin-top:10px; border-color:rgba(59,130,246,0.35); background:rgba(30,58,138,0.15);">
+              <div class="save-slot-head">
+                <span class="slot-badge" style="background:rgba(59,130,246,0.25); color:#93c5fd;">☁️ ĐỒNG BỘ ĐÁM MÂY</span>
+                <span id="cloud-sync-status" style="font-size:10px; font-weight:700; color:#34d399;">🟢 Đã đồng bộ đám mây</span>
+              </div>
+              <div class="save-slot-body" style="margin-top:4px;">
+                🔑 Mã Đồng Bộ Thiết Bị: <strong id="display-sync-code" style="color:#60a5fa; letter-spacing:1px; font-family:monospace;">ZTB-XXXX-XXXX</strong>
+                <div style="font-size:11px; color:#94a3b8; margin-top:2px;">Dùng mã này trên thiết bị khác để tiếp tục cuộc đời mà không cần xuất file.</div>
+              </div>
+              <div style="margin-top:8px;">
+                <button type="button" class="btn-sm btn-ghost" style="width:100%; padding:8px;" id="btn-copy-sync-code">📋 Sao Chép Mã</button>
               </div>
             </div>
 
@@ -787,6 +813,7 @@
   <script src="audio.js?v=4"></script>
   <script src="vendor/three.min.js?v=4"></script>
   <script src="diorama3d.js?v=4"></script>
+  <script src="api_client.js?v=4"></script>
   <script src="game.js?v=4"></script>
 </body>
 </html>

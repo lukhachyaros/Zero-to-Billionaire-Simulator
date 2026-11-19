@@ -77,7 +77,7 @@ namespace ZeroToBillionaire.Core
                 }
             }
 
-            StartNewLife("Nguyễn Gia Huy", "Nam", "bg_working_class");
+            StartNewLife("Người chơi", "Nam", "bg_working_class");
         }
 
         private void EnsureSubsystems()

@@ -38,7 +38,7 @@ namespace ZeroToBillionaire.Core
         public int generation = 1;
         public string backgroundId = "bg_working_class";
         public string backgroundName = "Gia Đình Lao Động Bình Dân";
-        public string characterName = "Nguyễn Gia Huy";
+        public string characterName = "Người chơi";
         public string gender = "Nam";
         public int age = 0;
         public bool isAlive = true;
