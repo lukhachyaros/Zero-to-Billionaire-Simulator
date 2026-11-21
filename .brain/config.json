@@ -1,0 +1,22 @@
+{
+  "ignore_globs": [
+    "node_modules/**",
+    ".git/**",
+    "__pycache__/**",
+    "*.pyc",
+    ".brain/**",
+    ".test_tmp/**",
+    "*.lock"
+  ],
+  "languages": {
+    "html": true,
+    "js": true,
+    "jsx": true,
+    "php": true,
+    "py": true,
+    "ts": true,
+    "tsx": true
+  },
+  "max_tokens": 2000,
+  "schema_version": 1
+}

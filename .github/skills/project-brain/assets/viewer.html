@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Brain — Knowledge Graph Viewer</title>
+  <style>
+    :root {
+      --bg-canvas: #0b0f19; --bg-panel: rgba(18, 24, 38, 0.94); --bg-panel-solid: #121826;
+      --bg-surface: #1e2638; --bg-surface-hover: #2a344d; --bg-input: #151b2b;
+      --border-subtle: #252f47; --border-strong: #3b4968; --text-main: #f1f5f9;
+      --text-muted: #94a3b8; --text-dim: #64748b; --accent: #38bdf8; --accent-hover: #0ea5e9;
+      --accent-subtle: rgba(56, 189, 248, 0.15); --danger: #ef4444; --success: #22c55e;
+      --warning: #f59e0b; --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.55);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.35); --tooltip-bg: rgba(15, 23, 42, 0.96);
+      --radius-sm: 4px; --radius-md: 8px; --radius-lg: 12px; --radius-pill: 9999px;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    [data-theme="light"] {
+      --bg-canvas: #f8fafc; --bg-panel: rgba(255, 255, 255, 0.95); --bg-panel-solid: #ffffff;
+      --bg-surface: #f1f5f9; --bg-surface-hover: #e2e8f0; --bg-input: #ffffff;
+      --border-subtle: #e2e8f0; --border-strong: #cbd5e1; --text-main: #0f172a;
+      --text-muted: #475569; --text-dim: #94a3b8; --accent: #0284c7; --accent-hover: #0369a1;
+      --accent-subtle: rgba(2, 132, 199, 0.12); --danger: #dc2626; --success: #16a34a;
+      --warning: #d97706; --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.12);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06); --tooltip-bg: rgba(255, 255, 255, 0.98);
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg-canvas: #f8fafc; --bg-panel: rgba(255, 255, 255, 0.95); --bg-panel-solid: #ffffff;
+        --bg-surface: #f1f5f9; --bg-surface-hover: #e2e8f0; --bg-input: #ffffff;
+        --border-subtle: #e2e8f0; --border-strong: #cbd5e1; --text-main: #0f172a;
+        --text-muted: #475569; --text-dim: #94a3b8; --accent: #0284c7; --accent-hover: #0369a1;
+        --accent-subtle: rgba(2, 132, 199, 0.12); --danger: #dc2626; --success: #16a34a;
+        --warning: #d97706; --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.12);
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06); --tooltip-bg: rgba(255, 255, 255, 0.98);
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-font-smoothing: antialiased; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font-sans); font-size: 13px; line-height: 1.4; color: var(--text-main); background-color: var(--bg-canvas); user-select: none; }
+    #app { display: flex; flex-direction: column; width: 100vw; height: 100vh; position: relative; }
+    header { z-index: 20; display: flex; flex-direction: column; background: var(--bg-panel); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-subtle); box-shadow: var(--shadow-sm); }
+    .top-bar { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; gap: 12px; border-bottom: 1px solid var(--border-subtle); }
+    .brand-section { display: flex; align-items: center; gap: 10px; }
+    .brand-icon { width: 26px; height: 26px; border-radius: var(--radius-sm); background: linear-gradient(135deg, #38bdf8, #818cf8); display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 700; font-size: 14px; box-shadow: 0 2px 6px rgba(56, 189, 248, 0.4); }
+    .brand-title { font-weight: 700; font-size: 14px; letter-spacing: -0.01em; display: flex; align-items: center; gap: 6px; }
+    .brand-title span.tag { font-size: 10px; font-weight: 600; padding: 1px 6px; background: var(--accent-subtle); color: var(--accent); border-radius: var(--radius-pill); text-transform: uppercase; letter-spacing: 0.05em; }
+    .search-wrapper { position: relative; flex: 1; max-width: 460px; display: flex; align-items: center; }
+    .search-icon { position: absolute; left: 10px; color: var(--text-dim); pointer-events: none; display: flex; align-items: center; }
+    .search-input { width: 100%; height: 32px; padding: 0 32px; border-radius: var(--radius-md); border: 1px solid var(--border-subtle); background: var(--bg-input); color: var(--text-main); font-size: 13px; outline: none; transition: all 0.15s ease; }
+    .search-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-subtle); }
+    .search-clear-btn { position: absolute; right: 8px; background: none; border: none; color: var(--text-dim); cursor: pointer; display: none; align-items: center; justify-content: center; width: 18px; height: 18px; border-radius: 50%; }
+    .search-clear-btn:hover { background: var(--bg-surface-hover); color: var(--text-main); }
+    .search-input:not(:placeholder-shown) + .search-clear-btn { display: flex; }
+    .search-kbd-hint { position: absolute; right: 10px; font-size: 11px; font-family: var(--font-mono); color: var(--text-dim); background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 1px 5px; border-radius: var(--radius-sm); pointer-events: none; }
+    .search-input:not(:placeholder-shown) ~ .search-kbd-hint { display: none; }
+    .actions-section { display: flex; align-items: center; gap: 8px; }
+    .stats-badge { display: flex; align-items: center; gap: 10px; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 4px 10px; border-radius: var(--radius-md); font-size: 11.5px; font-family: var(--font-mono); color: var(--text-muted); white-space: nowrap; }
+    .stats-badge strong { color: var(--text-main); }
+    .live-indicator { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 0 4px; }
+    .live-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--success); box-shadow: 0 0 6px var(--success); animation: live-pulse 2s infinite ease-in-out; }
+    .live-dot.offline { background: var(--danger); box-shadow: none; animation: none; }
+    @keyframes live-pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 32px; padding: 0 10px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-main); font-size: 12.5px; font-weight: 500; cursor: pointer; transition: all 0.15s ease; white-space: nowrap; }
+    .btn:hover { background: var(--bg-surface-hover); border-color: var(--border-strong); }
+    .btn:active { transform: scale(0.98); }
+    .btn-icon { width: 32px; padding: 0; }
+    .btn-accent { background: var(--accent); color: #fff; border-color: var(--accent); }
+    .btn-accent:hover { background: var(--accent-hover); border-color: var(--accent-hover); }
+    .filters-bar { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 6px 16px; font-size: 12px; background: var(--bg-surface); }
+    .filter-group { display: flex; align-items: center; gap: 8px; }
+    .filter-label { font-weight: 600; color: var(--text-dim); text-transform: uppercase; font-size: 10px; letter-spacing: 0.05em; }
+    .filter-items { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .chip-checkbox { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: var(--radius-pill); background: var(--bg-panel); border: 1px solid var(--border-subtle); cursor: pointer; font-size: 11.5px; color: var(--text-muted); transition: all 0.15s ease; user-select: none; }
+    .chip-checkbox:hover { border-color: var(--border-strong); color: var(--text-main); }
+    .chip-checkbox input[type="checkbox"] { display: none; }
+    .chip-checkbox.active { background: var(--accent-subtle); border-color: var(--accent); color: var(--text-main); font-weight: 500; }
+    .chip-dot { width: 7px; height: 7px; border-radius: 50%; }
+    .filter-select { height: 26px; padding: 0 24px 0 8px; background: var(--bg-panel); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); color: var(--text-main); font-size: 11.5px; outline: none; cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%2364748b' d='M0 0l5 6 5-6z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 8px center; }
+    .filter-select:focus { border-color: var(--accent); }
+    .viewport-container { position: relative; flex: 1; width: 100%; height: 100%; overflow: hidden; }
+    #graph-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: block; cursor: grab; }
+    #graph-canvas:active { cursor: grabbing; }
+    .viewport-controls { position: absolute; top: 14px; left: 14px; display: flex; flex-direction: column; gap: 6px; z-index: 10; }
+    .legend-panel { position: absolute; bottom: 14px; left: 14px; background: var(--bg-panel); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 10px 14px; box-shadow: var(--shadow-sm); z-index: 10; max-width: 260px; transition: all 0.2s ease; }
+    .legend-panel.collapsed .legend-body { display: none; }
+    .legend-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; font-weight: 600; font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.05em; }
+    .legend-body { margin-top: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 12px; font-size: 11.5px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; color: var(--text-muted); }
+    .legend-item-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+    #canvas-tooltip { position: absolute; display: none; z-index: 100; pointer-events: none; background: var(--tooltip-bg); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border: 1px solid var(--border-strong); padding: 8px 12px; border-radius: var(--radius-md); box-shadow: var(--shadow-lg); font-size: 12px; max-width: 320px; transform: translate(-50%, -100%); margin-top: -12px; transition: opacity 0.1s ease; }
+    #canvas-tooltip .tt-title { font-weight: 600; color: var(--text-main); margin-bottom: 2px; word-break: break-word; }
+    #canvas-tooltip .tt-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    #canvas-tooltip .tt-badge { display: inline-block; padding: 1px 6px; border-radius: var(--radius-pill); font-weight: 600; font-size: 10px; }
+    #empty-state { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-panel); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: 32px 40px; text-align: center; box-shadow: var(--shadow-lg); max-width: 440px; display: none; z-index: 15; }
+    #empty-state .empty-icon { font-size: 38px; margin-bottom: 12px; }
+    #empty-state h3 { font-size: 17px; font-weight: 600; margin-bottom: 8px; color: var(--text-main); }
+    #empty-state p { color: var(--text-muted); font-size: 13px; margin-bottom: 16px; line-height: 1.5; }
+    #empty-state code { display: block; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 8px 12px; border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 12px; color: var(--accent); margin-bottom: 16px; }
+    #detail-panel { position: absolute; top: 0; right: 0; bottom: 0; width: 360px; background: var(--bg-panel); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-left: 1px solid var(--border-subtle); box-shadow: var(--shadow-lg); z-index: 30; display: flex; flex-direction: column; transform: translateX(100%); transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+    #detail-panel.open { transform: translateX(0); }
+    .detail-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--border-subtle); }
+    .detail-header h2 { font-size: 14px; font-weight: 600; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+    .detail-close-btn { background: none; border: none; color: var(--text-muted); cursor: pointer; width: 28px; height: 28px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; }
+    .detail-close-btn:hover { background: var(--bg-surface-hover); color: var(--text-main); }
+    .detail-content { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; user-select: text; }
+    .detail-id-box { display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 6px 10px; border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 12px; color: var(--text-muted); word-break: break-all; }
+    .copy-btn { background: none; border: none; color: var(--text-dim); cursor: pointer; padding: 2px 4px; border-radius: var(--radius-sm); font-size: 11px; margin-left: 6px; flex-shrink: 0; }
+    .copy-btn:hover { color: var(--accent); background: var(--bg-surface-hover); }
+    .badges-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
+    .status-badge { background: var(--bg-surface); border: 1px solid var(--border-strong); color: var(--text-muted); }
+    .status-badge.status-stale { border-style: dashed; color: var(--warning); border-color: var(--warning); }
+    .status-badge.status-superseded { opacity: 0.6; }
+    .status-badge.status-done { color: var(--success); border-color: var(--success); }
+    .detail-section-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-dim); margin-bottom: 6px; }
+    .detail-text { font-size: 13px; color: var(--text-main); line-height: 1.5; word-break: break-word; }
+    .detail-summary-box { background: var(--bg-surface); border-left: 3px solid var(--accent); padding: 10px 12px; border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 12.5px; line-height: 1.5; }
+    .tags-container { display: flex; flex-wrap: wrap; gap: 4px; }
+    .tag-chip { background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 2px 8px; border-radius: var(--radius-pill); font-size: 11px; color: var(--text-muted); }
+    .edges-list { display: flex; flex-direction: column; gap: 6px; }
+    .edge-item { display: flex; align-items: center; justify-content: space-between; background: var(--bg-surface); border: 1px solid var(--border-subtle); padding: 6px 10px; border-radius: var(--radius-md); cursor: pointer; transition: all 0.15s ease; font-size: 12px; }
+    .edge-item:hover { background: var(--bg-surface-hover); border-color: var(--accent); transform: translateX(2px); }
+    .edge-item-info { display: flex; flex-direction: column; gap: 2px; overflow: hidden; }
+    .edge-item-title { font-weight: 500; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .edge-item-type { font-size: 10px; font-weight: 600; color: var(--text-dim); text-transform: uppercase; }
+    .detail-actions { display: flex; gap: 8px; padding-top: 8px; border-top: 1px solid var(--border-subtle); }
+    footer { z-index: 20; display: flex; align-items: center; padding: 8px 16px; gap: 16px; background: var(--bg-panel); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-top: 1px solid var(--border-subtle); box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.15); }
+    .timeline-playback { display: flex; align-items: center; gap: 6px; }
+    .timeline-slider-wrapper { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+    .timeline-slider-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--text-dim); font-family: var(--font-mono); }
+    .timeline-slider { -webkit-appearance: none; width: 100%; height: 6px; border-radius: var(--radius-pill); background: var(--bg-surface); outline: none; cursor: pointer; position: relative; }
+    .timeline-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: ew-resize; transition: transform 0.1s ease; }
+    .timeline-slider::-webkit-slider-thumb:hover { transform: scale(1.2); }
+    .timeline-slider::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4); cursor: ew-resize; }
+    .timeline-current-label { min-width: 150px; text-align: right; font-family: var(--font-mono); font-size: 11.5px; color: var(--text-muted); white-space: nowrap; }
+    .timeline-current-label strong { color: var(--text-main); }
+    .toast-notification { position: fixed; bottom: 60px; right: 20px; background: var(--accent); color: #fff; padding: 8px 14px; border-radius: var(--radius-md); font-size: 12px; font-weight: 500; z-index: 9999; box-shadow: var(--shadow-lg); transition: opacity 0.2s ease; }
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .modal-backdrop.open { display: flex; }
+    .modal-card { background: var(--bg-panel-solid); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); width: 90%; max-width: 440px; box-shadow: var(--shadow-lg); padding: 20px; }
+    .modal-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .shortcuts-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin-bottom: 16px; }
+    .shortcuts-table td { padding: 6px 0; border-bottom: 1px solid var(--border-subtle); }
+    .shortcuts-table kbd { background: var(--bg-surface); border: 1px solid var(--border-strong); padding: 2px 6px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 11px; }
+    @media (max-width: 768px) {
+      .filters-bar { overflow-x: auto; white-space: nowrap; padding-bottom: 8px; }
+      #detail-panel { width: 100%; }
+      .brand-title span.tag, .stats-badge { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <header>
+      <div class="top-bar">
+        <div class="brand-section">
+          <div class="brand-icon">🧠</div>
+          <div class="brand-title">Project Brain <span class="tag">Viewer</span></div>
+        </div>
+        <div class="search-wrapper">
+          <span class="search-icon">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search by ID, title, summary, tags..." autocomplete="off" spellcheck="false" />
+          <button id="search-clear" class="search-clear-btn" title="Clear search">✕</button>
+          <span class="search-kbd-hint">/</span>
+        </div>
+        <div class="actions-section">
+          <div class="stats-badge" id="stats-badge" title="Graph statistics">
+            <span>Nodes: <strong id="stat-nodes">0</strong></span>
+            <span>Edges: <strong id="stat-edges">0</strong></span>
+          </div>
+          <div class="live-indicator" id="live-indicator" title="Live Polling Status">
+            <span class="live-dot" id="live-dot"></span>
+            <span id="live-text">Live</span>
+          </div>
+          <button id="theme-toggle" class="btn btn-icon" title="Toggle Dark/Light Mode"><span id="theme-icon">☀️</span></button>
+          <button id="btn-shortcuts" class="btn btn-icon" title="Keyboard Shortcuts (?)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </button>
+        </div>
+      </div>
+      <div class="filters-bar">
+        <div class="filter-group">
+          <span class="filter-label">Types</span>
+          <div class="filter-items" id="node-type-filters"></div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Status</span>
+          <div class="filter-items" id="node-status-filters"></div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Tag</span>
+          <select id="filter-tag-select" class="filter-select"><option value="">All Tags</option></select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Agent</span>
+          <select id="filter-agent-select" class="filter-select"><option value="">All Agents</option></select>
+        </div>
+        <button id="btn-reset-filters" class="btn" style="height: 24px; padding: 0 8px; font-size: 11px;">Reset Filters</button>
+      </div>
+    </header>
+
+    <div class="viewport-container" id="viewport-container">
+      <canvas id="graph-canvas"></canvas>
+      <div class="viewport-controls">
+        <button id="btn-zoom-in" class="btn btn-icon" title="Zoom In (+)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <button id="btn-zoom-out" class="btn btn-icon" title="Zoom Out (-)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg></button>
+        <button id="btn-fit-view" class="btn btn-icon" title="Fit to View (F)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg></button>
+        <button id="btn-reheat" class="btn btn-icon" title="Reheat Layout Simulation"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg></button>
+      </div>
+
+      <div class="legend-panel" id="legend-panel">
+        <div class="legend-header" id="legend-toggle"><span>Legend</span><span id="legend-arrow">▾</span></div>
+        <div class="legend-body" id="legend-body"></div>
+      </div>
+
+      <div id="canvas-tooltip">
+        <div class="tt-title" id="tt-title"></div>
+        <div class="tt-meta"><span class="tt-badge" id="tt-type"></span><span id="tt-degree"></span></div>
+      </div>
+
+      <div id="empty-state">
+        <div class="empty-icon">🕸️</div>
+        <h3>No data yet</h3>
+        <p>No graph nodes found. Run brain.py scan to populate the knowledge graph.</p>
+        <code>python scripts/brain.py scan</code>
+        <div style="display: flex; gap: 8px; justify-content: center;">
+          <button id="btn-load-demo" class="btn btn-accent">Load Demo Graph</button>
+        </div>
+      </div>
+
+      <div id="detail-panel">
+        <div class="detail-header">
+          <h2 id="detail-pane-title">Node Details</h2>
+          <button id="detail-close-btn" class="detail-close-btn" title="Close Panel (Esc)">✕</button>
+        </div>
+        <div class="detail-content" id="detail-content"></div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="timeline-playback">
+        <button id="btn-timeline-reset" class="btn btn-icon" title="Reset Timeline"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5"></line></svg></button>
+        <button id="btn-timeline-play" class="btn btn-icon" title="Play / Pause (Space)">
+          <svg id="play-icon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          <svg id="pause-icon" style="display:none;" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        </button>
+      </div>
+      <div class="timeline-slider-wrapper">
+        <div class="timeline-slider-labels"><span id="timeline-label-start">Earliest</span><span id="timeline-label-end">Latest</span></div>
+        <input type="range" id="timeline-slider" class="timeline-slider" min="0" max="100" value="100" step="0.1" />
+      </div>
+      <div class="timeline-current-label">Timeline: <strong id="timeline-current-date">Present</strong></div>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="modal-shortcuts">
+    <div class="modal-card">
+      <h3>Keyboard Shortcuts <button id="modal-shortcuts-close" class="detail-close-btn">✕</button></h3>
+      <table class="shortcuts-table">
+        <tr><td><kbd>/</kbd></td><td>Focus search bar</td></tr>
+        <tr><td><kbd>Esc</kbd></td><td>Clear search / Deselect / Exit focus</td></tr>
+        <tr><td><kbd>Space</kbd></td><td>Play / Pause timeline playback</td></tr>
+        <tr><td><kbd>F</kbd></td><td>Fit entire graph to view</td></tr>
+        <tr><td><kbd>+</kbd> / <kbd>-</kbd></td><td>Zoom in / Zoom out</td></tr>
+        <tr><td><kbd>0</kbd></td><td>Reset zoom and center</td></tr>
+        <tr><td><kbd>Double-Click Node</kbd></td><td>Focus 2-hop neighborhood & unpin</td></tr>
+        <tr><td><kbd>Drag Node</kbd></td><td>Move and pin node position</td></tr>
+      </table>
+      <div style="text-align: right;"><button id="modal-shortcuts-ok" class="btn btn-accent">Got it</button></div>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    'use strict';
+    const NODE_COLORS = {
+      file: '#4FC3F7', module: '#81C784', concept: '#FFB74D', decision: '#E57373',
+      thought: '#BA68C8', task: '#FFF176', bug: '#FF8A65', test: '#4DB6AC'
+    };
+    const EDGE_COLORS = {
+      imports: '#38bdf8', depends_on: '#94a3b8', implements: '#4ade80', tests: '#2dd4bf',
+      caused_by: '#fb923c', fixes: '#a3e635', supersedes: '#f87171', relates_to: '#a78bfa',
+      derived_from: '#c084fc', default: '#64748b'
+    };
+    const NODE_TYPES = ['file', 'module', 'concept', 'decision', 'thought', 'task', 'bug', 'test'];
+    const NODE_STATUSES = ['active', 'stale', 'superseded', 'done'];
+
+        const state = {
+      nodes: [], edges: [], nodeMap: new Map(), edgeMap: new Map(),
+      activeTypeFilters: new Set(NODE_TYPES), activeStatusFilters: new Set(NODE_STATUSES),
+      activeTagFilter: '', activeAgentFilter: '', searchQuery: '',
+      filteredNodeIds: new Set(), matchingSearchIds: new Set(),
+      selectedNode: null, selectedEdge: null,
+      focusedNeighborhoodNodeId: null, focusedNeighborhoodSet: null,
+      hoveredNode: null, hoveredEdge: null,
+      timeRange: { min: 0, max: Date.now() }, timelineValue: 100, timelineCutoff: Date.now(),
+      isTimelinePlaying: false, timelinePlaySpeed: 0.25,
+      transform: { x: 0, y: 0, zoom: 1.0, minZoom: 0.1, maxZoom: 10.0 },
+      isPanning: false, draggedNode: null, panStart: { x: 0, y: 0 },
+      mouseScreen: { x: 0, y: 0 }, mouseWorld: { x: 0, y: 0 }, hasDragged: false,
+      sim: {
+        alpha: 1.0, alphaTarget: 0, alphaDecay: 0.012, alphaMin: 0.002,
+        velocityDecay: 0.90, idealDistance: 70, repulsionStrength: 4500,
+        centeringStrength: 0.0035, gridCellSize: 140, frameCount: 0
+      },
+      lastPollTimestamp: null, pollIntervalMs: 1500, isPollingActive: true, pollTimer: null,
+      theme: 'dark', devicePixelRatio: window.devicePixelRatio || 1
+    };
+
+    const els = {
+      canvas: document.getElementById('graph-canvas'), container: document.getElementById('viewport-container'),
+      searchInput: document.getElementById('search-input'), searchClear: document.getElementById('search-clear'),
+      nodeTypeFilters: document.getElementById('node-type-filters'), nodeStatusFilters: document.getElementById('node-status-filters'),
+      filterTagSelect: document.getElementById('filter-tag-select'), filterAgentSelect: document.getElementById('filter-agent-select'),
+      btnResetFilters: document.getElementById('btn-reset-filters'), statNodes: document.getElementById('stat-nodes'),
+      statEdges: document.getElementById('stat-edges'), liveDot: document.getElementById('live-dot'), liveText: document.getElementById('live-text'),
+      themeToggle: document.getElementById('theme-toggle'), themeIcon: document.getElementById('theme-icon'),
+      tooltip: document.getElementById('canvas-tooltip'), ttTitle: document.getElementById('tt-title'),
+      ttType: document.getElementById('tt-type'), ttDegree: document.getElementById('tt-degree'),
+      emptyState: document.getElementById('empty-state'), btnLoadDemo: document.getElementById('btn-load-demo'),
+      detailPanel: document.getElementById('detail-panel'), detailContent: document.getElementById('detail-content'),
+      detailPaneTitle: document.getElementById('detail-pane-title'), detailCloseBtn: document.getElementById('detail-close-btn'),
+      timelineSlider: document.getElementById('timeline-slider'), timelinePlayBtn: document.getElementById('btn-timeline-play'),
+      timelineResetBtn: document.getElementById('btn-timeline-reset'), timelineLabelStart: document.getElementById('timeline-label-start'),
+      timelineLabelEnd: document.getElementById('timeline-label-end'), timelineCurrentDate: document.getElementById('timeline-current-date'),
+      playIcon: document.getElementById('play-icon'), pauseIcon: document.getElementById('pause-icon'),
+      btnZoomIn: document.getElementById('btn-zoom-in'), btnZoomOut: document.getElementById('btn-zoom-out'),
+      btnFitView: document.getElementById('btn-fit-view'), btnReheat: document.getElementById('btn-reheat'),
+      legendPanel: document.getElementById('legend-panel'), legendToggle: document.getElementById('legend-toggle'),
+      legendBody: document.getElementById('legend-body'), legendArrow: document.getElementById('legend-arrow'),
+      btnShortcuts: document.getElementById('btn-shortcuts'), modalShortcuts: document.getElementById('modal-shortcuts'),
+      modalShortcutsClose: document.getElementById('modal-shortcuts-close'), modalShortcutsOk: document.getElementById('modal-shortcuts-ok')
+    };
+    const ctx = els.canvas.getContext('2d');
+
+    function init() {
+      initTheme();
+      initUI();
+      initCanvasEvents();
+      initKeyboardShortcuts();
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+      requestAnimationFrame(mainLoop);
+      fetchGraphData(false);
+      startPolling();
+    }
+
+    function initTheme() {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      state.theme = prefersDark ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', state.theme);
+      updateThemeIcon();
+      els.themeToggle.addEventListener('click', () => {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', state.theme);
+        updateThemeIcon();
+      });
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+        state.theme = e.matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', state.theme);
+        updateThemeIcon();
+      });
+    }
+
+    function updateThemeIcon() {
+      els.themeIcon.textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    }
+
+    function initUI() {
+      els.nodeTypeFilters.innerHTML = '';
+      NODE_TYPES.forEach(type => {
+        const label = document.createElement('label');
+        label.className = 'chip-checkbox active';
+        label.innerHTML = `<input type="checkbox" checked value="${type}"><span class="chip-dot" style="background:${NODE_COLORS[type]}"></span>${type}`;
+        const cb = label.querySelector('input');
+        cb.addEventListener('change', () => {
+          if (cb.checked) { state.activeTypeFilters.add(type); label.classList.add('active'); }
+          else { state.activeTypeFilters.delete(type); label.classList.remove('active'); }
+          applyFilters();
+        });
+        els.nodeTypeFilters.appendChild(label);
+      });
+      els.nodeStatusFilters.innerHTML = '';
+      NODE_STATUSES.forEach(status => {
+        const label = document.createElement('label');
+        label.className = 'chip-checkbox active';
+        label.innerHTML = `<input type="checkbox" checked value="${status}">${status}`;
+        const cb = label.querySelector('input');
+        cb.addEventListener('change', () => {
+          if (cb.checked) { state.activeStatusFilters.add(status); label.classList.add('active'); }
+          else { state.activeStatusFilters.delete(status); label.classList.remove('active'); }
+          applyFilters();
+        });
+        els.nodeStatusFilters.appendChild(label);
+      });
+      els.legendBody.innerHTML = '';
+      NODE_TYPES.forEach(type => {
+        const item = document.createElement('div');
+        item.className = 'legend-item';
+        item.innerHTML = `<span class="legend-item-dot" style="background:${NODE_COLORS[type]}"></span><span>${type}</span>`;
+        els.legendBody.appendChild(item);
+      });
+      els.legendToggle.addEventListener('click', () => {
+        els.legendPanel.classList.toggle('collapsed');
+        els.legendArrow.textContent = els.legendPanel.classList.contains('collapsed') ? '▸' : '▾';
+      });
+      els.searchInput.addEventListener('input', (e) => {
+        state.searchQuery = e.target.value.trim().toLowerCase();
+        applyFilters();
+      });
+      els.searchClear.addEventListener('click', () => {
+        els.searchInput.value = '';
+        state.searchQuery = '';
+        applyFilters();
+        els.searchInput.focus();
+      });
+      els.filterTagSelect.addEventListener('change', (e) => {
+        state.activeTagFilter = e.target.value;
+        applyFilters();
+      });
+      els.filterAgentSelect.addEventListener('change', (e) => {
+        state.activeAgentFilter = e.target.value;
+        applyFilters();
+      });
+      els.btnResetFilters.addEventListener('click', resetAllFilters);
+      els.timelineSlider.addEventListener('input', (e) => {
+        state.timelineValue = parseFloat(e.target.value);
+        updateTimelineCutoff();
+        applyFilters();
+      });
+      els.timelinePlayBtn.addEventListener('click', toggleTimelinePlay);
+      els.timelineResetBtn.addEventListener('click', () => {
+        state.timelineValue = 0;
+        els.timelineSlider.value = '0';
+        updateTimelineCutoff();
+        applyFilters();
+      });
+      els.btnZoomIn.addEventListener('click', () => zoomBy(1.25));
+      els.btnZoomOut.addEventListener('click', () => zoomBy(0.8));
+      els.btnFitView.addEventListener('click', fitGraphToView);
+      els.btnReheat.addEventListener('click', () => reheatSimulation(0.6));
+      els.detailCloseBtn.addEventListener('click', closeDetailPanel);
+      els.btnShortcuts.addEventListener('click', () => els.modalShortcuts.classList.add('open'));
+      els.modalShortcutsClose.addEventListener('click', () => els.modalShortcuts.classList.remove('open'));
+      els.modalShortcutsOk.addEventListener('click', () => els.modalShortcuts.classList.remove('open'));
+      els.modalShortcuts.addEventListener('click', (e) => {
+        if (e.target === els.modalShortcuts) els.modalShortcuts.classList.remove('open');
+      });
+      els.btnLoadDemo.addEventListener('click', loadDemoDataset);
+    }
+
+        function resetAllFilters() {
+      state.activeTypeFilters = new Set(NODE_TYPES); state.activeStatusFilters = new Set(NODE_STATUSES);
+      state.activeTagFilter = ''; state.activeAgentFilter = ''; state.searchQuery = '';
+      state.focusedNeighborhoodNodeId = null; state.focusedNeighborhoodSet = null;
+      els.searchInput.value = ''; els.filterTagSelect.value = ''; els.filterAgentSelect.value = '';
+      document.querySelectorAll('#node-type-filters .chip-checkbox').forEach(c => { c.classList.add('active'); c.querySelector('input').checked = true; });
+      document.querySelectorAll('#node-status-filters .chip-checkbox').forEach(c => { c.classList.add('active'); c.querySelector('input').checked = true; });
+      state.timelineValue = 100; els.timelineSlider.value = '100'; updateTimelineCutoff(); applyFilters();
+    }
+
+        function resizeCanvas() {
+      const rect = els.container.getBoundingClientRect();
+      state.devicePixelRatio = window.devicePixelRatio || 1;
+      els.canvas.width = rect.width * state.devicePixelRatio; els.canvas.height = rect.height * state.devicePixelRatio;
+      els.canvas.style.width = `${rect.width}px`; els.canvas.style.height = `${rect.height}px`;
+    }
+
+    function getCanvasCoordinates(e) {
+      const rect = els.canvas.getBoundingClientRect();
+      const screenX = e.clientX - rect.left, screenY = e.clientY - rect.top;
+      const worldX = (screenX - state.transform.x) / state.transform.zoom, worldY = (screenY - state.transform.y) / state.transform.zoom;
+      return { screenX, screenY, worldX, worldY };
+    }
+
+    function initCanvasEvents() {
+      const canvas = els.canvas;
+      canvas.addEventListener('mousedown', onMouseDown);
+      window.addEventListener('mousemove', onMouseMove);
+      window.addEventListener('mouseup', onMouseUp);
+      canvas.addEventListener('wheel', onWheel, { passive: false });
+      canvas.addEventListener('dblclick', onDoubleClick);
+      canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+      canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+      canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+    }
+
+    function onMouseDown(e) {
+      if (e.button !== 0) return;
+      const coords = getCanvasCoordinates(e);
+      state.mouseScreen = { x: coords.screenX, y: coords.screenY };
+      state.mouseWorld = { x: coords.worldX, y: coords.worldY };
+      state.hasDragged = false;
+      const hitNode = findNodeAt(coords.worldX, coords.worldY);
+      if (hitNode) {
+        state.draggedNode = hitNode;
+        hitNode.pinned = true;
+        reheatSimulation(0.3);
+      } else {
+        state.isPanning = true;
+        state.panStart = {
+          x: coords.screenX - state.transform.x,
+          y: coords.screenY - state.transform.y
+        };
+      }
+    }
+
+    function onMouseMove(e) {
+      const coords = getCanvasCoordinates(e);
+      const dx = coords.screenX - state.mouseScreen.x;
+      const dy = coords.screenY - state.mouseScreen.y;
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) state.hasDragged = true;
+      state.mouseScreen = { x: coords.screenX, y: coords.screenY };
+      state.mouseWorld = { x: coords.worldX, y: coords.worldY };
+      if (state.draggedNode) {
+        state.draggedNode.x = coords.worldX;
+        state.draggedNode.y = coords.worldY;
+        state.draggedNode.vx = 0;
+        state.draggedNode.vy = 0;
+        reheatSimulation(0.2);
+        return;
+      }
+      if (state.isPanning) {
+        state.transform.x = coords.screenX - state.panStart.x;
+        state.transform.y = coords.screenY - state.panStart.y;
+        return;
+      }
+      handleHover(coords.worldX, coords.worldY, coords.screenX, coords.screenY);
+    }
+
+    function onMouseUp(e) {
+      if (state.draggedNode) state.draggedNode = null;
+      state.isPanning = false;
+      if (!state.hasDragged) {
+        const coords = getCanvasCoordinates(e);
+        const hitNode = findNodeAt(coords.worldX, coords.worldY);
+        if (hitNode) {
+          selectNode(hitNode);
+        } else {
+          const hitEdge = findEdgeAt(coords.worldX, coords.worldY);
+          if (hitEdge) selectEdge(hitEdge);
+          else deselectAll();
+        }
+      }
+    }
+
+        function onWheel(e) {
+      e.preventDefault();
+      const rect = els.canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left, mouseY = e.clientY - rect.top;
+      const zoomFactor = e.deltaY < 0 ? 1.15 : (1 / 1.15);
+      const newZoom = Math.max(state.transform.minZoom, Math.min(state.transform.maxZoom, state.transform.zoom * zoomFactor));
+      state.transform.x = mouseX - (mouseX - state.transform.x) * (newZoom / state.transform.zoom);
+      state.transform.y = mouseY - (mouseY - state.transform.y) * (newZoom / state.transform.zoom);
+      state.transform.zoom = newZoom;
+    }
+
+    function onDoubleClick(e) {
+      const coords = getCanvasCoordinates(e);
+      const hitNode = findNodeAt(coords.worldX, coords.worldY);
+      if (hitNode) {
+        hitNode.pinned = false; // double click to unpin per requirements
+        toggleNeighborhoodFocus(hitNode.id);
+      } else {
+        if (state.focusedNeighborhoodNodeId) {
+          state.focusedNeighborhoodNodeId = null;
+          state.focusedNeighborhoodSet = null;
+          applyFilters();
+        }
+      }
+    }
+    let touchDist = 0;
+    let touchZoom = 1;
+    function onTouchStart(e) {
+      if (e.touches.length === 1) {
+        const t = e.touches[0];
+        onMouseDown({ clientX: t.clientX, clientY: t.clientY, button: 0 });
+      } else if (e.touches.length === 2) {
+        state.isPanning = false;
+        state.draggedNode = null;
+        touchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        touchZoom = state.transform.zoom;
+      }
+    }
+    function onTouchMove(e) {
+      e.preventDefault();
+      if (e.touches.length === 1) {
+        onMouseMove({ clientX: e.touches[0].clientX, clientY: e.touches[0].clientY });
+      } else if (e.touches.length === 2) {
+        const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        const factor = dist / touchDist;
+        const newZoom = Math.min(state.transform.maxZoom, Math.max(state.transform.minZoom, touchZoom * factor));
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        const rect = els.canvas.getBoundingClientRect();
+        const screenX = midX - rect.left;
+        const screenY = midY - rect.top;
+        const worldX = (screenX - state.transform.x) / state.transform.zoom;
+        const worldY = (screenY - state.transform.y) / state.transform.zoom;
+        state.transform.x = screenX - (worldX * newZoom);
+        state.transform.y = screenY - (worldY * newZoom);
+        state.transform.zoom = newZoom;
+      }
+    }
+    function onTouchEnd(e) { onMouseUp(e); }
+
+    function findNodeAt(worldX, worldY) {
+      for (let i = state.nodes.length - 1; i >= 0; i--) {
+        const n = state.nodes[i];
+        if (!isNodeVisible(n)) continue;
+        const dx = worldX - n.x, dy = worldY - n.y;
+        if (dx * dx + dy * dy <= (n.radius + 4) * (n.radius + 4)) return n;
+      }
+      return null;
+    }
+
+    function findEdgeAt(worldX, worldY) {
+      const threshold = 6 / state.transform.zoom;
+      for (let i = state.edges.length - 1; i >= 0; i--) {
+        const edge = state.edges[i];
+        if (!isEdgeVisible(edge) || !edge.source || !edge.target) continue;
+        const d = distToSegment({ x: worldX, y: worldY }, { x: edge.source.x, y: edge.source.y }, { x: edge.target.x, y: edge.target.y });
+        if (d <= threshold) return edge;
+      }
+      return null;
+    }
+
+    function distToSegment(p, v, w) {
+      const l2 = (v.x - w.x) * (v.x - w.x) + (v.y - w.y) * (v.y - w.y);
+      if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+      const t = Math.max(0, Math.min(1, ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2));
+      return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+    }
+
+    function handleHover(worldX, worldY, screenX, screenY) {
+      const hitNode = findNodeAt(worldX, worldY);
+      if (hitNode) {
+        if (state.hoveredNode !== hitNode) {
+          state.hoveredNode = hitNode;
+          state.hoveredEdge = null;
+          showTooltip(hitNode, screenX, screenY);
+        } else {
+          updateTooltipPosition(screenX, screenY);
+        }
+        els.canvas.style.cursor = 'pointer';
+        return;
+      }
+      const hitEdge = findEdgeAt(worldX, worldY);
+      if (hitEdge) {
+        if (state.hoveredEdge !== hitEdge) {
+          state.hoveredEdge = hitEdge;
+          state.hoveredNode = null;
+          showEdgeTooltip(hitEdge, screenX, screenY);
+        } else {
+          updateTooltipPosition(screenX, screenY);
+        }
+        els.canvas.style.cursor = 'pointer';
+        return;
+      }
+      if (state.hoveredNode || state.hoveredEdge) {
+        state.hoveredNode = null;
+        state.hoveredEdge = null;
+        hideTooltip();
+      }
+      els.canvas.style.cursor = 'grab';
+    }
+
+    function showTooltip(node, screenX, screenY) {
+      els.ttTitle.textContent = node.title || node.id;
+      els.ttType.textContent = node.type;
+      els.ttType.style.backgroundColor = (NODE_COLORS[node.type] || '#888') + '33';
+      els.ttType.style.color = NODE_COLORS[node.type] || '#fff';
+      els.ttDegree.textContent = `${node.degree || 0} connections • ${node.status}`;
+      els.tooltip.style.display = 'block';
+      updateTooltipPosition(screenX, screenY);
+    }
+
+    function showEdgeTooltip(edge, screenX, screenY) {
+      els.ttTitle.textContent = `${edge.src} → ${edge.dst}`;
+      els.ttType.textContent = edge.type;
+      els.ttType.style.backgroundColor = (EDGE_COLORS[edge.type] || '#888') + '33';
+      els.ttType.style.color = EDGE_COLORS[edge.type] || '#fff';
+      els.ttDegree.textContent = edge.note ? `Note: ${edge.note}` : `Weight: ${edge.weight || 1}`;
+      els.tooltip.style.display = 'block';
+      updateTooltipPosition(screenX, screenY);
+    }
+
+    function updateTooltipPosition(screenX, screenY) { els.tooltip.style.left = `${screenX}px`; els.tooltip.style.top = `${screenY}px`; }
+    function hideTooltip() { els.tooltip.style.display = 'none'; }
+    function toggleNeighborhoodFocus(nodeId) {
+      if (state.focusedNeighborhoodNodeId === nodeId) { state.focusedNeighborhoodNodeId = null; state.focusedNeighborhoodSet = null; }
+      else { state.focusedNeighborhoodNodeId = nodeId; state.focusedNeighborhoodSet = computeNeighborhoodDepth2(nodeId); }
+    }
+
+    function computeNeighborhoodDepth2(startNodeId) {
+      const set = new Set([startNodeId]);
+      const queue = [{ id: startNodeId, depth: 0 }];
+      const visited = new Set([startNodeId]);
+      while (queue.length > 0) {
+        const { id, depth } = queue.shift();
+        if (depth >= 2) continue;
+        const node = state.nodeMap.get(id);
+        if (!node) continue;
+        (node.outgoingEdges || []).forEach(edge => {
+          if (!visited.has(edge.dst)) {
+            visited.add(edge.dst);
+            set.add(edge.dst);
+            queue.push({ id: edge.dst, depth: depth + 1 });
+          }
+        });
+        (node.incomingEdges || []).forEach(edge => {
+          if (!visited.has(edge.src)) {
+            visited.add(edge.src);
+            set.add(edge.src);
+            queue.push({ id: edge.src, depth: depth + 1 });
+          }
+        });
+      }
+      return set;
+    }
+
+    function selectNode(node) { state.selectedNode = node; state.selectedEdge = null; openDetailPanelWithNode(node); }
+    function selectEdge(edge) { state.selectedEdge = edge; state.selectedNode = null; openDetailPanelWithEdge(edge); }
+    function deselectAll() { if (state.selectedNode || state.selectedEdge) { state.selectedNode = null; state.selectedEdge = null; closeDetailPanel(); } }
+
+        function openDetailPanelWithNode(node) {
+      els.detailPaneTitle.textContent = 'Node Details';
+      const createdStr = formatDate(node.created), updatedStr = formatDate(node.updated);
+      const typeColor = NODE_COLORS[node.type] || '#888';
+      let html = `<div class="detail-id-box"><span title="${escapeHtml(node.id)}">${escapeHtml(node.id)}</span><button class="copy-btn" onclick="window.__brainViewer.copyText('${escapeHtml(node.id)}')">Copy ID</button></div>
+        <div class="badges-row"><span class="badge" style="background:${typeColor}22; color:${typeColor}; border:1px solid ${typeColor}66;">${escapeHtml(node.type)}</span>
+          <span class="badge status-badge status-${escapeHtml(node.status || 'active')}">${escapeHtml(node.status || 'active')}</span>
+          ${node.pinned ? `<span class="badge" style="background:var(--accent-subtle); color:var(--accent);">Pinned</span>` : ''}
+          ${node.needs_summary ? `<span class="badge" style="background:rgba(239,68,68,0.15); color:var(--danger);">Needs Summary</span>` : ''}</div>
+        <div><div class="detail-section-title">Title</div><div class="detail-text" style="font-size:14px; font-weight:600;">${escapeHtml(node.title || '(Untitled)')}</div></div>
+        <div><div class="detail-section-title">Summary</div><div class="detail-summary-box">${escapeHtml(node.summary || 'No summary provided.')}</div></div>`;
+      if (node.path) html += `<div><div class="detail-section-title">Path</div><div class="detail-id-box" style="font-size:11px;"><span>${escapeHtml(node.path)}</span><button class="copy-btn" onclick="window.__brainViewer.copyText('${escapeHtml(node.path)}')">Copy</button></div></div>`;
+      if (node.tags && node.tags.length > 0) html += `<div><div class="detail-section-title">Tags</div><div class="tags-container">${node.tags.map(t => `<span class="tag-chip">#${escapeHtml(t)}</span>`).join('')}</div></div>`;
+      html += `<div><div class="detail-section-title">Timestamps</div><div style="font-size:11.5px; color:var(--text-muted); display:flex; flex-direction:column; gap:2px;">
+        <div>Created: <strong>${createdStr}</strong></div><div>Updated: <strong>${updatedStr}</strong></div>
+        ${node.agent ? `<div>Agent: <strong>${escapeHtml(node.agent)}</strong></div>` : ''}
+        ${node.session_id ? `<div>Session: <code>${escapeHtml(node.session_id)}</code></div>` : ''}</div></div>`;
+      const incoming = node.incomingEdges || [];
+      html += `<div><div class="detail-section-title">Incoming Connections (${incoming.length})</div><div class="edges-list">
+        ${incoming.length === 0 ? '<div style="font-size:11px; color:var(--text-dim);">None</div>' : ''}
+        ${incoming.map(e => `<div class="edge-item" onclick="window.__brainViewer.focusNodeById('${escapeHtml(e.src)}')"><div class="edge-item-info"><div class="edge-item-title">${escapeHtml(state.nodeMap.get(e.src)?.title || e.src)}</div><div class="edge-item-type">${escapeHtml(e.type)} ${e.note ? '• ' + escapeHtml(e.note) : ''}</div></div><span style="color:var(--text-dim); font-size:14px;">→</span></div>`).join('')}
+      </div></div>`;
+      const outgoing = node.outgoingEdges || [];
+      html += `<div><div class="detail-section-title">Outgoing Connections (${outgoing.length})</div><div class="edges-list">
+        ${outgoing.length === 0 ? '<div style="font-size:11px; color:var(--text-dim);">None</div>' : ''}
+        ${outgoing.map(e => `<div class="edge-item" onclick="window.__brainViewer.focusNodeById('${escapeHtml(e.dst)}')"><div class="edge-item-info"><div class="edge-item-title">${escapeHtml(state.nodeMap.get(e.dst)?.title || e.dst)}</div><div class="edge-item-type">${escapeHtml(e.type)} ${e.note ? '• ' + escapeHtml(e.note) : ''}</div></div><span style="color:var(--text-dim); font-size:14px;">→</span></div>`).join('')}
+      </div></div>
+      <div class="detail-actions">
+        <button class="btn btn-accent" style="flex:1;" onclick="window.__brainViewer.toggleNeighborhoodFocus('${escapeHtml(node.id)}')">${state.focusedNeighborhoodNodeId === node.id ? 'Exit Focus' : 'Focus 2-Hops'}</button>
+        <button class="btn" style="flex:1;" onclick="window.__brainViewer.togglePin('${escapeHtml(node.id)}')">${node.pinned ? 'Unpin' : 'Pin'}</button>
+      </div>`;
+      els.detailContent.innerHTML = html;
+      els.detailPanel.classList.add('open');
+    }
+
+        function openDetailPanelWithEdge(edge) {
+      els.detailPaneTitle.textContent = 'Edge Details';
+      const edgeColor = EDGE_COLORS[edge.type] || '#888', createdStr = formatDate(edge.created);
+      let html = `<div class="badges-row"><span class="badge" style="background:${edgeColor}22; color:${edgeColor}; border:1px solid ${edgeColor}66;">${escapeHtml(edge.type)}</span><span class="badge status-badge">Weight: ${edge.weight || 1}</span></div>
+        <div><div class="detail-section-title">Source Node</div><div class="edge-item" onclick="window.__brainViewer.focusNodeById('${escapeHtml(edge.src)}')"><div class="edge-item-info"><div class="edge-item-title">${escapeHtml(state.nodeMap.get(edge.src)?.title || edge.src)}</div><div class="edge-item-type">${escapeHtml(edge.src)}</div></div></div></div>
+        <div><div class="detail-section-title">Destination Node</div><div class="edge-item" onclick="window.__brainViewer.focusNodeById('${escapeHtml(edge.dst)}')"><div class="edge-item-info"><div class="edge-item-title">${escapeHtml(state.nodeMap.get(edge.dst)?.title || edge.dst)}</div><div class="edge-item-type">${escapeHtml(edge.dst)}</div></div></div></div>
+        ${edge.note ? `<div><div class="detail-section-title">Note</div><div class="detail-summary-box">${escapeHtml(edge.note)}</div></div>` : ''}
+        <div><div class="detail-section-title">Created</div><div style="font-size:12px; color:var(--text-muted);">${createdStr}</div></div>`;
+      els.detailContent.innerHTML = html;
+      els.detailPanel.classList.add('open');
+    }
+
+    function closeDetailPanel() {
+      els.detailPanel.classList.remove('open');
+    }
+
+    function applyFilters() {
+      state.filteredNodeIds.clear();
+      state.matchingSearchIds.clear();
+      const query = state.searchQuery;
+      const tagFilter = state.activeTagFilter;
+      const agentFilter = state.activeAgentFilter;
+      const cutoff = state.timelineCutoff;
+      for (let i = 0; i < state.nodes.length; i++) {
+        const node = state.nodes[i];
+        const nodeCreated = normalizeTimestamp(node.created);
+        if (nodeCreated && nodeCreated > cutoff) continue;
+        if (!state.activeTypeFilters.has(node.type)) continue;
+        if (!state.activeStatusFilters.has(node.status || 'active')) continue;
+        if (tagFilter && (!node.tags || !node.tags.includes(tagFilter))) continue;
+        if (agentFilter && node.agent !== agentFilter) continue;
+        state.filteredNodeIds.add(node.id);
+        if (query) {
+          const mId = (node.id || '').toLowerCase().includes(query);
+          const mTitle = (node.title || '').toLowerCase().includes(query);
+          const mSummary = (node.summary || '').toLowerCase().includes(query);
+          const mTags = (node.tags || []).some(t => t.toLowerCase().includes(query));
+          if (mId || mTitle || mSummary || mTags) {
+            state.matchingSearchIds.add(node.id);
+          }
+        }
+      }
+      updateStatsBadge();
+      reheatSimulation(0.2);
+    }
+
+    function isNodeVisible(node) {
+      return state.filteredNodeIds.has(node.id);
+    }
+
+    function isEdgeVisible(edge) {
+      if (!edge.source || !edge.target) return false;
+      return isNodeVisible(edge.source) && isNodeVisible(edge.target);
+    }
+
+    function getNodeOpacity(node) {
+      let alpha = 1.0;
+      if (node.status === 'superseded') alpha *= 0.3;
+      if (state.focusedNeighborhoodSet && !state.focusedNeighborhoodSet.has(node.id)) alpha *= 0.15;
+      if (state.searchQuery && !state.matchingSearchIds.has(node.id)) alpha *= 0.15;
+      return alpha;
+    }
+
+    function getEdgeOpacity(edge) {
+      let alpha = 0.65;
+      const srcAlpha = getNodeOpacity(edge.source);
+      const dstAlpha = getNodeOpacity(edge.target);
+      if (srcAlpha < 0.5 || dstAlpha < 0.5) alpha = 0.08;
+      if (state.hoveredEdge === edge) alpha = 1.0;
+      return alpha;
+    }
+
+    function updateTimelineCutoff() {
+      const min = state.timeRange.min;
+      const max = state.timeRange.max;
+      state.timelineCutoff = min + (max - min) * (state.timelineValue / 100);
+      els.timelineCurrentDate.textContent = formatDate(new Date(state.timelineCutoff));
+    }
+
+    function toggleTimelinePlay() {
+      state.isTimelinePlaying = !state.isTimelinePlaying;
+      if (state.isTimelinePlaying) {
+        els.playIcon.style.display = 'none';
+        els.pauseIcon.style.display = 'block';
+        if (state.timelineValue >= 100) {
+          state.timelineValue = 0;
+          els.timelineSlider.value = '0';
+        }
+      } else {
+        els.playIcon.style.display = 'block';
+        els.pauseIcon.style.display = 'none';
+      }
+    }
+
+    function stepTimeline() {
+      if (!state.isTimelinePlaying) return;
+      state.timelineValue += state.timelinePlaySpeed;
+      if (state.timelineValue >= 100) {
+        state.timelineValue = 100;
+        state.isTimelinePlaying = false;
+        els.playIcon.style.display = 'block';
+        els.pauseIcon.style.display = 'none';
+      }
+      els.timelineSlider.value = state.timelineValue.toString();
+      updateTimelineCutoff();
+      applyFilters();
+    }
+
+    function reheatSimulation(alpha = 0.5) {
+      state.sim.alpha = Math.max(state.sim.alpha, alpha);
+    }
+
+    function stepSimulation() {
+      const sim = state.sim;
+      if (sim.alpha < sim.alphaMin) return;
+      const visibleNodes = [];
+      for (let i = 0; i < state.nodes.length; i++) {
+        if (isNodeVisible(state.nodes[i])) visibleNodes.push(state.nodes[i]);
+      }
+      const nodeCount = visibleNodes.length;
+      if (nodeCount === 0) return;
+      // Spatial Grid for O(N) Repulsion
+      let cellSize = sim.gridCellSize;
+      if (nodeCount > 500) cellSize = 180;
+      if (nodeCount > 1000) cellSize = 220;
+      const grid = new Map();
+      for (let i = 0; i < nodeCount; i++) {
+        const n = visibleNodes[i];
+        const cx = Math.floor(n.x / cellSize);
+        const cy = Math.floor(n.y / cellSize);
+        const key = `${cx},${cy}`;
+        let cell = grid.get(key);
+        if (!cell) { cell = []; grid.set(key, cell); }
+        cell.push(n);
+      }
+      // 1. Repulsion force with 3x3 neighbor cell checks
+      const repStrength = sim.repulsionStrength * sim.alpha;
+      for (let i = 0; i < nodeCount; i++) {
+        const u = visibleNodes[i];
+        if (u.pinned) continue;
+        const cx = Math.floor(u.x / cellSize);
+        const cy = Math.floor(u.y / cellSize);
+        for (let ox = -1; ox <= 1; ox++) {
+          for (let oy = -1; oy <= 1; oy++) {
+            const cell = grid.get(`${cx + ox},${cy + oy}`);
+            if (!cell) continue;
+            for (let j = 0; j < cell.length; j++) {
+              const v = cell[j];
+              if (u === v) continue;
+              const dx = u.x - v.x;
+              const dy = u.y - v.y;
+              let dist2 = dx * dx + dy * dy;
+              if (dist2 === 0) {
+                u.vx += (Math.random() - 0.5) * 2;
+                u.vy += (Math.random() - 0.5) * 2;
+                continue;
+              }
+              const dist = Math.sqrt(dist2);
+              const minDist = u.radius + v.radius + 8;
+              if (dist < minDist) {
+                const overlap = (minDist - dist) * 0.4 * sim.alpha;
+                u.vx += (dx / dist) * overlap; u.vy += (dy / dist) * overlap;
+              }
+              const force = repStrength / (dist2 + 400);
+              u.vx += (dx / dist) * force; u.vy += (dy / dist) * force;
+            }
+          }
+        }
+      }
+      // 2. Attraction Force (Hooke's Law along edges)
+      for (let i = 0; i < state.edges.length; i++) {
+        const edge = state.edges[i];
+        if (!isEdgeVisible(edge)) continue;
+        const u = edge.source;
+        const v = edge.target;
+        if (!u || !v) continue;
+        const dx = v.x - u.x;
+        const dy = v.y - u.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        const weight = Math.max(0.2, edge.weight || 1);
+        const targetLen = sim.idealDistance / Math.sqrt(weight);
+        const springForce = (dist - targetLen) * 0.045 * sim.alpha;
+        const fx = (dx / dist) * springForce;
+        const fy = (dy / dist) * springForce;
+        if (!u.pinned) { u.vx += fx; u.vy += fy; }
+        if (!v.pinned) { v.vx -= fx; v.vy -= fy; }
+      }
+      // 3. Centering Force
+      const centerForce = sim.centeringStrength * sim.alpha;
+      for (let i = 0; i < nodeCount; i++) {
+        const n = visibleNodes[i];
+        if (n.pinned) continue;
+        n.vx -= n.x * centerForce; n.vy -= n.y * centerForce;
+      }
+      // 4. Damping & Velocity Update
+      const maxVel = 18 * sim.alpha;
+      for (let i = 0; i < nodeCount; i++) {
+        const n = visibleNodes[i];
+        if (n.pinned) { n.vx = 0; n.vy = 0; continue; }
+        n.vx *= sim.velocityDecay; n.vy *= sim.velocityDecay;
+        const v = Math.hypot(n.vx, n.vy);
+        if (v > maxVel) { n.vx = (n.vx / v) * maxVel; n.vy = (n.vy / v) * maxVel; }
+        n.x += n.vx; n.y += n.vy;
+      }
+      // 5. Cooling
+      sim.alpha += (sim.alphaTarget - sim.alpha) * sim.alphaDecay;
+    }
+
+    function render() {
+      const width = els.canvas.width;
+      const height = els.canvas.height;
+      const dpr = state.devicePixelRatio;
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, width, height);
+      ctx.setTransform(
+        state.transform.zoom * dpr, 0, 0,
+        state.transform.zoom * dpr,
+        state.transform.x * dpr, state.transform.y * dpr
+      );
+      drawBackgroundGrid();
+      const visibleNodes = [];
+      for (let i = 0; i < state.nodes.length; i++) {
+        if (isNodeVisible(state.nodes[i])) visibleNodes.push(state.nodes[i]);
+      }
+      drawEdges();
+      drawNodes(visibleNodes);
+      ctx.restore();
+    }
+
+    function drawBackgroundGrid() {
+      const zoom = state.transform.zoom;
+      if (zoom < 0.25) return;
+      const gridSize = 80;
+      const rect = els.canvas.getBoundingClientRect();
+      const left = -state.transform.x / zoom;
+      const top = -state.transform.y / zoom;
+      const right = (rect.width - state.transform.x) / zoom;
+      const bottom = (rect.height - state.transform.y) / zoom;
+      const startX = Math.floor(left / gridSize) * gridSize;
+      const startY = Math.floor(top / gridSize) * gridSize;
+      ctx.fillStyle = state.theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)';
+      for (let x = startX; x <= right; x += gridSize) {
+        for (let y = startY; y <= bottom; y += gridSize) {
+          ctx.beginPath();
+          ctx.arc(x, y, 1.2 / zoom, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function drawEdges() {
+      for (let i = 0; i < state.edges.length; i++) {
+        const edge = state.edges[i];
+        if (!isEdgeVisible(edge)) continue;
+        const src = edge.source, dst = edge.target;
+        if (!src || !dst) continue;
+        const opacity = getEdgeOpacity(edge);
+        if (opacity <= 0.01) continue;
+        const baseColor = EDGE_COLORS[edge.type] || EDGE_COLORS.default, weight = edge.weight || 1;
+        const lineWidth = Math.max(1, Math.min(6, 1 + weight * 0.7)), dx = dst.x - src.x, dy = dst.y - src.y, dist = Math.hypot(dx, dy);
+        if (dist === 0) continue;
+        const targetRadius = dst.radius + 3, endX = dst.x - (dx / dist) * targetRadius, endY = dst.y - (dy / dist) * targetRadius;
+        ctx.save(); ctx.globalAlpha = opacity; ctx.strokeStyle = baseColor; ctx.lineWidth = lineWidth;
+        ctx.beginPath(); ctx.moveTo(src.x, src.y); ctx.lineTo(endX, endY); ctx.stroke();
+        const arrowSize = Math.max(5, Math.min(10, 4 + lineWidth)), angle = Math.atan2(dy, dx);
+        ctx.fillStyle = baseColor; ctx.beginPath(); ctx.moveTo(endX, endY);
+        ctx.lineTo(endX - arrowSize * Math.cos(angle - Math.PI / 6), endY - arrowSize * Math.sin(angle - Math.PI / 6));
+        ctx.lineTo(endX - arrowSize * Math.cos(angle + Math.PI / 6), endY - arrowSize * Math.sin(angle + Math.PI / 6));
+        ctx.closePath(); ctx.fill();
+        if (state.hoveredEdge === edge) {
+          drawEdgeLabel(edge, (src.x + endX) / 2, (src.y + endY) / 2, baseColor);
+        }
+        ctx.restore();
+      }
+    }
+
+    function drawEdgeLabel(edge, x, y, color) {
+      const text = edge.note ? `${edge.type}: ${edge.note}` : edge.type;
+      ctx.font = '11px sans-serif';
+      const textWidth = ctx.measureText(text).width, padX = 6, padY = 3;
+      ctx.fillStyle = state.theme === 'dark' ? 'rgba(15, 23, 42, 0.9)' : 'rgba(255, 255, 255, 0.9)';
+      ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.beginPath();
+      ctx.roundRect(x - textWidth / 2 - padX, y - 9 - padY, textWidth + padX * 2, 18 + padY * 2, 4);
+      ctx.fill(); ctx.stroke();
+      ctx.fillStyle = state.theme === 'dark' ? '#f8fafc' : '#0f172a';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(text, x, y);
+    }
+
+    function drawNodes(nodes) {
+      const now = performance.now();
+      const nodeCount = nodes.length;
+      const zoom = state.transform.zoom;
+      const renderLabels = !(nodeCount > 1000 && zoom < 0.8);
+      for (let i = 0; i < nodeCount; i++) {
+        const node = nodes[i];
+        const opacity = getNodeOpacity(node);
+        if (opacity <= 0.01) continue;
+        const isHovered = (state.hoveredNode === node);
+        const isSelected = (state.selectedNode === node);
+        const isFocusedNeighborhood = (state.focusedNeighborhoodNodeId === node.id);
+        const baseColor = NODE_COLORS[node.type] || '#90A4AE';
+        const r = node.radius;
+        ctx.save();
+        ctx.globalAlpha = opacity;
+        // Glow/Pulse animation (fade over 3 seconds)
+        if (node.pulseStartTime) {
+          const pulseAge = (now - node.pulseStartTime) / 1000;
+          if (pulseAge < 3.0) {
+            const factor = 1.0 - (pulseAge / 3.0);
+            const pulseRadius = r + 6 + 14 * (1 - factor);
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, pulseRadius, 0, Math.PI * 2);
+            ctx.strokeStyle = baseColor;
+            ctx.lineWidth = 3 * factor;
+            ctx.globalAlpha = opacity * factor * 0.8;
+            ctx.stroke();
+            ctx.restore();
+          } else {
+            delete node.pulseStartTime;
+          }
+        }
+        // Selection / Focus Halo
+        if (isSelected || isFocusedNeighborhood) {
+          ctx.beginPath(); ctx.arc(node.x, node.y, r + 5, 0, Math.PI * 2);
+          ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 3; ctx.stroke();
+        } else if (isHovered) {
+          ctx.beginPath(); ctx.arc(node.x, node.y, r + 4, 0, Math.PI * 2);
+          ctx.strokeStyle = baseColor; ctx.lineWidth = 2; ctx.stroke();
+        }
+        // Node Circle Body
+        ctx.beginPath();
+        ctx.arc(node.x, node.y, r, 0, Math.PI * 2);
+        ctx.fillStyle = baseColor;
+        ctx.fill();
+        // Border: Dashed for status=stale
+        if (node.status === 'stale') {
+          ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5; ctx.stroke(); ctx.restore();
+        } else {
+          ctx.strokeStyle = state.theme === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)';
+          ctx.lineWidth = 1.5; ctx.stroke();
+        }
+        // Status=done: Checkmark overlay
+        if (node.status === 'done') {
+          ctx.save(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = Math.max(2, r * 0.16); ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+          ctx.beginPath(); ctx.moveTo(node.x - r * 0.35, node.y); ctx.lineTo(node.x - r * 0.08, node.y + r * 0.3); ctx.lineTo(node.x + r * 0.38, node.y - r * 0.3);
+          ctx.stroke(); ctx.restore();
+        }
+        // Pinned indicator
+        if (node.pinned) {
+          ctx.beginPath(); ctx.arc(node.x + r * 0.65, node.y - r * 0.65, 3.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#38bdf8'; ctx.fill(); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1; ctx.stroke();
+        }
+        // Label below node
+        const shouldDrawLabel = renderLabels || isHovered || isSelected || isFocusedNeighborhood;
+        if (shouldDrawLabel && zoom > 0.3) {
+          drawNodeLabel(node, r);
+        }
+        ctx.restore();
+      }
+    }
+
+    function drawNodeLabel(node, radius) {
+      let rawText = node.title || node.id;
+      if (rawText.length > 20) rawText = rawText.slice(0, 18) + '…';
+      ctx.save();
+      ctx.font = '11px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'top';
+      const textY = node.y + radius + 4;
+      ctx.strokeStyle = state.theme === 'dark' ? 'rgba(11, 15, 25, 0.85)' : 'rgba(248, 250, 252, 0.85)';
+      ctx.lineWidth = 3;
+      ctx.strokeText(rawText, node.x, textY);
+      ctx.fillStyle = state.theme === 'dark' ? '#f1f5f9' : '#0f172a';
+      ctx.fillText(rawText, node.x, textY);
+      ctx.restore();
+    }
+
+    function mainLoop() {
+      state.sim.frameCount++;
+      const nodeCount = state.nodes.length;
+      if (nodeCount > 1000 && state.sim.alpha < 0.05) {
+        if (state.sim.frameCount % 3 === 0) stepSimulation();
+      } else {
+        stepSimulation();
+      }
+      stepTimeline();
+      render();
+      requestAnimationFrame(mainLoop);
+    }
+
+    function zoomBy(factor) {
+      const rect = els.canvas.getBoundingClientRect();
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const worldX = (centerX - state.transform.x) / state.transform.zoom;
+      const worldY = (centerY - state.transform.y) / state.transform.zoom;
+      const newZoom = Math.min(state.transform.maxZoom, Math.max(state.transform.minZoom, state.transform.zoom * factor));
+      state.transform.x = centerX - worldX * newZoom;
+      state.transform.y = centerY - worldY * newZoom;
+      state.transform.zoom = newZoom;
+    }
+
+    function fitGraphToView() {
+      const visibleNodes = state.nodes.filter(isNodeVisible);
+      if (visibleNodes.length === 0) {
+        state.transform = { x: els.canvas.clientWidth / 2, y: els.canvas.clientHeight / 2, zoom: 1.0, minZoom: 0.1, maxZoom: 10.0 };
+        return;
+      }
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (let i = 0; i < visibleNodes.length; i++) {
+        const n = visibleNodes[i];
+        if (n.x < minX) minX = n.x;
+        if (n.x > maxX) maxX = n.x;
+        if (n.y < minY) minY = n.y;
+        if (n.y > maxY) maxY = n.y;
+      }
+      const padding = 80;
+      const graphW = (maxX - minX) || 200;
+      const graphH = (maxY - minY) || 200;
+      const rect = els.canvas.getBoundingClientRect();
+      const scaleX = (rect.width - padding * 2) / graphW;
+      const scaleY = (rect.height - padding * 2) / graphH;
+      const targetZoom = Math.min(2.0, Math.max(0.15, Math.min(scaleX, scaleY)));
+      state.transform.zoom = targetZoom;
+      state.transform.x = rect.width / 2 - ((minX + maxX) / 2) * targetZoom;
+      state.transform.y = rect.height / 2 - ((minY + maxY) / 2) * targetZoom;
+    }
+
+    function focusNodeById(nodeId) {
+      const node = state.nodeMap.get(nodeId);
+      if (!node) return;
+      selectNode(node);
+      const rect = els.canvas.getBoundingClientRect();
+      state.transform.x = rect.width / 2 - node.x * state.transform.zoom;
+      state.transform.y = rect.height / 2 - node.y * state.transform.zoom;
+    }
+
+    async function fetchGraphData(isIncremental = false) {
+      const url = isIncremental && state.lastPollTimestamp
+        ? `/api/graph?since=${encodeURIComponent(state.lastPollTimestamp)}`
+        : `/api/graph`;
+      try {
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setLiveStatus(true);
+        processIncomingGraphData(data, isIncremental);
+      } catch (err) {
+        setLiveStatus(false, 'Offline / Demo');
+        if (state.nodes.length === 0) {
+          els.emptyState.style.display = 'block';
+        }
+      }
+    }
+
+    function setLiveStatus(isOnline, text = 'Live') {
+      els.liveDot.classList.toggle('offline', !isOnline);
+      els.liveText.textContent = isOnline ? 'Live' : text;
+    }
+
+    function processIncomingGraphData(data, isIncremental) {
+      if (!data || (!data.nodes && !data.edges)) return;
+      const incomingNodes = data.nodes || [];
+      const incomingEdges = data.edges || [];
+      if (incomingNodes.length === 0 && state.nodes.length === 0) {
+        els.emptyState.style.display = 'block';
+        return;
+      }
+      els.emptyState.style.display = 'none';
+      let latestTs = state.lastPollTimestamp || 0;
+      let hasNewOrUpdated = false;
+      for (let i = 0; i < incomingNodes.length; i++) {
+        const raw = incomingNodes[i];
+        if (!raw.id) continue;
+        const createdTs = normalizeTimestamp(raw.created);
+        const updatedTs = normalizeTimestamp(raw.updated);
+        const maxNodeTs = Math.max(createdTs || 0, updatedTs || 0);
+        if (maxNodeTs > latestTs) latestTs = maxNodeTs;
+        let existing = state.nodeMap.get(raw.id);
+        if (existing) {
+          let changed = false;
+          ['type', 'title', 'summary', 'path', 'sha1', 'status', 'needs_summary', 'agent', 'session_id'].forEach(k => {
+            if (raw[k] !== undefined && raw[k] !== existing[k]) {
+              existing[k] = raw[k];
+              changed = true;
+            }
+          });
+          if (raw.tags) existing.tags = Array.isArray(raw.tags) ? raw.tags : [raw.tags];
+          if (changed) {
+            existing.pulseStartTime = performance.now();
+            hasNewOrUpdated = true;
+          }
+        } else {
+          const newNode = {
+            id: raw.id, type: raw.type || 'file', title: raw.title || raw.id,
+            summary: raw.summary || '', path: raw.path || '', sha1: raw.sha1 || '',
+            tags: Array.isArray(raw.tags) ? raw.tags : (raw.tags ? [raw.tags] : []),
+            status: raw.status || 'active', needs_summary: !!raw.needs_summary,
+            created: createdTs, updated: updatedTs || createdTs, agent: raw.agent || '', session_id: raw.session_id || '',
+            x: (Math.random() - 0.5) * 300, y: (Math.random() - 0.5) * 300, vx: 0, vy: 0,
+            pinned: false, radius: 12, degree: 0, incomingEdges: [], outgoingEdges: [],
+            pulseStartTime: performance.now()
+          };
+          state.nodes.push(newNode);
+          state.nodeMap.set(newNode.id, newNode);
+          hasNewOrUpdated = true;
+        }
+      }
+      for (let i = 0; i < incomingEdges.length; i++) {
+        const raw = incomingEdges[i];
+        if (!raw.src || !raw.dst) continue;
+        const edgeKey = `${raw.src}->${raw.dst}:${raw.type || 'relates_to'}`;
+        const edgeCreated = normalizeTimestamp(raw.created);
+        if (edgeCreated && edgeCreated > latestTs) latestTs = edgeCreated;
+        let existingEdge = state.edgeMap.get(edgeKey);
+        if (!existingEdge) {
+          const newEdge = {
+            id: edgeKey, src: raw.src, dst: raw.dst, type: raw.type || 'relates_to',
+            weight: typeof raw.weight === 'number' ? raw.weight : 1.0, note: raw.note || '',
+            created: edgeCreated || Date.now(), source: state.nodeMap.get(raw.src), target: state.nodeMap.get(raw.dst)
+          };
+          state.edges.push(newEdge);
+          state.edgeMap.set(edgeKey, newEdge);
+          hasNewOrUpdated = true;
+        }
+      }
+      if (latestTs > 0) state.lastPollTimestamp = latestTs;
+      refreshGraphTopologies();
+      updateFilterSelects();
+      refreshTimeRange();
+      applyFilters();
+      if (hasNewOrUpdated) reheatSimulation(isIncremental ? 0.35 : 0.8);
+      if (!isIncremental && state.nodes.length > 0) setTimeout(fitGraphToView, 200);
+    }
+
+    function refreshGraphTopologies() {
+      state.nodes.forEach(n => { n.incomingEdges = []; n.outgoingEdges = []; n.degree = 0; });
+      for (let i = 0; i < state.edges.length; i++) {
+        const e = state.edges[i];
+        e.source = state.nodeMap.get(e.src); e.target = state.nodeMap.get(e.dst);
+        if (e.source && e.target) {
+          e.source.outgoingEdges.push(e); e.target.incomingEdges.push(e);
+          e.source.degree++; e.target.degree++;
+        }
+      }
+      state.nodes.forEach(n => { n.radius = Math.max(8, Math.min(40, 8 + Math.sqrt(n.degree) * 5)); });
+    }
+
+    function refreshTimeRange() {
+      let min = Infinity, max = -Infinity;
+      for (let i = 0; i < state.nodes.length; i++) {
+        const t = state.nodes[i].created || state.nodes[i].updated;
+        if (t) {
+          if (t < min) min = t;
+          if (t > max) max = t;
+        }
+      }
+      if (min === Infinity || max === -Infinity) {
+        min = Date.now() - 86400000;
+        max = Date.now();
+      }
+      if (min >= max) max = min + 60000;
+      state.timeRange = { min, max };
+      els.timelineLabelStart.textContent = formatDate(min);
+      els.timelineLabelEnd.textContent = formatDate(max);
+      updateTimelineCutoff();
+    }
+
+        function updateFilterSelects() {
+      const tags = new Set(), agents = new Set();
+      state.nodes.forEach(n => { (n.tags || []).forEach(t => tags.add(t)); if (n.agent) agents.add(n.agent); });
+      const currentTag = state.activeTagFilter, currentAgent = state.activeAgentFilter;
+      els.filterTagSelect.innerHTML = '<option value="">All Tags</option>' + Array.from(tags).sort().map(t => `<option value="${t}" ${t === currentTag ? 'selected' : ''}>#${t}</option>`).join('');
+      els.filterAgentSelect.innerHTML = '<option value="">All Agents</option>' + Array.from(agents).sort().map(a => `<option value="${a}" ${a === currentAgent ? 'selected' : ''}>${a}</option>`).join('');
+    }
+
+    function updateStatsBadge() {
+      let visibleEdges = 0;
+      for (let i = 0; i < state.edges.length; i++) { if (isEdgeVisible(state.edges[i])) visibleEdges++; }
+      els.statNodes.textContent = `${state.filteredNodeIds.size}/${state.nodes.length}`;
+      els.statEdges.textContent = `${visibleEdges}/${state.edges.length}`;
+    }
+
+    function startPolling() {
+      if (state.pollTimer) clearInterval(state.pollTimer);
+      state.pollTimer = setInterval(() => { if (state.isPollingActive) fetchGraphData(true); }, state.pollIntervalMs);
+    }
+
+        function initKeyboardShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        const inInput = (document.activeElement === els.searchInput);
+        if (e.key === 'Escape') {
+          if (inInput) els.searchInput.blur();
+          else { deselectAll(); if (state.focusedNeighborhoodNodeId) { state.focusedNeighborhoodNodeId = null; state.focusedNeighborhoodSet = null; applyFilters(); } }
+          return;
+        }
+        if (inInput) return;
+        if (e.key === '/') { e.preventDefault(); els.searchInput.focus(); els.searchInput.select(); }
+        else if (e.key === ' ' || e.code === 'Space') { e.preventDefault(); toggleTimelinePlay(); }
+        else if (e.key === 'f' || e.key === 'F' || e.key === '0') fitGraphToView();
+        else if (e.key === '+' || e.key === '=') zoomBy(1.25);
+        else if (e.key === '-' || e.key === '_') zoomBy(0.8);
+        else if (e.key === '?') els.modalShortcuts.classList.toggle('open');
+      });
+    }
+
+    function loadDemoDataset() {
+      const demoNodes = [];
+      const demoEdges = [];
+      const now = Date.now();
+      const oneHour = 3600000;
+      const sampleFiles = [
+        { id: 'brain.py', type: 'file', title: 'Brain CLI Core', summary: 'Entrypoint CLI for project brain graph commands', tags: ['cli', 'core'], status: 'active' },
+        { id: 'scanner.py', type: 'file', title: 'File Tree Scanner', summary: 'Walks project files and extracts imports & hashes', tags: ['scanner'], status: 'active' },
+        { id: 'storage.py', type: 'file', title: 'JSONL Storage', summary: 'Append-only storage for nodes.jsonl & edges.jsonl', tags: ['storage', 'io'], status: 'active' },
+        { id: 'viewer.html', type: 'file', title: 'Force Graph Viewer', summary: 'Interactive force-directed visualization frontend', tags: ['ui', 'viewer'], status: 'active' },
+        { id: 'digest.py', type: 'file', title: 'Digest Generator', summary: 'Compacts brain graph into INDEX.md summary', tags: ['digest'], status: 'active' },
+        { id: 'mod_graph', type: 'module', title: 'Graph Engine', summary: 'In-memory graph traversals, paths, and neighbors', tags: ['graph'], status: 'active' },
+        { id: 'concept_persist', type: 'concept', title: 'Graph Memory', summary: 'Persistent graph memory across coding sessions', tags: ['architecture'], status: 'active' },
+        { id: 'dec_jsonl', type: 'decision', title: 'Use Append-Only JSONL', summary: 'Adopted JSONL format for concurrent safety and diffing', tags: ['decision', 'storage'], status: 'active' },
+        { id: 'dec_sqlite', type: 'decision', title: 'SQLite Backend', summary: 'Early proposal for sqlite database store', tags: ['decision'], status: 'superseded' },
+        { id: 'thought_indexing', type: 'thought', title: 'LSI Keyword Search', summary: 'Explore TF-IDF or vector embeddings for search', tags: ['search'], status: 'active' },
+        { id: 'task_spatial_grid', type: 'task', title: 'Spatial Grid Layout', summary: 'Implement O(N) spatial grid repulsion for 1000+ nodes', tags: ['perf', 'canvas'], status: 'done' },
+        { id: 'bug_symlink', type: 'bug', title: 'Symlink Recursion', summary: 'Recursive symlinks causing infinite scanner loops', tags: ['scanner', 'bug'], status: 'stale' },
+        { id: 'test_scanner', type: 'test', title: 'Scanner Test Suite', summary: 'Unit tests for Python & JS import extraction', tags: ['test'], status: 'active' }
+      ];
+      sampleFiles.forEach((f, idx) => {
+        demoNodes.push({
+          ...f,
+          created: now - (sampleFiles.length - idx) * oneHour * 3,
+          updated: now - (sampleFiles.length - idx) * oneHour,
+          agent: idx % 2 === 0 ? 'gemini' : 'claude',
+          session_id: `sess-${100 + (idx % 3)}`
+        });
+      });
+            demoEdges.push(
+        { src: 'brain.py', dst: 'scanner.py', type: 'imports', weight: 2.5, note: 'Scans directory' },
+        { src: 'brain.py', dst: 'storage.py', type: 'imports', weight: 3.0, note: 'Reads/writes graph' },
+        { src: 'brain.py', dst: 'digest.py', type: 'imports', weight: 1.5, note: 'Generates digest' },
+        { src: 'storage.py', dst: 'dec_jsonl', type: 'implements', weight: 2.0, note: 'Follows design' },
+        { src: 'dec_jsonl', dst: 'dec_sqlite', type: 'supersedes', weight: 1.8, note: 'Replaced sqlite' },
+        { src: 'scanner.py', dst: 'test_scanner', type: 'tests', weight: 2.0, note: 'Test coverage' },
+        { src: 'scanner.py', dst: 'bug_symlink', type: 'caused_by', weight: 1.2, note: 'Root cause' },
+        { src: 'viewer.html', dst: 'concept_persist', type: 'relates_to', weight: 1.5, note: 'Visualizes memory' },
+        { src: 'viewer.html', dst: 'task_spatial_grid', type: 'implements', weight: 2.0, note: 'Fast rendering' },
+        { src: 'thought_indexing', dst: 'concept_persist', type: 'relates_to', weight: 1.0, note: 'Search exploration' },
+        { src: 'mod_graph', dst: 'storage.py', type: 'depends_on', weight: 2.0, note: 'Data loading' },
+        { src: 'brain.py', dst: 'mod_graph', type: 'imports', weight: 2.5, note: 'Query subgraph' }
+      );
+      for (let i = 1; i <= 35; i++) {
+        const id = `file_worker_${i}.py`;
+        demoNodes.push({
+          id: id, type: i % 5 === 0 ? 'task' : (i % 7 === 0 ? 'test' : 'file'),
+          title: `Worker Component ${i}`, summary: `Auto-generated modular pipeline step ${i}`,
+          tags: ['worker', `batch-${Math.floor(i / 10)}`], status: i % 8 === 0 ? 'stale' : (i % 11 === 0 ? 'done' : 'active'),
+          created: now - (40 - i) * oneHour, updated: now - (40 - i) * oneHour * 0.5, agent: 'gemini'
+        });
+        demoEdges.push({ src: 'scanner.py', dst: id, type: 'imports', weight: 1.0 + (i % 3) * 0.5, note: `Sub-import ${i}` });
+        if (i > 1 && i % 3 === 0) {
+          demoEdges.push({ src: `file_worker_${i - 1}.py`, dst: id, type: 'depends_on', weight: 1.2, note: 'Pipeline dependency' });
+        }
+      }
+      processIncomingGraphData({ nodes: demoNodes, edges: demoEdges }, false);
+    }
+
+    function normalizeTimestamp(ts) {
+      if (!ts) return null;
+      if (typeof ts === 'number') return ts < 10000000000 ? ts * 1000 : ts;
+      const parsed = Date.parse(ts);
+      return isNaN(parsed) ? null : parsed;
+    }
+
+    function formatDate(ts) {
+      if (!ts) return 'Unknown';
+      const d = new Date(ts);
+      return isNaN(d.getTime()) ? 'Unknown' : d.toISOString().replace('T', ' ').substring(0, 19);
+    }
+
+    function escapeHtml(str) {
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showNotification('Copied to clipboard!')).catch(() => fallbackCopy(text));
+      } else { fallbackCopy(text); }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); showNotification('Copied to clipboard!'); } catch (err) {}
+      document.body.removeChild(ta);
+    }
+
+        function showNotification(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'toast-notification';
+      toast.textContent = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 200); }, 1500);
+    }
+
+    window.__brainViewer = {
+      focusNodeById,
+      toggleNeighborhoodFocus,
+      togglePin: function(nodeId) {
+        const node = state.nodeMap.get(nodeId);
+        if (node) {
+          node.pinned = !node.pinned;
+          openDetailPanelWithNode(node);
+        }
+      },
+      copyText: copyToClipboard
+    };
+    init();
+  })();
+  </script>
+</body>
+</html>
